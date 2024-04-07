@@ -1,0 +1,1 @@
+export const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_ROUTE || `http://localhost:8080/v2`;

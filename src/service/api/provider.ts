@@ -1,10 +1,30 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+
+import { BASE_URL } from "@/config";
+
+console.log(BASE_URL);
 
 // Create a base Axios instance
 const api: AxiosInstance = axios.create({
-	baseURL: "http://localhost:8080",
+	baseURL: BASE_URL,
 	// timeout: 5000,
 });
+
+// api.interceptors.response.use(
+// 	(response) => {
+// 		return response.data;
+// 	},
+// 	(error: AxiosError) => {
+// 		const { response } = error;
+
+// 		if (response && response?.status >= 400) {
+// 			console.error("Error Response", response);
+// 		}
+
+// 		return Promise.reject(error);
+
+// 	}
+// );
 
 // Define the Data type
 type Data = Record<string, any>;

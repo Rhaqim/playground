@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Web3Provider } from "@/lib/ether";
 import { routes } from "@/service/api/routes";
@@ -83,3 +84,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		</AuthContext.Provider>
 	);
 };
+
+export function withAuth(Component: React.ComponentType) {
+	function AuthComponent(props: any) {
+		const { isLoggedIn } = useAuth();
+
+		const router = useRouter();
+
+		if (!isLoggedIn) {
+			router.push("/");
+			return null;
+		}
+
+		return <Component {...props} />;
+	};
+
+	AuthComponent.displayName = `withAuth(${Component.displayName || Component.name})`;
+
+	return AuthComponent;
+}
