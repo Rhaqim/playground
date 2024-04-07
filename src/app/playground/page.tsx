@@ -5,14 +5,26 @@ import { useState } from "react";
 import TestPromptRequest, {
 	Pacing,
 	StoryStyle,
+	StoryTone,
 	Tense,
 	VoiceStyle,
+	Character,
 } from "@/types";
 import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
 
 const TestPromptForm = () => {
-	const [formData, setFormData] = useState<TestPromptRequest>({
+	const [mainCharacter, setMainCharacter] = useState<Character>({
+		Name: "",
+		Description: "",
+	});
+	const [sideCharacters, setSideCharacters] = useState<Character[]>([]);
+	const [newSideCharacter, setNewSideCharacter] = useState<Character>({
+		Name: "",
+		Description: "",
+	});
+
+	const initalFormData: TestPromptRequest = {
 		Setting: "",
 		Exposition: "",
 		FirstAct: "",
@@ -20,11 +32,8 @@ const TestPromptForm = () => {
 		WinningScenario: [],
 		LosingScenario: [],
 		Premise: "",
-		MainCharater: {
-			Name: "",
-			Description: "",
-		},
-		SideCharacters: [],
+		MainCharater: mainCharacter,
+		SideCharacters: sideCharacters,
 		WritingStyle: {
 			Tense: Tense.PastTense,
 			Style: StoryStyle.Description,
@@ -47,7 +56,34 @@ const TestPromptForm = () => {
 			Humoristic: 1,
 			Surreal: 1,
 		},
-	});
+	};
+
+	const [formData, setFormData] = useState<TestPromptRequest>(initalFormData);
+
+	const handleMainCharacterChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setMainCharacter({ ...mainCharacter, [e.target.name]: e.target.value });
+	};
+
+	const handleNewSideCharacterChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setNewSideCharacter({
+			...newSideCharacter,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const handleAddSideCharacter = () => {
+		// check if the new side character has a name and description
+		if (!newSideCharacter.Name || !newSideCharacter.Description) {
+			return;
+		}
+
+		setSideCharacters([...sideCharacters, newSideCharacter]);
+		setNewSideCharacter({ Name: "", Description: "" }); // Clear input fields
+	};
 
 	const handleChange = (
 		e: React.ChangeEvent<
@@ -58,6 +94,19 @@ const TestPromptForm = () => {
 		setFormData(prevData => ({
 			...prevData,
 			[name]: value,
+		}));
+	};
+
+	const handleSliderChange = (
+		newValue: number,
+		toneProperty: keyof StoryTone
+	) => {
+		setFormData(prevFormData => ({
+			...prevFormData,
+			Tone: {
+				...prevFormData.Tone,
+				[toneProperty]: newValue,
+			},
 		}));
 	};
 
@@ -73,37 +122,6 @@ const TestPromptForm = () => {
 			console.error(error);
 		}
 	};
-
-	const SliderField = ({
-		label,
-		id,
-		name,
-		value,
-		onChange,
-	}: {
-		label: string;
-		id: string;
-		name: string;
-		value: number;
-		onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	}) => (
-		<div>
-			<label htmlFor={id} className="block mb-1">
-				{label}
-			</label>
-			<input
-				type="range"
-				min="1"
-				max="100"
-				id={id}
-				name={id}
-				value={value}
-				onChange={onChange}
-				className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-				required
-			/>
-		</div>
-	);
 
 	return (
 		<div className="max-w-md mx-auto">
@@ -214,32 +232,62 @@ const TestPromptForm = () => {
 				<Dropdown name="Characters">
 					<div>
 						<label htmlFor="sideCharacters" className="block mb-1">
-							Side Characters
+							Main Character
 						</label>
 						<input
 							type="text"
 							id="mainCharacter"
-							name="MainCharacter"
-							value={formData.MainCharater.Name}
-							onChange={handleChange}
+							name="Name"
+							value={mainCharacter.Name}
+							onChange={handleMainCharacterChange}
+							placeholder="Name"
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500 mb-1"
+							// required
+						/>
+						<input
+							type="text"
+							id="mainCharacterDescription"
+							name="Description"
+							value={mainCharacter.Description}
+							onChange={handleMainCharacterChange}
+							placeholder="Description"
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
 					</div>
 
-					<div>
+					<div className="flex flex-col space-y-1">
 						<label htmlFor="sideCharacters" className="block mb-1">
 							Side Characters
 						</label>
+						<ul>
+							{sideCharacters.map((character, index) => (
+								<li key={index}>
+									{character.Name}: {character.Description}
+								</li>
+							))}
+						</ul>
 						<input
 							type="text"
 							id="sideCharacters"
-							name="SideCharacters"
-							value={formData.SideCharacters.map(c => c.Name).join(", ")}
-							onChange={handleChange}
+							name="Name"
+							value={newSideCharacter.Name}
+							placeholder="Side Character Name"
+							onChange={handleNewSideCharacterChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
+						<input
+							type="text"
+							id="sideCharacters"
+							name="Description"
+							value={newSideCharacter.Description}
+							placeholder="Side Character Description"
+							onChange={handleNewSideCharacterChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							// required
+						/>
+						<button onClick={handleAddSideCharacter}>Add Side Character</button>
 					</div>
 				</Dropdown>
 
@@ -322,98 +370,98 @@ const TestPromptForm = () => {
 						id="optimistic"
 						name="Tone.Optimistic"
 						value={formData.Tone.Optimistic}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Optimistic")}
 					/>
 					<SliderField
 						label="Pessimistic"
 						id="pessimistic"
 						name="Tone.Pessimistic"
 						value={formData.Tone.Pessimistic}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Pessimistic")}
 					/>
 					<SliderField
 						label="Sarcastic"
 						id="sarcastic"
 						name="Tone.Sarcastic"
 						value={formData.Tone.Sarcastic}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Sarcastic")}
 					/>
 					<SliderField
 						label="Assertive"
 						id="assertive"
 						name="Tone.Assertive"
 						value={formData.Tone.Assertive}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Assertive")}
 					/>
 					<SliderField
 						label="Aggressive"
 						id="aggressive"
 						name="Tone.Aggressive"
 						value={formData.Tone.Aggressive}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Aggressive")}
 					/>
 					<SliderField
 						label="Passionate"
 						id="passionate"
 						name="Tone.Passionate"
 						value={formData.Tone.Passionate}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Passionate")}
 					/>
 					<SliderField
 						label="Entertaining"
 						id="entertaining"
 						name="Tone.Entertaining"
 						value={formData.Tone.Entertaining}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Entertaining")}
 					/>
 					<SliderField
 						label="Serious"
 						id="serious"
 						name="Tone.Serious"
 						value={formData.Tone.Serious}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Serious")}
 					/>
 					<SliderField
 						label="Educational"
 						id="educational"
 						name="Tone.Educational"
 						value={formData.Tone.Educational}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Educational")}
 					/>
 					<SliderField
 						label="Persuasive"
 						id="persuasive"
 						name="Tone.Persuasive"
 						value={formData.Tone.Persuasive}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Persuasive")}
 					/>
 					<SliderField
 						label="Motivating"
 						id="motivating"
 						name="Tone.Motivating"
 						value={formData.Tone.Motivating}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Motivating")}
 					/>
 					<SliderField
 						label="Curious"
 						id="curious"
 						name="Tone.Curious"
 						value={formData.Tone.Curious}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Curious")}
 					/>
 					<SliderField
 						label="Humoristic"
 						id="humoristic"
 						name="Tone.Humoristic"
 						value={formData.Tone.Humoristic}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Humoristic")}
 					/>
 					<SliderField
 						label="Surreal"
 						id="surreal"
 						name="Tone.Surreal"
 						value={formData.Tone.Surreal}
-						onChange={handleChange}
+						onChange={newValue => handleSliderChange(newValue, "Surreal")}
 					/>
 				</Dropdown>
 				<button
@@ -428,3 +476,39 @@ const TestPromptForm = () => {
 };
 
 export default TestPromptForm;
+
+
+
+const SliderField = ({
+	label,
+	id,
+	name,
+	value,
+	onChange,
+}: {
+	label: string;
+	id: string;
+	name: string;
+	value: number;
+	onChange: (newValue: number) => void; // Update the onChange prop to accept the new value directly
+}) => (
+	<div>
+		<label htmlFor={id} className="block mb-1">
+			{label}
+		</label>
+		<div className="flex space-x-4 items-center">
+			<input
+				type="range"
+				min="1"
+				max="100"
+				id={id}
+				name={id}
+				value={value}
+				onChange={e => onChange(parseInt(e.target.value, 10))} // Parse the value to integer and call onChange with the new value
+				className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+				required
+			/>
+			<h1>{value}</h1>
+		</div>
+	</div>
+);

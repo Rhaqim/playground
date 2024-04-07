@@ -17,7 +17,9 @@ const Dropdown: React.FC<DropdownProps> = ({ name, children }) => {
             <button 
             className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
             onClick={toggleDropdown}>Toggle {name} <span>{isOpen ? '▲' : '▼'}</span></button>
-            {isOpen && <div>{children}</div>}
+            {isOpen && <div
+            className='p-4 border border-gray-300 rounded-md mt-2 flex flex-col space-y-2'
+            >{children}</div>}
         </div>
     );
 };
