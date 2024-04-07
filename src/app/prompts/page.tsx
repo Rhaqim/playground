@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { routes } from "@/service/api/routes";
 
 export default function Page() {
@@ -35,41 +36,46 @@ const PromptsTable = ({
 	prompts,
 }: {
 	prompts: { category: string; prompt: string; id: number }[];
-}) => (
-	<table className="w-full mt-4 rounded-md">
-		<thead>
-			<tr>
-				<th className="text-left">Category</th>
-				<th className="text-left">Prompt</th>
-				<th className="text-left">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{prompts.map(prompt => (
-				<tr key={prompt.id}>
-					<td>{prompt.category}</td>
-					<td className="text-wrap max-w-[50%]">{prompt.prompt}</td>
-					<td className="flex">
-						<button className="bg-blue-500 text-white px-4 py-1 rounded-md">
-							Edit
-						</button>
-						<button
-							onClick={() => routes.delPrompt(prompt.id.toString())}
-							className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
-						>
-							Delete
-						</button>
-						<button
-							onClick={() =>
-								routes.demoPrompt({ prompt_id: prompt.id.toString() })
-							}
-							className="bg-green-500 text-white px-4 py-1 rounded-md ml-2"
-						>
-							Demo
-						</button>
-					</td>
+}) => {
+	const router = useRouter();
+
+	return (
+		<table className="w-full mt-4 rounded-md">
+			<thead>
+				<tr>
+					<th className="text-left">Category</th>
+					<th className="text-left">Prompt</th>
+					<th className="text-left">Action</th>
 				</tr>
-			))}
-		</tbody>
-	</table>
-);
+			</thead>
+			<tbody>
+				{prompts.map(prompt => (
+					<tr key={prompt.id}>
+						<td>{prompt.category}</td>
+						<td className="text-wrap max-w-[50%]">{prompt.prompt}</td>
+						<td className="flex">
+							<button className="bg-blue-500 text-white px-4 py-1 rounded-md">
+								Edit
+							</button>
+							<button
+								onClick={() => routes.delPrompt(prompt.id.toString())}
+								className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
+							>
+								Delete
+							</button>
+							<button
+								onClick={() =>
+									// routes.demoPrompt({ prompt_id: prompt.id.toString() })
+									router.push(`/prompts/${prompt.id}`)
+								}
+								className="bg-green-500 text-white px-4 py-1 rounded-md ml-2"
+							>
+								Demo
+							</button>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+	);
+};

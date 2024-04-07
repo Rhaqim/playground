@@ -6,7 +6,7 @@ export default function Layout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<div className="min-h-screen bg-black">
-			<header className="bg-blue-500 text-white text-center p-4">
+			<header className="bg-blue-500 text-white text-center p-4 flex justify-between">
 				<Link href="/">
 					<p className="text-white">Home</p>
 				</Link>
