@@ -14,6 +14,10 @@ import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
 
 const TestPromptForm = () => {
+	const [fullResponse, setFullResponse] = useState<string>("");
+	const [response, setResponse] = useState<string>("");
+	const [category, setCategory] = useState<number>(0);
+
 	const [losingScenarios, setLosingScenarios] = useState<string[]>([]);
 	const [losingScenario, setLosingScenario] = useState<string>("");
 	const [winningScenarios, setWinningScenarios] = useState<string[]>([]);
@@ -162,8 +166,21 @@ const TestPromptForm = () => {
 		e.preventDefault();
 
 		try {
-			const data = await routes.generatePrompt(formData);
-			console.log(data);
+			const { data } = await routes.generatePrompt(formData);
+			setFullResponse(data.full);
+			setResponse(data.short);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const handleSavePrompt = async (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		e.preventDefault();
+
+		try {
+			await routes.createPrompt({ prompt: response, category });
 		} catch (error) {
 			console.error(error);
 		}
@@ -206,7 +223,8 @@ const TestPromptForm = () => {
 					<label htmlFor="exposition" className="block mb-1">
 						Exposition
 					</label>
-					<textarea
+					<input
+						type="text"
 						id="exposition"
 						name="Exposition"
 						value={formData.Exposition}
@@ -219,7 +237,8 @@ const TestPromptForm = () => {
 					<label htmlFor="firstAct" className="block mb-1">
 						First Act
 					</label>
-					<textarea
+					<input
+						type="text"
 						id="firstAct"
 						name="FirstAct"
 						value={formData.FirstAct}
@@ -561,6 +580,28 @@ const TestPromptForm = () => {
 					Submit
 				</button>
 			</div>
+			{response && (
+				<div>
+					<h1>Prompt</h1>
+					<input
+						type="number"
+						id="category"
+						name="Category"
+						value={category}
+						onChange={e => setCategory(parseInt(e.target.value, 10))}
+						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+						placeholder="Category"
+						required
+					/>
+					<p>{response}</p>
+					<button
+						className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+						onClick={handleSavePrompt}
+					>
+						Save Prompt
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
