@@ -14,6 +14,11 @@ import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
 
 const TestPromptForm = () => {
+	const [losingScenarios, setLosingScenarios] = useState<string[]>([]);
+	const [losingScenario, setLosingScenario] = useState<string>("");
+	const [winningScenarios, setWinningScenarios] = useState<string[]>([]);
+	const [winningScenario, setWinningScenario] = useState<string>("");
+
 	const [mainCharacter, setMainCharacter] = useState<Character>({
 		Name: "",
 		Description: "",
@@ -29,8 +34,8 @@ const TestPromptForm = () => {
 		Exposition: "",
 		FirstAct: "",
 		POV: "",
-		WinningScenario: [],
-		LosingScenario: [],
+		WinningScenario: winningScenarios,
+		LosingScenario: losingScenarios,
 		Premise: "",
 		MainCharater: mainCharacter,
 		SideCharacters: sideCharacters,
@@ -60,6 +65,42 @@ const TestPromptForm = () => {
 
 	const [formData, setFormData] = useState<TestPromptRequest>(initalFormData);
 
+	const handleNewWinningScenarioChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setWinningScenario(e.target.value);
+	};
+
+	const handleAddWinningScenario = () => {
+		if (winningScenario) {
+			setWinningScenarios([...winningScenarios, winningScenario]);
+			setWinningScenario("");
+		}
+	};
+
+	const handleRemoveWinningScenario = (index: number) => {
+		const newWinningScenarios = winningScenarios.filter((_, i) => i !== index);
+		setWinningScenarios(newWinningScenarios);
+	};
+
+	const handleNewLosingScenarioChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setLosingScenario(e.target.value);
+	};
+
+	const handleAddLosingScenario = () => {
+		if (losingScenario) {
+			setLosingScenarios([...losingScenarios, losingScenario]);
+			setLosingScenario("");
+		}
+	};
+
+	const handleRemoveLosingScenario = (index: number) => {
+		const newLosingScenarios = losingScenarios.filter((_, i) => i !== index);
+		setLosingScenarios(newLosingScenarios);
+	};
+
 	const handleMainCharacterChange = (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -83,6 +124,11 @@ const TestPromptForm = () => {
 
 		setSideCharacters([...sideCharacters, newSideCharacter]);
 		setNewSideCharacter({ Name: "", Description: "" }); // Clear input fields
+	};
+
+	const handleRemoveSideCharacter = (index: number) => {
+		const newSideCharacters = sideCharacters.filter((_, i) => i !== index);
+		setSideCharacters(newSideCharacters);
 	};
 
 	const handleChange = (
@@ -202,30 +248,68 @@ const TestPromptForm = () => {
 						<label htmlFor="winningScenario" className="block mb-1">
 							Winning Scenario
 						</label>
+						<ul>
+							{winningScenarios.map((scenrio, index) => (
+								<li key={index}>
+									{scenrio}
+									<button
+										className="text-red-600"
+										onClick={() => handleRemoveWinningScenario(index)}
+									>
+										X
+									</button>
+								</li>
+							))}
+						</ul>
 						<input
 							type="text"
 							id="winningScenario"
 							name="WinningScenario"
-							value={formData.WinningScenario.join(", ")}
-							onChange={handleChange}
+							value={winningScenario}
+							onChange={handleNewWinningScenarioChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
+						<button
+							className="p-2 rounded-md bg-blue-600"
+							onClick={handleAddWinningScenario}
+						>
+							Add Winning Scenario
+						</button>
 					</div>
 
 					<div>
 						<label htmlFor="losingScenario" className="block mb-1">
 							Losing Scenario
 						</label>
+						<ul>
+							{losingScenarios.map((scenrio, index) => (
+								<li key={index}>
+									{scenrio}
+									<button
+										className="text-red-600"
+										onClick={() => handleRemoveLosingScenario(index)}
+									>
+										X
+									</button>
+								</li>
+							))}
+						</ul>
 						<input
 							type="text"
 							id="losingScenario"
 							name="LosingScenario"
-							value={formData.LosingScenario.join(", ")}
-							onChange={handleChange}
+							value={losingScenario}
+							onChange={handleNewLosingScenarioChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
+						<button
+							className="p-2 rounded-md bg-blue-600"
+							onClick={handleAddLosingScenario}
+						>
+							Add Losing Scenario
+						</button>
 					</div>
 				</Dropdown>
 
@@ -263,7 +347,13 @@ const TestPromptForm = () => {
 						<ul>
 							{sideCharacters.map((character, index) => (
 								<li key={index}>
-									{character.Name}: {character.Description}
+									{character.Name}: {character.Description}{" "}
+									<button
+										className="text-red-600"
+										onClick={() => handleRemoveSideCharacter(index)}
+									>
+										X
+									</button>
 								</li>
 							))}
 						</ul>
@@ -476,8 +566,6 @@ const TestPromptForm = () => {
 };
 
 export default TestPromptForm;
-
-
 
 const SliderField = ({
 	label,
