@@ -4,10 +4,10 @@ import { apiFunctions } from "./provider";
 const { get, post, patch, del } = apiFunctions;
 
 export const routes = {
+	getPrompt: async () => get("/prompts"),
 	generatePrompt: async (data: TestPromptRequest) => post("/gen-prompt", data),
 	createPrompt: ({ prompt, category }: { prompt: string; category: string }) =>
 		post("/prompt", { prompt, category }),
-	getPrompt: async () => get("/prompts"),
 	editPrompt: ({
 		prompt,
 		category,
