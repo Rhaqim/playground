@@ -9,6 +9,7 @@ import TestPromptRequest, {
 	VoiceStyle,
 } from "@/types";
 import { routes } from "@/service/api/routes";
+import Dropdown from "@/components/Dropdown";
 
 const TestPromptForm = () => {
 	const [formData, setFormData] = useState<TestPromptRequest>({
@@ -19,6 +20,10 @@ const TestPromptForm = () => {
 		WinningScenario: [],
 		LosingScenario: [],
 		Premise: "",
+		MainCharater: {
+			Name: "",
+			Description: "",
+		},
 		SideCharacters: [],
 		WritingStyle: {
 			Tense: Tense.PastTense,
@@ -56,15 +61,17 @@ const TestPromptForm = () => {
 		}));
 	};
 
-	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleSubmit = async (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
 		e.preventDefault();
-        
-        try {
-            const data = await routes.generatePrompt(formData);
-            console.log(data);
-        } catch (error) {
-            console.error(error);
-        }
+
+		try {
+			const data = await routes.generatePrompt(formData);
+			console.log(data);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const SliderField = ({
@@ -117,6 +124,21 @@ const TestPromptForm = () => {
 				</div>
 
 				<div>
+					<label htmlFor="premise" className="block mb-1">
+						Premise
+					</label>
+					<textarea
+						id="premise"
+						name="Premise"
+						rows={6}
+						value={formData.Premise}
+						onChange={handleChange}
+						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+						required
+					/>
+				</div>
+
+				<div>
 					<label htmlFor="exposition" className="block mb-1">
 						Exposition
 					</label>
@@ -157,238 +179,246 @@ const TestPromptForm = () => {
 					/>
 				</div>
 
-				<div>
-					<label htmlFor="winningScenario" className="block mb-1">
-						Winning Scenario
-					</label>
-					<input
-						type="text"
-						id="winningScenario"
-						name="WinningScenario"
-						value={formData.WinningScenario.join(", ")}
+				<Dropdown name="Scenarios">
+					<div>
+						<label htmlFor="winningScenario" className="block mb-1">
+							Winning Scenario
+						</label>
+						<input
+							type="text"
+							id="winningScenario"
+							name="WinningScenario"
+							value={formData.WinningScenario.join(", ")}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							// required
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="losingScenario" className="block mb-1">
+							Losing Scenario
+						</label>
+						<input
+							type="text"
+							id="losingScenario"
+							name="LosingScenario"
+							value={formData.LosingScenario.join(", ")}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							// required
+						/>
+					</div>
+				</Dropdown>
+
+				<Dropdown name="Characters">
+					<div>
+						<label htmlFor="sideCharacters" className="block mb-1">
+							Side Characters
+						</label>
+						<input
+							type="text"
+							id="mainCharacter"
+							name="MainCharacter"
+							value={formData.MainCharater.Name}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							// required
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="sideCharacters" className="block mb-1">
+							Side Characters
+						</label>
+						<input
+							type="text"
+							id="sideCharacters"
+							name="SideCharacters"
+							value={formData.SideCharacters.map(c => c.Name).join(", ")}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							// required
+						/>
+					</div>
+				</Dropdown>
+
+				<Dropdown name="Writing Style">
+					<div>
+						<label htmlFor="tense" className="block mb-1">
+							Tense
+						</label>
+						<select
+							id="tense"
+							name="Tense"
+							value={formData.WritingStyle.Tense}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							required
+						>
+							<option value={Tense.PastTense}>Past Tense</option>
+							<option value={Tense.PresentTense}>Present Tense</option>
+							<option value={Tense.FutureTense}>Future Tense</option>
+						</select>
+					</div>
+
+					<div>
+						<label htmlFor="style" className="block mb-1">
+							Style
+						</label>
+						<select
+							id="style"
+							name="Style"
+							value={formData.WritingStyle.Style}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							required
+						>
+							<option value={StoryStyle.Description}>Description</option>
+							<option value={StoryStyle.Narrative}>Narrative</option>
+							<option value={StoryStyle.Expository}>Expository</option>
+						</select>
+					</div>
+
+					<div>
+						<label htmlFor="voice" className="block mb-1">
+							Voice
+						</label>
+						<select
+							id="voice"
+							name="Voice"
+							value={formData.WritingStyle.Voice}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							required
+						>
+							<option value={VoiceStyle.Active}>Active</option>
+							<option value={VoiceStyle.Passive}>Passive</option>
+						</select>
+					</div>
+
+					<div>
+						<label htmlFor="pacing" className="block mb-1">
+							Pacing
+						</label>
+						<select
+							id="pacing"
+							name="Pacing"
+							value={formData.WritingStyle.Pacing}
+							onChange={handleChange}
+							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+							required
+						>
+							<option value={Pacing.SlowPacing}>Slow Pacing</option>
+							<option value={Pacing.NormalPacing}>Normal Pacing</option>
+							<option value={Pacing.FastPacing}>Fast Pacing</option>
+						</select>
+					</div>
+				</Dropdown>
+
+				<Dropdown name="Story Characteristics">
+					<SliderField
+						label="Optimistic"
+						id="optimistic"
+						name="Tone.Optimistic"
+						value={formData.Tone.Optimistic}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						// required
 					/>
-				</div>
-
-				<div>
-					<label htmlFor="losingScenario" className="block mb-1">
-						Losing Scenario
-					</label>
-					<input
-						type="text"
-						id="losingScenario"
-						name="LosingScenario"
-						value={formData.LosingScenario.join(", ")}
+					<SliderField
+						label="Pessimistic"
+						id="pessimistic"
+						name="Tone.Pessimistic"
+						value={formData.Tone.Pessimistic}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						// required
 					/>
-				</div>
-
-				<div>
-					<label htmlFor="premise" className="block mb-1">
-						Premise
-					</label>
-					<input
-						type="text"
-						id="premise"
-						name="Premise"
-						value={formData.Premise}
+					<SliderField
+						label="Sarcastic"
+						id="sarcastic"
+						name="Tone.Sarcastic"
+						value={formData.Tone.Sarcastic}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						required
 					/>
-				</div>
-
-				<div>
-					<label htmlFor="sideCharacters" className="block mb-1">
-						Side Characters
-					</label>
-					<input
-						type="text"
-						id="sideCharacters"
-						name="SideCharacters"
-						value={formData.SideCharacters.map(c => c.Name).join(", ")}
+					<SliderField
+						label="Assertive"
+						id="assertive"
+						name="Tone.Assertive"
+						value={formData.Tone.Assertive}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						// required
 					/>
-				</div>
-
-				<div>
-					<label htmlFor="tense" className="block mb-1">
-						Tense
-					</label>
-					<select
-						id="tense"
-						name="Tense"
-						value={formData.WritingStyle.Tense}
+					<SliderField
+						label="Aggressive"
+						id="aggressive"
+						name="Tone.Aggressive"
+						value={formData.Tone.Aggressive}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						required
-					>
-						<option value={Tense.PastTense}>Past Tense</option>
-						<option value={Tense.PresentTense}>Present Tense</option>
-						<option value={Tense.FutureTense}>Future Tense</option>
-					</select>
-				</div>
-
-				<div>
-					<label htmlFor="style" className="block mb-1">
-						Style
-					</label>
-					<select
-						id="style"
-						name="Style"
-						value={formData.WritingStyle.Style}
+					/>
+					<SliderField
+						label="Passionate"
+						id="passionate"
+						name="Tone.Passionate"
+						value={formData.Tone.Passionate}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						required
-					>
-						<option value={StoryStyle.Description}>Description</option>
-						<option value={StoryStyle.Narrative}>Narrative</option>
-						<option value={StoryStyle.Expository}>Expository</option>
-					</select>
-				</div>
-
-				<div>
-					<label htmlFor="voice" className="block mb-1">
-						Voice
-					</label>
-					<select
-						id="voice"
-						name="Voice"
-						value={formData.WritingStyle.Voice}
+					/>
+					<SliderField
+						label="Entertaining"
+						id="entertaining"
+						name="Tone.Entertaining"
+						value={formData.Tone.Entertaining}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						required
-					>
-						<option value={VoiceStyle.Active}>Active</option>
-						<option value={VoiceStyle.Passive}>Passive</option>
-					</select>
-				</div>
-
-				<div>
-					<label htmlFor="pacing" className="block mb-1">
-						Pacing
-					</label>
-					<select
-						id="pacing"
-						name="Pacing"
-						value={formData.WritingStyle.Pacing}
+					/>
+					<SliderField
+						label="Serious"
+						id="serious"
+						name="Tone.Serious"
+						value={formData.Tone.Serious}
 						onChange={handleChange}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						required
-					>
-						<option value={Pacing.SlowPacing}>Slow Pacing</option>
-						<option value={Pacing.NormalPacing}>Normal Pacing</option>
-						<option value={Pacing.FastPacing}>Fast Pacing</option>
-					</select>
-				</div>
-
-				<SliderField
-					label="Optimistic"
-					id="optimistic"
-					name="Tone.Optimistic"
-					value={formData.Tone.Optimistic}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Pessimistic"
-					id="pessimistic"
-					name="Tone.Pessimistic"
-					value={formData.Tone.Pessimistic}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Sarcastic"
-					id="sarcastic"
-					name="Tone.Sarcastic"
-					value={formData.Tone.Sarcastic}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Assertive"
-					id="assertive"
-					name="Tone.Assertive"
-					value={formData.Tone.Assertive}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Aggressive"
-					id="aggressive"
-					name="Tone.Aggressive"
-					value={formData.Tone.Aggressive}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Passionate"
-					id="passionate"
-					name="Tone.Passionate"
-					value={formData.Tone.Passionate}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Entertaining"
-					id="entertaining"
-					name="Tone.Entertaining"
-					value={formData.Tone.Entertaining}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Serious"
-					id="serious"
-					name="Tone.Serious"
-					value={formData.Tone.Serious}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Educational"
-					id="educational"
-					name="Tone.Educational"
-					value={formData.Tone.Educational}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Persuasive"
-					id="persuasive"
-					name="Tone.Persuasive"
-					value={formData.Tone.Persuasive}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Motivating"
-					id="motivating"
-					name="Tone.Motivating"
-					value={formData.Tone.Motivating}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Curious"
-					id="curious"
-					name="Tone.Curious"
-					value={formData.Tone.Curious}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Humoristic"
-					id="humoristic"
-					name="Tone.Humoristic"
-					value={formData.Tone.Humoristic}
-					onChange={handleChange}
-				/>
-				<SliderField
-					label="Surreal"
-					id="surreal"
-					name="Tone.Surreal"
-					value={formData.Tone.Surreal}
-					onChange={handleChange}
-				/>
+					/>
+					<SliderField
+						label="Educational"
+						id="educational"
+						name="Tone.Educational"
+						value={formData.Tone.Educational}
+						onChange={handleChange}
+					/>
+					<SliderField
+						label="Persuasive"
+						id="persuasive"
+						name="Tone.Persuasive"
+						value={formData.Tone.Persuasive}
+						onChange={handleChange}
+					/>
+					<SliderField
+						label="Motivating"
+						id="motivating"
+						name="Tone.Motivating"
+						value={formData.Tone.Motivating}
+						onChange={handleChange}
+					/>
+					<SliderField
+						label="Curious"
+						id="curious"
+						name="Tone.Curious"
+						value={formData.Tone.Curious}
+						onChange={handleChange}
+					/>
+					<SliderField
+						label="Humoristic"
+						id="humoristic"
+						name="Tone.Humoristic"
+						value={formData.Tone.Humoristic}
+						onChange={handleChange}
+					/>
+					<SliderField
+						label="Surreal"
+						id="surreal"
+						name="Tone.Surreal"
+						value={formData.Tone.Surreal}
+						onChange={handleChange}
+					/>
+				</Dropdown>
 				<button
 					className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                    onClick={handleSubmit}
+					onClick={handleSubmit}
 				>
 					Submit
 				</button>

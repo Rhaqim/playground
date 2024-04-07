@@ -23,7 +23,7 @@ export enum Pacing {
 }
 
 // Interfaces
-export interface SideCharacter {
+export interface Character {
 	Name: string;
 	Description: string;
 }
@@ -60,7 +60,8 @@ declare interface TestPromptRequest {
 	WinningScenario: string[];
 	LosingScenario: string[];
 	Premise: string;
-	SideCharacters: SideCharacter[];
+	MainCharater: Character;
+	SideCharacters:Character[];
 	WritingStyle: WritingStyle;
 	Tone: StoryTone;
 }
