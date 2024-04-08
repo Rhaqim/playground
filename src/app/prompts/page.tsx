@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { routes } from "@/service/api/routes";
 
@@ -39,6 +39,32 @@ const PromptsTable = ({
 }) => {
 	const router = useRouter();
 
+	const [editableRow, setEditableRow] = useState<number | null>(null); // Track the id of the currently editable row
+	const editRef = useRef<HTMLTextAreaElement>(null);
+
+	const handleEdit = (id: number) => {
+		setEditableRow(id); // Enable editing for the selected row
+		setTimeout(() => editRef.current?.focus(), 0); // Focus the textarea after a short delay to ensure it's mounted
+	};
+
+	const handleSave = async (id: number, category: string, prompt: string) => {
+		try {
+			const { data } = await routes.editPrompt({
+				prompt_id: id.toString(),
+				category,
+				prompt,
+			});
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setEditableRow(null);
+		}
+	};
+
+	const handleCancel = () => {
+		setEditableRow(null);
+	};
+
 	return (
 		<table className="w-full mt-4 rounded-md">
 			<thead>
@@ -52,11 +78,45 @@ const PromptsTable = ({
 				{prompts.map(prompt => (
 					<tr key={prompt.id}>
 						<td>{prompt.category}</td>
-						<td className="text-wrap max-w-[50%]">{prompt.prompt}</td>
+						<td className="text-wrap max-w-[50%]">
+							{editableRow === prompt.id ? ( // If editing is enabled for this row
+								<textarea
+									ref={editRef}
+									value={prompt.prompt}
+									rows={10}
+									onChange={e => {} /* Handle changes if needed */}
+									className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+								/>
+							) : (
+								prompt.prompt
+							)}
+						</td>
 						<td className="flex">
-							<button className="bg-blue-500 text-white px-4 py-1 rounded-md">
-								Edit
-							</button>
+							{editableRow === prompt.id ? ( // If editing is enabled for this row
+								<>
+									<button
+										onClick={() =>
+											handleSave(prompt.id, prompt.category, prompt.prompt)
+										}
+										className="bg-green-500 text-white px-4 py-1 rounded-md"
+									>
+										Save
+									</button>
+									<button
+										onClick={handleCancel}
+										className="bg-gray-500 text-white px-4 py-1 rounded-md ml-2"
+									>
+										Cancel
+									</button>
+								</>
+							) : (
+								<button
+									onClick={() => handleEdit(prompt.id)}
+									className="bg-blue-500 text-white px-4 py-1 rounded-md"
+								>
+									Edit
+								</button>
+							)}
 							<button
 								onClick={() => routes.delPrompt(prompt.id.toString())}
 								className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
