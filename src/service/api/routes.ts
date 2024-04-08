@@ -1,13 +1,14 @@
 import TestPromptRequest from "@/types";
 import { apiFunctions } from "./provider";
+import { stringify } from "querystring";
 
 const { get, post, patch, del } = apiFunctions;
 
 export const routes = {
 	getPrompt: async () => get("/prompts"),
 	generatePrompt: async (data: TestPromptRequest) => post("/gen-prompt", data),
-	createPrompt: ({ prompt, category }: { prompt: string; category: number }) =>
-		post("/prompt", { prompt, category }),
+	createPrompt: ({ prompt, category }: { prompt: string; category: string }) =>
+		post("/prompt", { prompt, category: category.toString() }),
 	editPrompt: ({
 		prompt,
 		category,

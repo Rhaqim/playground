@@ -6,7 +6,7 @@ export enum Tense {
 }
 
 export enum StoryStyle {
-	Description = "description",
+	Descriptive = "descriptive",
 	Narrative = "narrative",
 	Expository = "expository",
 }

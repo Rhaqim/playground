@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use, useCallback } from "react";
 
 import TestPromptRequest, {
 	Pacing,
@@ -16,7 +16,8 @@ import Dropdown from "@/components/Dropdown";
 const TestPromptForm = () => {
 	const [fullResponse, setFullResponse] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
-	const [category, setCategory] = useState<number>(0);
+	const [category, setCategory] = useState<string>("1");
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const [losingScenarios, setLosingScenarios] = useState<string[]>([]);
 	const [losingScenario, setLosingScenario] = useState<string>("");
@@ -45,7 +46,7 @@ const TestPromptForm = () => {
 		SideCharacters: sideCharacters,
 		WritingStyle: {
 			Tense: Tense.PastTense,
-			Style: StoryStyle.Description,
+			Style: StoryStyle.Descriptive,
 			Voice: VoiceStyle.Active,
 			Pacing: Pacing.NormalPacing,
 		},
@@ -138,12 +139,13 @@ const TestPromptForm = () => {
 	const handleChange = (
 		e: React.ChangeEvent<
 			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-		>
+		>,
+		key?: string
 	) => {
 		const { name, value } = e.target;
 		setFormData(prevData => ({
 			...prevData,
-			[name]: value,
+			[key ?? name]: value,
 		}));
 	};
 
@@ -185,6 +187,15 @@ const TestPromptForm = () => {
 			console.error(error);
 		}
 	};
+
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
+
+	useEffect(() => {
+		// Update isModalOpen when response changes
+		setIsModalOpen(response !== "");
+	}, [response]);
 
 	return (
 		<div className="max-w-md mx-auto">
@@ -407,9 +418,9 @@ const TestPromptForm = () => {
 						</label>
 						<select
 							id="tense"
-							name="Tense"
+							name="WritingStyle.Tense"
 							value={formData.WritingStyle.Tense}
-							onChange={handleChange}
+							onChange={e => handleChange(e, "WritingStyle.Tense")}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
 						>
@@ -425,13 +436,13 @@ const TestPromptForm = () => {
 						</label>
 						<select
 							id="style"
-							name="Style"
+							name="WritingStyle.Style"
 							value={formData.WritingStyle.Style}
-							onChange={handleChange}
+							onChange={e => handleChange(e, "WritingStyle.Style")}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
 						>
-							<option value={StoryStyle.Description}>Description</option>
+							<option value={StoryStyle.Descriptive}>Description</option>
 							<option value={StoryStyle.Narrative}>Narrative</option>
 							<option value={StoryStyle.Expository}>Expository</option>
 						</select>
@@ -573,35 +584,69 @@ const TestPromptForm = () => {
 						onChange={newValue => handleSliderChange(newValue, "Surreal")}
 					/>
 				</Dropdown>
-				<button
-					className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-					onClick={handleSubmit}
-				>
-					Submit
-				</button>
-			</div>
-			{response && (
-				<div>
-					<h1>Prompt</h1>
-					<input
-						type="number"
-						id="category"
-						name="Category"
-						value={category}
-						onChange={e => setCategory(parseInt(e.target.value, 10))}
-						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
-						placeholder="Category"
-						required
-					/>
-					<p>{response}</p>
+				<div className="flex justify-between items-center">
 					<button
 						className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-						onClick={handleSavePrompt}
+						onClick={handleSubmit}
 					>
-						Save Prompt
+						Submit
 					</button>
+					{response && (
+						<button
+							className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+							onClick={toggleModal}
+						>
+							View Prompt
+						</button>
+					)}
 				</div>
-			)}
+			</div>
+			<div>
+				{isModalOpen && (
+					<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
+						<div className="bg-white p-8 rounded-lg shadow-md w-[50%]">
+							<h1 className="text-2xl font-bold mb-4 text-black">Prompt</h1>
+							<p className="text-black">
+								Review the prompt and make any changes
+							</p>
+							<textarea
+								value={response}
+								rows={10}
+								onChange={e => setResponse(e.target.value)}
+								className="w-full border-gray-300 text-white bg-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+								required
+							/>
+							<div>
+								<label htmlFor="category" className="block mb-1 text-black">
+									Select Category
+								</label>
+								<select
+									id="category"
+									name="Category"
+									value={category}
+									onChange={e => setCategory(e.target.value)}
+									className="w-full border-black border-2 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+									required
+								>
+									<option value="1">Escape</option>
+								</select>
+							</div>
+							<button
+								className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+								onClick={handleSavePrompt}
+							>
+								Save Prompt
+							</button>
+							<button
+								className="mt-4 bg-gray-300 text-gray-800 px-4 py-2 rounded-md ml-2 hover:bg-gray-400"
+								onClick={toggleModal}
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };
@@ -619,7 +664,7 @@ const SliderField = ({
 	id: string;
 	name: string;
 	value: number;
-	onChange: (newValue: number) => void; // Update the onChange prop to accept the new value directly
+	onChange: (newValue: number) => void;
 }) => (
 	<div>
 		<label htmlFor={id} className="block mb-1">
