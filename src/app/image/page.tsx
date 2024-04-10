@@ -34,23 +34,38 @@ const ImagePlayground = () => {
 	};
 
 	return (
-		<div>
-			<h1>Image Playground</h1>
-			<input
-				type="text"
-				placeholder="Enter Prompt"
-				value={prompt}
-				onChange={handlePrompt}
-				className="text-black"
-			/>
-			<button onClick={handleLoad}>Load Image</button>
-			{loading && (
-				<div className="flex justify-center items-center">
-					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white"></div>
+		<div className="flex flex-col items-center h-screen bg-black text-white">
+			<div className="text-center p-4">
+				<h1 className="text-2xl font-semibold">Image Playground</h1>
+				<p>Enter a prompt to generate an image</p>
+			</div>
+			<div className="flex flex-col space-y-4">
+				<div className="flex flex-col justify-center items-center space-y-2">
+					<input
+						type="text"
+						placeholder="Enter Prompt"
+						value={prompt}
+						onChange={handlePrompt}
+						className="text-black rounded-md p-2"
+					/>
+					<button 
+						className="bg-blue-500 text-white p-2 rounded-md"
+					onClick={handleLoad}>Load Image</button>
 				</div>
-			)}
-			{error && <p style={{ color: "red" }}>{error}</p>}
-			{base64 && <ImageBase64 image={base64} />}
+				<div className="flex flex-col justify-center items-center space-y-2">
+					{loading && (
+						<div className="flex justify-center items-center">
+							<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white"></div>
+						</div>
+					)}
+					{error && <p style={{ color: "red" }}>{error}</p>}
+					{base64 && (
+						<div className="flex justify-center items-center rounded-md">
+							<ImageBase64 image={base64} />
+						</div>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 };

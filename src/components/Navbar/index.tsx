@@ -43,10 +43,10 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 				</button>
 				<h1 className="text-2xl font-semibold">Story Prompts</h1>
 				<nav
-					className={`${showLinks ? "flex" : "hidden"} md:flex md:items-center`}
+					className={`${showLinks ? "flex" : "hidden"} md:flex md:items-center space-x-2`}
 				>
 					<Link href="/">
-						<p className="text-white mr-4">Home</p>
+						<p className="text-white">Home</p>
 					</Link>
 					<Link href="/playground">
 						<p className="text-white">Playground</p>
