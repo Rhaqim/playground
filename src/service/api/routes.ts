@@ -26,4 +26,5 @@ export const routes = {
 	login: async (wallet: string, signature: string) => post("/login", { wallet, signature }),
 	logout: async () => post("/logout", {}),
 	getNonce: async (wallet: string) => post("/nonce", { wallet }),
+	image: async (image: string) => get(`/image?prompt=${image}`),
 };
