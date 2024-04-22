@@ -63,9 +63,17 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 	useEffect(() => {
 		if (videoRef.current) {
-			// play the video and loop it
-			videoRef.current.play().catch((error) => console.error(error));
-			videoRef.current.loop = true;
+			// Check if videoRef exists before manipulating it
+			const video = videoRef.current;
+
+			// Set autoplay and loop attributes
+			video.autoplay = true;
+			video.loop = true;
+			
+			// Ensure the video is loaded and then play it
+			video.addEventListener("loadeddata", () => {
+				video.play().catch(error => console.error(error));
+			});
 		}
 	}, [videoRef]);
 
