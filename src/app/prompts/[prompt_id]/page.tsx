@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
+
 import { routes } from "@/service/api/routes";
 import { BASE_URL } from "@/config";
 
@@ -16,13 +18,20 @@ type ReturnData = {
 
 export default function Page({ params }: { params: { prompt_id: string } }) {
 	const [prompt, setPrompt] = useState<ReturnData | null>(null);
+
 	const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
+	const [loadingVideo, setLoadingVideo] = useState<boolean>(false);
+	const [videoLoaded, setVideoLoaded] = useState<boolean>(false);
+
+	const [image, setImage] = useState<string>("");
+	const [loadingImage, setLoading] = useState<boolean>(false);
 
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const imageRef = useRef<HTMLImageElement>(null);
 
 	const promptResponse = async (choice: number, id: string) => {
 		const response = await routes.respond(choice, id);
+		setVideoBlob(null);
 		setPrompt(response.data);
 	};
 
@@ -40,6 +49,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 	useEffect(() => {
 		if (prompt && prompt) {
 			const fetchVideo = async (id: string) => {
+				setLoadingVideo(true);
 				try {
 					// use fetch POST request passing the id as story_id
 					const response = await fetch(`${BASE_URL}/video`, {
@@ -54,29 +64,54 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 					setVideoBlob(blob);
 				} catch (error) {
+					setVideoLoaded(false);
+					setVideoBlob(null);
 					console.error(error);
+				} finally {
+					setLoadingVideo(false);
 				}
 			};
+
+			const fetchImage = async (id: string) => {
+				setLoading(true);
+				try {
+					const response = await fetch(`${BASE_URL}/image`, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ story_id: id }),
+					});
+
+					const data = await response.text();
+					const img = `data:image/png;base64,${data}`;
+					console.log("Image: ", img);
+					setImage(img);
+				} catch (error) {
+					console.error(error);
+				} finally {
+					setLoading(false);
+				}
+			};
+
 			fetchVideo(prompt.id);
+			fetchImage(prompt.id);
 		}
 	}, [prompt]);
 
 	useEffect(() => {
-		if (videoRef.current) {
+		if (videoRef && videoRef.current) {
 			// Check if videoRef exists before manipulating it
 			const video = videoRef.current;
 
-			// Set autoplay and loop attributes
-			video.autoplay = true;
-			video.loop = true;
-			
-			// Ensure the video is loaded and then play it
-			video.addEventListener("loadeddata", () => {
+			videoRef.current.onloadeddata = () => {
+				setVideoLoaded(true);
 				video.play().catch(error => console.error(error));
-			});
+				video.autoplay = true;
+				video.loop = true;
+			};
 		}
 	}, [videoRef]);
-
 
 	if (!prompt) {
 		return <div>Loading...</div>;
@@ -86,14 +121,39 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 		return (
 			<div className="text-center">
 				<h1 className="text-3xl font-bold mb-4">Prompt Page</h1>
-				<div className="max-w-lg mx-auto bg-cover bg-center rounded-lg overflow-hidden shadow-lg">
-					<div className="p-8">
-						{videoBlob && (
-							<video ref={videoRef} className="w-full" controls>
-								<source src={videoBlob ? URL.createObjectURL(videoBlob) : ""} />
-								Your browser does not support the video tag.
-							</video>
+				<div className="p-4 relative">
+					<div className="p-2 relative flex flex-col space-y-2 w-full max-h-50">
+						{loadingImage && !image ? (
+							<div className="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-gray-500">
+								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
+							</div>
+						) : (
+							!videoLoaded &&
+							image && (
+								<img
+									src={image}
+									alt="Generated Image"
+									ref={imageRef}
+									className="w-full object-cover h-96 rounded-lg"
+								/>
+							)
 						)}
+						{loadingVideo && !videoLoaded ? (
+							<div className="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-gray-500">
+								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
+							</div>
+						) : (
+							videoLoaded && (
+								<video ref={videoRef} className="w-full" controls autoPlay loop>
+									<source
+										src={videoBlob ? URL.createObjectURL(videoBlob) : ""}
+									/>
+									Your browser does not support the video tag.
+								</video>
+							)
+						)}
+					</div>
+					<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg overflow-hidden shadow-lg mt-2">
 						<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">
 							{prompt.story}
 						</h2>
