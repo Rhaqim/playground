@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
 import { routes } from "@/service/api/routes";
-import { BASE_URL } from "@/config";
+import { BASE_URL_DEV } from "@/config";
 
 type ReturnData = {
 	id: string;
@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 				setLoadingVideo(true);
 				try {
 					// use fetch POST request passing the id as story_id
-					const response = await fetch(`${BASE_URL}/video`, {
+					const response = await fetch(`${BASE_URL_DEV}/video`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 			const fetchImage = async (id: string) => {
 				setLoading(true);
 				try {
-					const response = await fetch(`${BASE_URL}/image`, {
+					const response = await fetch(`${BASE_URL_DEV}/image`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
