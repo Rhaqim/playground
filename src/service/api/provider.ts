@@ -1,13 +1,22 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
-import { BASE_URL } from "@/config";
+import { BASE_URL_DEV } from "@/config";
 
-console.log(BASE_URL);
+let apiUrl = BASE_URL_DEV;
 
-// Create a base Axios instance
+export const setApiUrl = (url: string) => {
+	apiUrl = url;
+};
+
+console.log("API URL", apiUrl);
+
 const api: AxiosInstance = axios.create({
-	baseURL: BASE_URL,
-	// timeout: 5000,
+	baseURL: apiUrl,
+});
+
+api.interceptors.request.use(config => {
+	config.baseURL = apiUrl;
+	return config;
 });
 
 // api.interceptors.response.use(
@@ -43,5 +52,5 @@ export const apiFunctions = {
 	post: (url: string, data: Data) => request("post", url, data),
 	put: (url: string, data: Data) => request("put", url, data),
 	del: (url: string, data?: Data) => request("delete", url, data),
-	patch : (url: string, data: Data) => request("patch", url, data),
+	patch: (url: string, data: Data) => request("patch", url, data),
 };

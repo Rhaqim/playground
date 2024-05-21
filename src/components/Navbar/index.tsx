@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
+import { useEnvironment } from "@/context/env.context";
+
 const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+	const { toggleEnvironment, environment } = useEnvironment();
+
 	const [showLinks, setShowLinks] = useState(false);
 
 	const toggleLinks = () => {
@@ -15,7 +19,7 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 			<header className="bg-blue-500 text-white text-center p-4 flex justify-between">
 				<button
 					onClick={toggleLinks}
-					className="block md:hidden focus:outline-none"
+					className="block md:hidden focus:outline-none z-20"
 				>
 					<svg
 						className="w-6 h-6 text-white"
@@ -42,9 +46,34 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 					</svg>
 				</button>
 				<h1 className="text-2xl font-semibold">Story Prompts</h1>
+				{/* <nav
+					className={`${
+						showLinks ? "flex flex-col" : "hidden"
+					} md:flex md:items-center space-x-2`}
+				> */}
 				<nav
-					className={`${showLinks ? "flex" : "hidden"} md:flex md:items-center space-x-2`}
+					className={`${
+						showLinks ? "flex" : "hidden"
+					} fixed inset-0 z-10 bg-gray-900 bg-opacity-90 flex-col items-center justify-center md:flex md:relative md:bg-transparent md:bg-opacity-100 md:flex-row md:space-x-2`}
 				>
+					<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
+						<button
+							onClick={toggleEnvironment}
+							className={`${
+								environment === "development" ? "bg-blue-500" : "bg-gray-300"
+							} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
+						>
+							Dev
+						</button>
+						<button
+							onClick={toggleEnvironment}
+							className={`${
+								environment === "production" ? "bg-green-500" : "bg-gray-300"
+							} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
+						>
+							Prod
+						</button>
+					</div>
 					<Link href="/">
 						<p className="text-white">Home</p>
 					</Link>
