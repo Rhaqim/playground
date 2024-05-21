@@ -46,16 +46,23 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 					</svg>
 				</button>
 				<h1 className="text-2xl font-semibold">Story Prompts</h1>
-				{/* <nav
-					className={`${
-						showLinks ? "flex flex-col" : "hidden"
-					} md:flex md:items-center space-x-2`}
-				> */}
 				<nav
 					className={`${
 						showLinks ? "flex" : "hidden"
-					} fixed inset-0 z-10 bg-gray-900 bg-opacity-90 flex-col items-center justify-center md:flex md:relative md:bg-transparent md:bg-opacity-100 md:flex-row md:space-x-2`}
+					} fixed inset-0 z-10 bg-gray-900 bg-opacity-90 flex-col justify-around items-center md:flex md:relative md:bg-transparent md:bg-opacity-100 md:flex-row md:space-x-2`}
 				>
+					<Link href="/">
+						<p className="text-white">Home</p>
+					</Link>
+					<Link href="/playground">
+						<p className="text-white">Playground</p>
+					</Link>
+					<Link href="/prompts">
+						<p className="text-white">Prompts</p>
+					</Link>
+					<Link href="/image">
+						<p className="text-white">Image</p>
+					</Link>
 					<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
 						<button
 							onClick={toggleEnvironment}
@@ -74,18 +81,6 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 							Prod
 						</button>
 					</div>
-					<Link href="/">
-						<p className="text-white">Home</p>
-					</Link>
-					<Link href="/playground">
-						<p className="text-white">Playground</p>
-					</Link>
-					<Link href="/prompts">
-						<p className="text-white">Prompts</p>
-					</Link>
-					<Link href="/image">
-						<p className="text-white">Image</p>
-					</Link>
 				</nav>
 			</header>
 			<main className="container mx-auto p-4">{children}</main>
