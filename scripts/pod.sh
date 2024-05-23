@@ -25,11 +25,11 @@ podman rm -f $CONTAINER_NAME
 # Build the Docker image
 podman build -t $APP_NAME ..
 
-# # Remove the existing pod if it exists
-# podman pod rm -f $POD_NAME
+# Remove the existing pod if it exists
+podman pod rm -f $POD_NAME
 
-# # Create a new pod
-# podman pod create --name $POD_NAME -p 3000:3000 -p 8001:8001 -p 8000:8000
+# Create a new pod
+podman pod create --name $POD_NAME -p 3031:3031 -p 8001:8001 -p 8000:8000
 
-# # Run the container in the pod
-# podman run -d --name $CONTAINER_NAME --pod $POD_NAME $APP_NAME
+# Run the container in the pod
+podman run -d --name $CONTAINER_NAME --pod $POD_NAME $APP_NAME
