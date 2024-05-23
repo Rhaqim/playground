@@ -29,7 +29,7 @@ podman build -t $APP_NAME ..
 podman pod rm -f $POD_NAME
 
 # Create a new pod
-podman pod create --name $POD_NAME -p 3031:3031
+podman pod create --name $POD_NAME -p 3031:3000
 
 # Run the container in the pod
 podman run -d --name $CONTAINER_NAME --pod $POD_NAME $APP_NAME
