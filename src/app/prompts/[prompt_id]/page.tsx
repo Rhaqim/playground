@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 
 import { usePrompt } from "@/context/prompt.context";
 import { routes } from "@/service/api/routes";
@@ -29,65 +30,10 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 	useEffect(() => {
 		startStory(parseInt(params.prompt_id), setStory);
-
-		// const fetchPrompt = async (id: string) => {
-		// 	// convert the id to a number
-		// 	const id_ = parseInt(id);
-
-		// 	const response = await routes.demoPrompt(id_);
-		// 	setStory(response.data);
-		// };
-		// fetchPrompt(params.prompt_id);
 	}, [params.prompt_id, startStory]);
 
 	useEffect(() => {
 		if (story && story) {
-			// const fetchVideo = async (id: string) => {
-			// 	setLoadingVideo(true);
-			// 	try {
-			// 		// use fetch POST request passing the id as story_id
-			// 		const response = await fetch(`${BASE_URL_DEV}/video`, {
-			// 			method: "POST",
-			// 			headers: {
-			// 				"Content-Type": "application/json",
-			// 			},
-			// 			body: JSON.stringify({ story_id: id }),
-			// 		});
-
-			// 		const blob = await response.blob();
-
-			// 		setVideoBlob(blob);
-			// 	} catch (error) {
-			// 		setVideoLoaded(false);
-			// 		setVideoBlob(null);
-			// 		console.error(error);
-			// 	} finally {
-			// 		setLoadingVideo(false);
-			// 	}
-			// };
-
-			// const fetchImage = async (id: string) => {
-			// 	setLoading(true);
-			// 	try {
-			// 		const response = await fetch(`${BASE_URL_DEV}/image`, {
-			// 			method: "POST",
-			// 			headers: {
-			// 				"Content-Type": "application/json",
-			// 			},
-			// 			body: JSON.stringify({ story_id: id }),
-			// 		});
-
-			// 		const data = await response.text();
-			// 		const img = `data:image/png;base64,${data}`;
-			// 		console.log("Image: ", img);
-			// 		setImage(img);
-			// 	} catch (error) {
-			// 		console.error(error);
-			// 	} finally {
-			// 		setLoading(false);
-			// 	}
-			// };
-
 			const fetchVideo = async (id: string) => {
 				try {
 					setLoadingVideo(true);
@@ -97,6 +43,8 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 					setVideoLoaded(false);
 					setVideoBlob(null);
 					console.error(error);
+				} finally {
+					setLoadingVideo(false);
 				}
 			};
 
@@ -104,7 +52,8 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 				try {
 					setLoading(true);
 					const data = await routes.image(id);
-					const img = `data:image/png;base64,${data}`;
+					console.log("Image: ", data);
+					const img = `data:image/png;base64,${data.data}`;
 					setImage(img);
 				} catch (error) {
 					console.error(error);
@@ -113,7 +62,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 				}
 			};
 
-			fetchVideo(story.id);
+			// fetchVideo(story.id);
 			fetchImage(story.id);
 		}
 	}, [story]);
@@ -141,7 +90,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 			<div className="text-center">
 				<h1 className="text-3xl font-bold mb-4">Prompt Page</h1>
 				<div className="p-4 relative">
-					<div className="p-2 relative flex flex-col space-y-2 w-full max-h-50">
+					<div className="p-2 relative flex flex-col space-y-2 w-full h-60 max-h-50">
 						{loadingImage && !image ? (
 							<div className="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-gray-500">
 								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
@@ -149,8 +98,8 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 						) : (
 							!videoLoaded &&
 							image && (
-								<img
-									src={image}
+								<Image
+									src={decodeURIComponent(image)}
 									alt="Generated Image"
 									ref={imageRef}
 									className="w-full object-cover h-96 rounded-lg"
