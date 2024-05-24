@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/Navbar";
-import { EnvironmentProvider } from "@/context/env.context";
-import { PromptProvider } from "@/context/prompt.context";
+import AppProviders from "@/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +20,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<EnvironmentProvider>
-					<PromptProvider>
-						<Navbar>{children}</Navbar>
-					</PromptProvider>
-				</EnvironmentProvider>
+				<AppProviders>
+					<Navbar>{children}</Navbar>
+				</AppProviders>
 			</body>
 		</html>
 	);
