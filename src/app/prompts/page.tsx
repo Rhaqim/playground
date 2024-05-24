@@ -205,7 +205,10 @@ const PromptsTable = ({
 									</button>
 								)}
 								<button
-									onClick={() => routes.delPrompt(prompt.id.toString())}
+									onClick={() => 
+										// routes.delPrompt(prompt.id.toString())
+										console.log("Delete prompt")
+									}
 									className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
 								>
 									Delete
