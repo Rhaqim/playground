@@ -6,11 +6,20 @@ const nextConfig = {
         return [
             {
                 source: "/api/dev/:path*",
-                destination: `http://localhost:8001/:path*`,
+                destination: `http://localhost:8080/:path*`,
+            },
+            {
+                source: "/prompts/api/dev/:path*",
+                destination: `http://localhost:8080/:path*`,
             },
             {
                 source: "/api/prod/:path*",
-                destination: `http://localhost:8000/:path*`,
+                destination: `http://localhost:8081/:path*`,
+
+            },
+            {
+                source: "/prompts/api/prod/:path*",
+                destination: `http://localhost:8081/:path*`,
 
             }
         ];
