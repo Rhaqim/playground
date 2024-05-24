@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from "react";
 
-import { BASE_URL_DEV } from "@/config";
 import { usePrompt } from "@/context/prompt.context";
 import { routes } from "@/service/api/routes";
 import StoryData from "@/types/story.type";
