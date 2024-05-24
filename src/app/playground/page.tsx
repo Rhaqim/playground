@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import TestPromptRequest, {
 	Pacing,
@@ -12,11 +12,14 @@ import TestPromptRequest, {
 } from "@/types/craftPrompt.type";
 import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
+import { usePrompt } from "@/context/prompt.context";
 
 const TestPromptForm = () => {
+	const { categories } = usePrompt();
+
 	const [fullResponse, setFullResponse] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
-	const [category, setCategory] = useState<string>("1");
+	const [categoryId, setCategoryId] = useState<number>(1);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const [losingScenarios, setLosingScenarios] = useState<string[]>([]);
@@ -182,7 +185,7 @@ const TestPromptForm = () => {
 		e.preventDefault();
 
 		try {
-			await routes.createPrompt({ prompt: response, category });
+			await routes.createPrompt({ prompt: response, category: categoryId });
 		} catch (error) {
 			console.error(error);
 		}
@@ -623,12 +626,17 @@ const TestPromptForm = () => {
 								<select
 									id="category"
 									name="Category"
-									value={category}
-									onChange={e => setCategory(e.target.value)}
+									value={categoryId}
+									onChange={e => setCategoryId(parseInt(e.target.value))}
 									className="w-full border-black border-2 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 									required
 								>
-									<option value="1">Escape</option>
+									{categories.map(cat => (
+										<option key={cat.id} value={cat.id}>
+											{cat.name}
+										</option>
+									))}
+									{/* <option value="1">Escape</option> */}
 								</select>
 							</div>
 							<button

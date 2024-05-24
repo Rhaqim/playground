@@ -10,12 +10,17 @@ import React, {
 
 import { useEnvironment } from "@/context/env.context";
 import { routes } from "@/service/api/routes";
-import Prompt from "@/types/prompt.type";
+import Prompt, { Topic, Category } from "@/types/prompt.type";
 import StoryData from "@/types/story.type";
 
 interface PromptContextProps {
 	prompts: Prompt[];
+	topics: Topic[];
+	categories: Category[];
+	newCategoryName: string;
+	handleCategoryCreation: () => void;
 	generatePrompt: () => Promise<void>;
+	setNewCategoryName: (name: string) => void;
 	updatePrompt: (
 		prompt: Prompt,
 		editableRow: (row: number | null) => void
@@ -35,6 +40,9 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	const { environment } = useEnvironment();
 
 	const [prompts, setPrompts] = useState<Prompt[]>([]);
+	const [topics, setTopics] = useState<Topic[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
+	const [newCategoryName, setNewCategoryName] = useState<string>("");
 
 	async function generatePrompt() {
 		try {
@@ -43,6 +51,26 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		} catch (error) {
 			console.error(error);
 			setPrompts([]);
+		}
+	}
+
+	async function fetchTopics() {
+		try {
+			const { data } = await routes.getTopics();
+			setTopics(data.topics);
+		} catch (error) {
+			console.error(error);
+			setTopics([]);
+		}
+	}
+
+	async function fetchCategories() {
+		try {
+			const { data } = await routes.getCategories();
+			setCategories(data.categories);
+		} catch (error) {
+			console.error(error);
+			setCategories([]);
 		}
 	}
 
@@ -63,6 +91,20 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
+	const handleTopicCategoryChange = async (
+		topicId: number,
+		categoryId: number
+	) => {
+		const { data } = await routes.updateTopicCategory(topicId, categoryId);
+		setTopics(prev => prev.map(t => (t.id === data.topic.id ? data.topic : t)));
+	};
+
+	const handleCategoryCreation = async () => {
+		const { data } = await routes.createCategory(newCategoryName);
+		setCategories(prev => [...prev, data.category]);
+		setNewCategoryName("");
+	};
+
 	async function startStory(
 		prompt_id: number,
 		setStory: (story: StoryData | null) => void
@@ -78,11 +120,23 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 
 	useEffect(() => {
 		generatePrompt();
+		fetchTopics();
+		fetchCategories();
 	}, [environment]);
 
 	return (
 		<PromptContext.Provider
-			value={{ prompts, generatePrompt, updatePrompt, startStory }}
+			value={{
+				prompts,
+				topics,
+				categories,
+				newCategoryName,
+				handleCategoryCreation,
+				setNewCategoryName,
+				generatePrompt,
+				updatePrompt,
+				startStory,
+			}}
 		>
 			{children}
 		</PromptContext.Provider>

@@ -5,8 +5,13 @@ const { get, post, patch, del } = apiFunctions;
 
 export const routes = {
 	getPrompt: async () => get("/prompts"),
+	getTopics: async () => get("/topics"),
+	getCategories: async () => get("/categories"),
+	updateTopicCategory: async (topic_id: number, category_id: number) =>
+		patch(`/topic/${topic_id}`, { category_id }),
+	createCategory: async (name: string) => post("/category", { name }),
 	generatePrompt: async (data: TestPromptRequest) => post("/gen-prompt", data),
-	createPrompt: ({ prompt, category }: { prompt: string; category: string }) =>
+	createPrompt: ({ prompt, category }: { prompt: string; category: number }) =>
 		post("/prompt", { prompt, category: category.toString() }),
 	editPrompt: ({
 		prompt,
