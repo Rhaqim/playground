@@ -3,20 +3,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { routes } from "@/service/api/routes";
+import { usePrompt } from "@/context/prompt.context";
 
 export default function Page() {
-	const [prompts, setPrompts] = useState<
-		{ category: string; prompt: string; id: number }[]
-	>([]);
-
-	async function generatePrompt() {
-		const { data } = await routes.getPrompt();
-		setPrompts(data.prompts);
-	}
-
-	useEffect(() => {
-		generatePrompt();
-	}, []);
+	const { prompts } = usePrompt();
 
 	return (
 		<div>
@@ -39,6 +29,8 @@ const PromptsTable = ({
 }) => {
 	const router = useRouter();
 
+	const { updatePrompt } = usePrompt();
+
 	const [editableRow, setEditableRow] = useState<number | null>(null); // Track the id of the currently editable row
 	const editRef = useRef<HTMLTextAreaElement>(null);
 
@@ -48,18 +40,8 @@ const PromptsTable = ({
 	};
 
 	const handleSave = async (id: number, category: string, prompt: string) => {
-		try {
-			const { data } = await routes.editPrompt({
-				prompt_id: id.toString(),
-				category,
-				prompt,
-			});
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setEditableRow(null);
-		}
-	};
+		await updatePrompt({ id, category, prompt }, setEditableRow);
+	}
 
 	const handleCancel = () => {
 		setEditableRow(null);

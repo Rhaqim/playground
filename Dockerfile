@@ -2,8 +2,8 @@
 FROM node:18 AS builder
 
 # Environment variable to set the API URL
-ENV NEXT_PUBLIC_BACKEND_DEV=http://localhost:8001
-ENV NEXT_PUBLIC_BACKEND_PROD=http://localhost:8000
+ENV NEXT_PUBLIC_BACKEND_DEV=api/dev
+ENV NEXT_PUBLIC_BACKEND_PROD=api/prod
 
 # Set the working directory inside the container
 WORKDIR /app

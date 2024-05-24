@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Navbar from "@/components/Navbar";
 import { EnvironmentProvider } from "@/context/env.context";
+import { PromptProvider } from "@/context/prompt.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<EnvironmentProvider>
-					<Navbar>{children}</Navbar>
+					<PromptProvider>
+						<Navbar>{children}</Navbar>
+					</PromptProvider>
 				</EnvironmentProvider>
 			</body>
 		</html>

@@ -11,8 +11,8 @@ cd "$(dirname "$0")"
 # Create .env file if it doesn't exist
 if [ ! -f ../.env ]; then
   cat <<EOF > ../.env
-NEXT_PUBLIC_BACKEND_DEV=http://localhost:8001
-NEXT_PUBLIC_BACKEND_PROD=http://localhost:8000
+NEXT_PUBLIC_BACKEND_DEV=api/dev
+NEXT_PUBLIC_BACKEND_PROD=api/prod
 EOF
 fi
 

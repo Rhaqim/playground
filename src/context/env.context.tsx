@@ -7,6 +7,8 @@ import React, {
 	ReactNode,
 	useEffect,
 } from "react";
+import { useRouter } from "next/navigation";
+
 import config from "@/config";
 import { setApiUrl } from "@/service/api/provider";
 
@@ -24,17 +26,31 @@ const EnvironmentContext = createContext<EnvironmentContextProps | undefined>(
 export const EnvironmentProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
+	const router = useRouter();
+
 	const [environment, setEnvironment] = useState<Environment>("development");
+
+	const toggleEnvironment = () => {
+		localStorage.setItem(
+			"environment",
+			environment === "development" ? "production" : "development"
+		);
+
+		setEnvironment(prev =>
+			prev === "development" ? "production" : "development"
+		);
+	};
 
 	useEffect(() => {
 		setApiUrl(config[environment]);
 	}, [environment]);
 
-	const toggleEnvironment = () => {
-		setEnvironment(prev =>
-			prev === "development" ? "production" : "development"
-		);
-	};
+	useEffect(() => {
+		const storedEnvironment = localStorage.getItem("environment") as Environment;
+		if (storedEnvironment) {
+			setEnvironment(storedEnvironment);
+		}
+	}, []);
 
 	return (
 		<EnvironmentContext.Provider value={{ environment, toggleEnvironment }}>

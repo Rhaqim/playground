@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    siteUrl: "https://playground.degenerousdao.com",
+    // siteUrl: "https://playground.degenerousdao.com",
     // reactStrictMode: true,
     // images: {
     //     domains: ["playground.degenerousdao.com"],
@@ -13,15 +13,20 @@ const nextConfig = {
     //         },
     //     ];
     // },
-    // // proxy config
-    // async rewrites() {
-    //     return [
-    //         {
-    //             source: "/api/:path*",
-    //             destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
-    //         },
-    //     ];
-    // },
+    // proxy config
+    async rewrites() {
+        return [
+            {
+                source: "/api/dev/:path*",
+                destination: `http://localhost:8080/:path*`,
+            },
+            {
+                source: "/api/prod/:path*",
+                destination: `http://localhost:8081/:path*`,
+
+            }
+        ];
+    },
 };
 
 export default nextConfig;
