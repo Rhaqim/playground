@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // siteUrl: "https://playground.degenerousdao.com",
     // reactStrictMode: true,
-    // images: {
-    //     domains: ["playground.degenerousdao.com"],
-    // },
     // async headers() {
     //     return [
     //         {
