@@ -7,14 +7,11 @@ import React, {
 	ReactNode,
 	useEffect,
 } from "react";
-import { routes } from "@/service/api/routes";
-import { useEnvironment } from "./env.context";
 
-interface Prompt {
-	category: string;
-	prompt: string;
-	id: number;
-}
+import { useEnvironment } from "@/context/env.context";
+import { routes } from "@/service/api/routes";
+import Prompt from "@/types/prompt.type";
+import StoryData from "@/types/story.type";
 
 interface PromptContextProps {
 	prompts: Prompt[];
@@ -22,6 +19,11 @@ interface PromptContextProps {
 	updatePrompt: (
 		prompt: Prompt,
 		editableRow: (row: number | null) => void
+	) => Promise<void>;
+
+	startStory: (
+		prompt_id: number,
+		setStory: (story: StoryData | null) => void
 	) => Promise<void>;
 }
 
@@ -31,17 +33,17 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const { environment } = useEnvironment();
+
 	const [prompts, setPrompts] = useState<Prompt[]>([]);
 
 	async function generatePrompt() {
-        try {
-
-            const { data } = await routes.getPrompt();
-            setPrompts(data.prompts);
-        } catch (error) {
-            console.error(error);
-            setPrompts([]);
-        }
+		try {
+			const { data } = await routes.getPrompt();
+			setPrompts(data.prompts);
+		} catch (error) {
+			console.error(error);
+			setPrompts([]);
+		}
 	}
 
 	async function updatePrompt(
@@ -61,21 +63,36 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
+	async function startStory(
+		prompt_id: number,
+		setStory: (story: StoryData | null) => void
+	) {
+		try {
+			const { data } = await routes.demoPrompt(prompt_id);
+			setStory(data);
+		} catch (error) {
+			console.error(error);
+			setStory(null);
+		}
+	}
+
 	useEffect(() => {
 		generatePrompt();
 	}, [environment]);
 
 	return (
-		<PromptContext.Provider value={{ prompts, generatePrompt, updatePrompt }}>
+		<PromptContext.Provider
+			value={{ prompts, generatePrompt, updatePrompt, startStory }}
+		>
 			{children}
 		</PromptContext.Provider>
 	);
 };
 
 export const usePrompt = (): PromptContextProps => {
-    const context = useContext(PromptContext);
-    if (!context) {
-        throw new Error("usePrompt must be used within a PromptProvider");
-    }
-    return context;
+	const context = useContext(PromptContext);
+	if (!context) {
+		throw new Error("usePrompt must be used within a PromptProvider");
+	}
+	return context;
 };

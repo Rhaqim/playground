@@ -9,7 +9,7 @@ import TestPromptRequest, {
 	Tense,
 	VoiceStyle,
 	Character,
-} from "@/types";
+} from "@/types/craftPrompt.type";
 import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
 

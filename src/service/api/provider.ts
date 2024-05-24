@@ -47,6 +47,17 @@ const request = async (
 	return response;
 };
 
+export const requestBlob = async (
+	method: "get" | "post" | "put" | "delete" | "patch",
+	url: string,
+	data?: Data
+): Promise<Blob> => {
+	const response: AxiosResponse<Blob> = await api[method](url, data, {
+		responseType: "blob",
+	});
+	return response.data;
+}
+
 export const apiFunctions = {
 	get: (url: string) => request("get", url),
 	post: (url: string, data: Data) => request("post", url, data),
