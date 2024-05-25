@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 
+import { routes } from "@/service/api/routes";
+import Dropdown from "@/components/Dropdown";
+import { usePrompt } from "@/context/prompt.context";
 import TestPromptRequest, {
 	Pacing,
 	StoryStyle,
@@ -10,15 +13,14 @@ import TestPromptRequest, {
 	VoiceStyle,
 	Character,
 } from "@/types/craftPrompt.type";
-import { routes } from "@/service/api/routes";
-import Dropdown from "@/components/Dropdown";
-import { usePrompt } from "@/context/prompt.context";
 
 const TestPromptForm = () => {
 	const { categories } = usePrompt();
 
 	const [fullResponse, setFullResponse] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
+
+	const [topicName, setTopicName] = useState<string>("");
 	const [categoryId, setCategoryId] = useState<number>(1);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -182,10 +184,14 @@ const TestPromptForm = () => {
 	const handleSavePrompt = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
-		e.preventDefault();
+		// e.preventDefault();
 
 		try {
-			await routes.createPrompt({ prompt: response, category: categoryId });
+			await routes.createPrompt({
+				prompt: response,
+				category: categoryId,
+				topic: topicName,
+			});
 		} catch (error) {
 			console.error(error);
 		}
@@ -201,7 +207,7 @@ const TestPromptForm = () => {
 	}, [response]);
 
 	return (
-		<div className="max-w-md mx-auto">
+		<div className="max-w-md mx-auto text-white">
 			<div>
 				<div>
 					<label htmlFor="setting" className="block mb-1">
@@ -612,6 +618,26 @@ const TestPromptForm = () => {
 							<p className="text-black">
 								Review the prompt and make any changes
 							</p>
+							{/* Topic title input */}
+							<label
+								htmlFor="topic"
+								className="block mb-1 text-black font-bold"
+							>
+								Topic
+							</label>
+							<input
+								type="text"
+								value={topicName}
+								onChange={e => setTopicName(e.target.value)}
+								className="w-full border-gray-300 text-white bg-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+								required
+							/>
+							<label
+								htmlFor="response"
+								className="block mb-1 text-black font-bold"
+							>
+								Response
+							</label>
 							<textarea
 								value={response}
 								rows={10}
@@ -620,7 +646,10 @@ const TestPromptForm = () => {
 								required
 							/>
 							<div>
-								<label htmlFor="category" className="block mb-1 text-black">
+								<label
+									htmlFor="category"
+									className="block mb-1 text-black font-bold"
+								>
 									Select Category
 								</label>
 								<select

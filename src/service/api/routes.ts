@@ -18,8 +18,8 @@ export const routes = {
 	createCategory: async (name: string) => post("/category", { name }),
 	// Prompts
 	generatePrompt: async (data: TestPromptRequest) => post("/gen-prompt", data),
-	createPrompt: ({ prompt, category }: { prompt: string; category: number }) =>
-		post("/prompt", { prompt, category: category.toString() }),
+	createPrompt: ({ prompt, category, topic }: { prompt: string; category: number, topic: string }) =>
+		post("/prompt", { prompt, category: category.toString(), topic }),
 	editPrompt: ({
 		prompt,
 		category,

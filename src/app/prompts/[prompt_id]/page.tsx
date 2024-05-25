@@ -20,17 +20,17 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 	const [loadingImage, setLoading] = useState<boolean>(false);
 
 	const videoRef = useRef<HTMLVideoElement>(null);
-	const imageRef = useRef<HTMLImageElement>(null);
 
 	const promptResponse = async (choice: number, id: string) => {
 		const response = await routes.respond(choice, id);
 		setVideoBlob(null);
+		setImage("");
 		setStory(response.data);
 	};
 
 	useEffect(() => {
 		startStory(parseInt(params.prompt_id), setStory);
-	}, [params.prompt_id, startStory]);
+	}, [params.prompt_id]);
 
 	useEffect(() => {
 		if (story && story) {
@@ -87,57 +87,52 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 	if (story.options && !story.end) {
 		return (
-			<div className="text-center">
-				<h1 className="text-3xl font-bold mb-4">Prompt Page</h1>
-				<div className="p-4 relative">
-					<div className="p-2 relative flex flex-col space-y-2 w-full h-60 max-h-50">
-						{loadingImage && !image ? (
-							<div className="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-gray-500">
-								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
-							</div>
-						) : (
-							!videoLoaded &&
-							image && (
-								<Image
-									src={decodeURIComponent(image)}
-									alt="Generated Image"
-									ref={imageRef}
-									className="w-full object-cover h-96 rounded-lg"
-								/>
-							)
-						)}
-						{loadingVideo && !videoLoaded ? (
-							<div className="w-full h-full flex justify-center items-center absolute top-0 left-0 bg-gray-500">
-								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
-							</div>
-						) : (
-							videoLoaded && (
-								<video ref={videoRef} className="w-full" controls autoPlay loop>
-									<source
-										src={videoBlob ? URL.createObjectURL(videoBlob) : ""}
-									/>
-									Your browser does not support the video tag.
-								</video>
-							)
-						)}
-					</div>
-					<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg overflow-hidden shadow-lg mt-2">
-						<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">
-							{story.story}
-						</h2>
-						<ul className="text-white text-left list-none border border-gray-400 rounded-md p-4">
-							{story.options.map((option, index) => (
-								<li key={index}>
-									<button
-										className="focus:outline-none bg-transparent text-white hover:bg-gray-800 py-2 px-4 rounded-lg transition duration-300 ease-in-out"
-										onClick={() => promptResponse(index + 1, story.id)}
-									>
-										{option}
-									</button>
-								</li>
-							))}
-						</ul>
-					</div>
+			<div className="items-center text-white">
+				<h1 className="text-3xl text-center font-bold mb-4">Prompt Page</h1>
+				<div className="p-2 flex flex-col flex-1 space-y-2 w-full h-96">
+					{loadingImage && !image ? (
+						<div className="w-full h-full flex justify-center items-center bg-gray-500">
+							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
+						</div>
+					) : (
+						!videoLoaded &&
+						image && (
+							<img
+								src={image}
+								alt="Generated Image"
+								className="w-full object-cover h-full rounded-lg"
+							/>
+						)
+					)}
+					{loadingVideo && !videoLoaded ? (
+						<div className="w-full h-full flex justify-center items-center bg-gray-500">
+							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
+						</div>
+					) : (
+						videoLoaded && (
+							<video ref={videoRef} className="w-full" controls autoPlay loop>
+								<source src={videoBlob ? URL.createObjectURL(videoBlob) : ""} />
+								Your browser does not support the video tag.
+							</video>
+						)
+					)}
+				</div>
+				<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg shadow-lg mt-2">
+					<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">
+						{story.story}
+					</h2>
+					<ul className="text-white text-left list-none border border-gray-400 rounded-md p-4">
+						{story.options.map((option, index) => (
+							<li key={index}>
+								<button
+									className="focus:outline-none bg-transparent text-white hover:bg-gray-800 py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+									onClick={() => promptResponse(index + 1, story.id)}
+								>
+									{option}
+								</button>
+							</li>
+						))}
+					</ul>
 				</div>
 			</div>
 		);

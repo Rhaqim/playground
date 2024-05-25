@@ -18,17 +18,14 @@ export default function Page() {
 	} = usePrompt();
 
 	return (
-		<div className="w-full mx-auto p-4">
+		<div className="w-full mx-auto p-4 text-white">
 			<h1 className="text-4xl font-bold text-center">
-				Welcome to the Writing Prompt Generator
+				Welcome to the Writing Prompt Explorer
 			</h1>
 			<p className="text-center text-lg mt-4">
-				Get started by generating a writing prompt or exploring the prompts
-				created by others.
+				Explore and manage the writing prompts available in the system.
 			</p>
-			<div
-				className="flex flex-col items-center mt-4 p-4 border rounded-md"
-			>
+			<div className="flex flex-col items-center mt-4 p-4 border rounded-md">
 				<PromptsTable
 					prompts={prompts}
 					topics_={topics}
@@ -98,9 +95,9 @@ const PromptsTable = ({
 	};
 
 	return (
-		<table className="w-full mt-4 rounded-md">
+		<table className="w-full mt-2 rounded-md">
 			<thead>
-				<tr>
+				<tr className="text-white">
 					<th className="text-left" style={{ borderTopLeftRadius: "0.5rem" }}>
 						Topic
 					</th>
@@ -139,7 +136,7 @@ const PromptsTable = ({
 					};
 
 					return (
-						<tr className="border-t border-gray-300" key={prompt.id}>
+						<tr className="border-t border-gray-300 text-white" key={prompt.id}>
 							<td
 								className="text-left"
 								style={{ borderTopLeftRadius: "0.5rem" }}
@@ -205,9 +202,9 @@ const PromptsTable = ({
 									</button>
 								)}
 								<button
-									onClick={() => 
-										// routes.delPrompt(prompt.id.toString())
-										console.log("Delete prompt")
+									onClick={() =>
+										routes.delPrompt(prompt.id.toString())
+										// console.log("Delete prompt")
 									}
 									className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
 								>
