@@ -17,6 +17,8 @@ import TestPromptRequest, {
 const TestPromptForm = () => {
 	const { categories } = usePrompt();
 
+	const [error, setError] = useState<string>("");
+
 	const [fullResponse, setFullResponse] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
 
@@ -192,8 +194,11 @@ const TestPromptForm = () => {
 				category: categoryId,
 				topic: topicName,
 			});
-		} catch (error) {
+		} catch (error: any) {
+			setError("An error occurred while saving the prompt");
 			console.error(error);
+		} finally {
+			setIsModalOpen(false);
 		}
 	};
 
@@ -208,6 +213,15 @@ const TestPromptForm = () => {
 
 	return (
 		<div className="max-w-md mx-auto text-white">
+			{/* Error */}
+			<div className="relative w-full h-96 bg-gray-500 bg-opacity-50 flex justify-center items-center rounded-md mb-4">
+				{error && (
+					<div className="absolute top-0 left-0 right-0 bg-red-500 text-white p-2 rounded-t-md">
+						{error}
+					</div>
+				)}
+			</div>
+			{/* Form */}
 			<div>
 				<div>
 					<label htmlFor="setting" className="block mb-1">
