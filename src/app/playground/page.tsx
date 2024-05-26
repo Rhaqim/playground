@@ -239,6 +239,7 @@ const TestPromptForm = () => {
 						name="Setting"
 						value={formData.Setting}
 						onChange={handleChange}
+						placeholder="Set in a world where..."
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 						required
 					/>
@@ -256,6 +257,7 @@ const TestPromptForm = () => {
 						name="Premise"
 						rows={6}
 						value={formData.Premise}
+						placeholder="The story is about..."
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 						required
@@ -273,6 +275,7 @@ const TestPromptForm = () => {
 						type="text"
 						id="exposition"
 						name="Exposition"
+						placeholder="The story begins with..."
 						value={formData.Exposition}
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -290,6 +293,7 @@ const TestPromptForm = () => {
 						type="text"
 						id="firstAct"
 						name="FirstAct"
+						placeholder="The story progresses when..."
 						value={formData.FirstAct}
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -308,6 +312,7 @@ const TestPromptForm = () => {
 						id="pov"
 						name="POV"
 						value={formData.POV}
+						placeholder="The story is told from the perspective of..."
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 						required
@@ -340,6 +345,7 @@ const TestPromptForm = () => {
 							id="winningScenario"
 							name="WinningScenario"
 							value={winningScenario}
+							placeholder="The story ends when..."
 							onChange={handleNewWinningScenarioChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
@@ -377,6 +383,7 @@ const TestPromptForm = () => {
 							id="losingScenario"
 							name="LosingScenario"
 							value={losingScenario}
+							placeholder="The story ends when..."
 							onChange={handleNewLosingScenarioChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
@@ -404,7 +411,7 @@ const TestPromptForm = () => {
 							name="Name"
 							value={mainCharacter.Name}
 							onChange={handleMainCharacterChange}
-							placeholder="Name"
+							placeholder="Cassandra"
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500 mb-1"
 							// required
 						/>
@@ -414,7 +421,7 @@ const TestPromptForm = () => {
 							name="Description"
 							value={mainCharacter.Description}
 							onChange={handleMainCharacterChange}
-							placeholder="Description"
+							placeholder="A warrior princess"
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
@@ -445,7 +452,7 @@ const TestPromptForm = () => {
 							id="sideCharacters"
 							name="Name"
 							value={newSideCharacter.Name}
-							placeholder="Side Character Name"
+							placeholder="Morgan"
 							onChange={handleNewSideCharacterChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
@@ -455,7 +462,7 @@ const TestPromptForm = () => {
 							id="sideCharacters"
 							name="Description"
 							value={newSideCharacter.Description}
-							placeholder="Side Character Description"
+							placeholder="A wise old wizard"
 							onChange={handleNewSideCharacterChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
