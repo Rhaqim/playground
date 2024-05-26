@@ -214,13 +214,13 @@ const TestPromptForm = () => {
 	return (
 		<div className="max-w-md mx-auto text-white">
 			{/* Error */}
-			<div className="relative w-full h-96 bg-gray-500 bg-opacity-50 flex justify-center items-center rounded-md mb-4">
-				{error && (
+			{error && (
+				<div className="relative w-full h-96 bg-opacity-50 flex justify-center items-center rounded-md mb-4">
 					<div className="absolute top-0 left-0 right-0 bg-red-500 text-white p-2 rounded-t-md">
 						{error}
 					</div>
-				)}
-			</div>
+				</div>
+			)}
 			{/* Form */}
 			<div>
 				<div>
