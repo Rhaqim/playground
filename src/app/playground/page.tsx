@@ -212,7 +212,7 @@ const TestPromptForm = () => {
 	}, [response]);
 
 	return (
-		<div className="max-w-md mx-auto text-white">
+		<div className="mx-auto text-white">
 			{/* Error */}
 			{error && (
 				<div className="relative w-full h-96 bg-opacity-50 flex justify-center items-center rounded-md mb-4">
@@ -222,8 +222,14 @@ const TestPromptForm = () => {
 				</div>
 			)}
 			{/* Form */}
-			<div>
-				<div>
+			<div
+				className="w-full p-4 bg-black bg-opacity-50 rounded-md"
+				style={{ backdropFilter: "blur(10px)" }}
+			>
+				<div
+					className="text-2xl font-bold text-center mb-4"
+					style={{ color: "white" }}
+				>
 					<label htmlFor="setting" className="block mb-1">
 						Setting
 					</label>
@@ -238,7 +244,10 @@ const TestPromptForm = () => {
 					/>
 				</div>
 
-				<div>
+				<div
+					className="text-2xl font-bold text-center mb-4"
+					style={{ color: "white" }}
+				>
 					<label htmlFor="premise" className="block mb-1">
 						Premise
 					</label>
@@ -253,7 +262,10 @@ const TestPromptForm = () => {
 					/>
 				</div>
 
-				<div>
+				<div
+					className="text-2xl font-bold text-center mb-4"
+					style={{ color: "white" }}
+				>
 					<label htmlFor="exposition" className="block mb-1">
 						Exposition
 					</label>
@@ -267,7 +279,10 @@ const TestPromptForm = () => {
 					/>
 				</div>
 
-				<div>
+				<div
+					className="text-2xl font-bold text-center mb-4"
+					style={{ color: "white" }}
+				>
 					<label htmlFor="firstAct" className="block mb-1">
 						First Act
 					</label>
@@ -281,7 +296,10 @@ const TestPromptForm = () => {
 					/>
 				</div>
 
-				<div>
+				<div
+					className="text-2xl font-bold text-center mb-4"
+					style={{ color: "white" }}
+				>
 					<label htmlFor="pov" className="block mb-1">
 						Point of View
 					</label>
@@ -297,7 +315,10 @@ const TestPromptForm = () => {
 				</div>
 
 				<Dropdown name="Scenarios">
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="winningScenario" className="block mb-1">
 							Winning Scenario
 						</label>
@@ -331,7 +352,10 @@ const TestPromptForm = () => {
 						</button>
 					</div>
 
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="losingScenario" className="block mb-1">
 							Losing Scenario
 						</label>
@@ -367,7 +391,10 @@ const TestPromptForm = () => {
 				</Dropdown>
 
 				<Dropdown name="Characters">
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="sideCharacters" className="block mb-1">
 							Main Character
 						</label>
@@ -393,7 +420,10 @@ const TestPromptForm = () => {
 						/>
 					</div>
 
-					<div className="flex flex-col space-y-1">
+					<div
+						className="text-2xl font-bold flex flex-col space-y-1 text-center items-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="sideCharacters" className="block mb-1">
 							Side Characters
 						</label>
@@ -430,12 +460,20 @@ const TestPromptForm = () => {
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							// required
 						/>
-						<button onClick={handleAddSideCharacter}>Add Side Character</button>
+						<button
+							className="p-2 rounded-md bg-blue-600"
+							onClick={handleAddSideCharacter}
+						>
+							Add Side Character
+						</button>
 					</div>
 				</Dropdown>
 
 				<Dropdown name="Writing Style">
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="tense" className="block mb-1">
 							Tense
 						</label>
@@ -453,7 +491,10 @@ const TestPromptForm = () => {
 						</select>
 					</div>
 
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="style" className="block mb-1">
 							Style
 						</label>
@@ -471,7 +512,10 @@ const TestPromptForm = () => {
 						</select>
 					</div>
 
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="voice" className="block mb-1">
 							Voice
 						</label>
@@ -488,7 +532,10 @@ const TestPromptForm = () => {
 						</select>
 					</div>
 
-					<div>
+					<div
+						className="text-2xl font-bold text-center mb-4"
+						style={{ color: "white" }}
+					>
 						<label htmlFor="pacing" className="block mb-1">
 							Pacing
 						</label>
@@ -624,7 +671,10 @@ const TestPromptForm = () => {
 					)}
 				</div>
 			</div>
-			<div>
+			<div
+				className="w-full p-4 bg-black bg-opacity-50 rounded-md"
+				style={{ backdropFilter: "blur(10px)" }}
+			>
 				{isModalOpen && (
 					<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
 						<div className="bg-white p-8 rounded-lg shadow-md w-[50%]">
