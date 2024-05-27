@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import Image from "next/image";
+import Link from "next/link";
 
 import { usePrompt } from "@/context/prompt.context";
 import { routes } from "@/service/api/routes";
@@ -139,16 +139,16 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 	}
 
 	return (
-		<div className="text-center">
-			<h1 className="text-3xl font-bold mb-4">Prompt Page</h1>
+		<div className="text-center text-white">
+			<h1 className="text-3xl font-bold mb-4">Story End</h1>
 			<div className="max-w-lg mx-auto">
 				<h2 className="text-xl mb-4">{story.story}</h2>
-				<button
+				<Link
+					href="/prompts"
 					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-					onClick={() => console.log("Continue")}
 				>
-					Continue
-				</button>
+					Other Stories
+				</Link>
 			</div>
 		</div>
 	);

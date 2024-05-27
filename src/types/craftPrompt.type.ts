@@ -24,8 +24,8 @@ export enum Pacing {
 
 // Interfaces
 export interface Character {
-	Name: string;
-	Description: string;
+	name: string;
+	description: string;
 }
 
 export interface WritingStyle {
@@ -53,17 +53,17 @@ export interface StoryTone {
 }
 
 declare interface TestPromptRequest {
-	Setting: string;
-	Exposition?: string;
-	FirstAct?: string;
-	POV: string;
-	WinningScenario: string[];
-	LosingScenario: string[];
-	Premise: string;
-	MainCharater: Character;
-	SideCharacters:Character[];
-	WritingStyle: WritingStyle;
-	Tone: StoryTone;
+	setting: string;
+	premise: string;
+	exposition?: string;
+	firstAct?: string;
+	pov: string;
+	winningScenario: string[];
+	losingScenario: string[];
+	mainCharacter: Character;
+	sideCharacters:Character[];
+	writingStyle: WritingStyle;
+	tone: StoryTone;
 }
 
 export default TestPromptRequest;

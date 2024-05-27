@@ -32,32 +32,32 @@ const TestPromptForm = () => {
 	const [winningScenario, setWinningScenario] = useState<string>("");
 
 	const [mainCharacter, setMainCharacter] = useState<Character>({
-		Name: "",
-		Description: "",
+		name: "",
+		description: "",
 	});
 	const [sideCharacters, setSideCharacters] = useState<Character[]>([]);
 	const [newSideCharacter, setNewSideCharacter] = useState<Character>({
-		Name: "",
-		Description: "",
+		name: "",
+		description: "",
 	});
 
 	const initalFormData: TestPromptRequest = {
-		Setting: "",
-		Exposition: "",
-		FirstAct: "",
-		POV: "",
-		WinningScenario: winningScenarios,
-		LosingScenario: losingScenarios,
-		Premise: "",
-		MainCharater: mainCharacter,
-		SideCharacters: sideCharacters,
-		WritingStyle: {
+		setting: "",
+		exposition: "",
+		firstAct: "",
+		pov: "",
+		winningScenario: winningScenarios,
+		losingScenario: losingScenarios,
+		premise: "",
+		mainCharacter: mainCharacter,
+		sideCharacters: sideCharacters,
+		writingStyle: {
 			Tense: Tense.PastTense,
 			Style: StoryStyle.Descriptive,
 			Voice: VoiceStyle.Active,
 			Pacing: Pacing.NormalPacing,
 		},
-		Tone: {
+		tone: {
 			Optimistic: 1,
 			Pessimistic: 1,
 			Sarcastic: 1,
@@ -130,12 +130,12 @@ const TestPromptForm = () => {
 
 	const handleAddSideCharacter = () => {
 		// check if the new side character has a name and description
-		if (!newSideCharacter.Name || !newSideCharacter.Description) {
+		if (!newSideCharacter.name || !newSideCharacter.description) {
 			return;
 		}
 
 		setSideCharacters([...sideCharacters, newSideCharacter]);
-		setNewSideCharacter({ Name: "", Description: "" }); // Clear input fields
+		setNewSideCharacter({ name: "", description: "" }); // Clear input fields
 	};
 
 	const handleRemoveSideCharacter = (index: number) => {
@@ -162,8 +162,8 @@ const TestPromptForm = () => {
 	) => {
 		setFormData(prevFormData => ({
 			...prevFormData,
-			Tone: {
-				...prevFormData.Tone,
+			tone: {
+				...prevFormData.tone,
 				[toneProperty]: newValue,
 			},
 		}));
@@ -173,6 +173,13 @@ const TestPromptForm = () => {
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
 		e.preventDefault();
+
+		formData.winningScenario = winningScenarios;
+		formData.losingScenario = losingScenarios;
+		formData.mainCharacter = mainCharacter;
+		formData.sideCharacters = sideCharacters;
+
+		console.log("Form Data: ", formData);
 
 		try {
 			const { data } = await routes.generatePrompt(formData);
@@ -227,7 +234,7 @@ const TestPromptForm = () => {
 				style={{ backdropFilter: "blur(10px)" }}
 			>
 				<div
-					className="text-2xl font-bold text-center mb-4"
+					className="text-lg font-bold text-center mb-4"
 					style={{ color: "white" }}
 				>
 					<label htmlFor="setting" className="block mb-1">
@@ -236,8 +243,8 @@ const TestPromptForm = () => {
 					<input
 						type="text"
 						id="setting"
-						name="Setting"
-						value={formData.Setting}
+						name="setting"
+						value={formData.setting}
 						onChange={handleChange}
 						placeholder="Set in a world where..."
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -246,7 +253,7 @@ const TestPromptForm = () => {
 				</div>
 
 				<div
-					className="text-2xl font-bold text-center mb-4"
+					className="text-lg font-bold text-center mb-4"
 					style={{ color: "white" }}
 				>
 					<label htmlFor="premise" className="block mb-1">
@@ -254,9 +261,9 @@ const TestPromptForm = () => {
 					</label>
 					<textarea
 						id="premise"
-						name="Premise"
+						name="premise"
 						rows={6}
-						value={formData.Premise}
+						value={formData.premise}
 						placeholder="The story is about..."
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -265,7 +272,7 @@ const TestPromptForm = () => {
 				</div>
 
 				<div
-					className="text-2xl font-bold text-center mb-4"
+					className="text-lg font-bold text-center mb-4"
 					style={{ color: "white" }}
 				>
 					<label htmlFor="exposition" className="block mb-1">
@@ -274,16 +281,16 @@ const TestPromptForm = () => {
 					<input
 						type="text"
 						id="exposition"
-						name="Exposition"
+						name="exposition"
 						placeholder="The story begins with..."
-						value={formData.Exposition}
+						value={formData.exposition}
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
 
 				<div
-					className="text-2xl font-bold text-center mb-4"
+					className="text-lg font-bold text-center mb-4"
 					style={{ color: "white" }}
 				>
 					<label htmlFor="firstAct" className="block mb-1">
@@ -292,16 +299,16 @@ const TestPromptForm = () => {
 					<input
 						type="text"
 						id="firstAct"
-						name="FirstAct"
+						name="firstAct"
 						placeholder="The story progresses when..."
-						value={formData.FirstAct}
+						value={formData.firstAct}
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
 
 				<div
-					className="text-2xl font-bold text-center mb-4"
+					className="text-lg font-bold text-center mb-4"
 					style={{ color: "white" }}
 				>
 					<label htmlFor="pov" className="block mb-1">
@@ -310,8 +317,8 @@ const TestPromptForm = () => {
 					<input
 						type="text"
 						id="pov"
-						name="POV"
-						value={formData.POV}
+						name="pov"
+						value={formData.pov}
 						placeholder="The story is told from the perspective of..."
 						onChange={handleChange}
 						className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -321,7 +328,7 @@ const TestPromptForm = () => {
 
 				<Dropdown name="Scenarios">
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="winningScenario" className="block mb-1">
@@ -332,10 +339,10 @@ const TestPromptForm = () => {
 								<li key={index}>
 									{scenrio}
 									<button
-										className="text-red-600"
+										className="text-white text-md bg-red-700 rounded-md p-1 m-2"
 										onClick={() => handleRemoveWinningScenario(index)}
 									>
-										X
+										Remove
 									</button>
 								</li>
 							))}
@@ -359,7 +366,7 @@ const TestPromptForm = () => {
 					</div>
 
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="losingScenario" className="block mb-1">
@@ -370,10 +377,10 @@ const TestPromptForm = () => {
 								<li key={index}>
 									{scenrio}
 									<button
-										className="text-red-600"
+										className="text-white text-md bg-red-700 rounded-md p-1 m-2"
 										onClick={() => handleRemoveLosingScenario(index)}
 									>
-										X
+										Remove
 									</button>
 								</li>
 							))}
@@ -399,7 +406,7 @@ const TestPromptForm = () => {
 
 				<Dropdown name="Characters">
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="sideCharacters" className="block mb-1">
@@ -408,8 +415,8 @@ const TestPromptForm = () => {
 						<input
 							type="text"
 							id="mainCharacter"
-							name="Name"
-							value={mainCharacter.Name}
+							name="name"
+							value={mainCharacter.name}
 							onChange={handleMainCharacterChange}
 							placeholder="Cassandra"
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500 mb-1"
@@ -418,8 +425,8 @@ const TestPromptForm = () => {
 						<input
 							type="text"
 							id="mainCharacterDescription"
-							name="Description"
-							value={mainCharacter.Description}
+							name="description"
+							value={mainCharacter.description}
 							onChange={handleMainCharacterChange}
 							placeholder="A warrior princess"
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -428,7 +435,7 @@ const TestPromptForm = () => {
 					</div>
 
 					<div
-						className="text-2xl font-bold flex flex-col space-y-1 text-center items-center mb-4"
+						className="text-lg font-bold flex flex-col space-y-1 text-center items-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="sideCharacters" className="block mb-1">
@@ -437,12 +444,12 @@ const TestPromptForm = () => {
 						<ul>
 							{sideCharacters.map((character, index) => (
 								<li key={index}>
-									{character.Name}: {character.Description}{" "}
+									{character.name}: {character.description}{" "}
 									<button
-										className="text-red-600"
+										className="text-white text-md bg-red-700 rounded-md p-1 m-2"
 										onClick={() => handleRemoveSideCharacter(index)}
 									>
-										X
+										Remove
 									</button>
 								</li>
 							))}
@@ -450,8 +457,8 @@ const TestPromptForm = () => {
 						<input
 							type="text"
 							id="sideCharacters"
-							name="Name"
-							value={newSideCharacter.Name}
+							name="name"
+							value={newSideCharacter.name}
 							placeholder="Morgan"
 							onChange={handleNewSideCharacterChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -460,8 +467,8 @@ const TestPromptForm = () => {
 						<input
 							type="text"
 							id="sideCharacters"
-							name="Description"
-							value={newSideCharacter.Description}
+							name="description"
+							value={newSideCharacter.description}
 							placeholder="A wise old wizard"
 							onChange={handleNewSideCharacterChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -478,7 +485,7 @@ const TestPromptForm = () => {
 
 				<Dropdown name="Writing Style">
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="tense" className="block mb-1">
@@ -486,8 +493,8 @@ const TestPromptForm = () => {
 						</label>
 						<select
 							id="tense"
-							name="WritingStyle.Tense"
-							value={formData.WritingStyle.Tense}
+							name="writingStyle.Tense"
+							value={formData.writingStyle.Tense}
 							onChange={e => handleChange(e, "WritingStyle.Tense")}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
@@ -499,7 +506,7 @@ const TestPromptForm = () => {
 					</div>
 
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="style" className="block mb-1">
@@ -507,8 +514,8 @@ const TestPromptForm = () => {
 						</label>
 						<select
 							id="style"
-							name="WritingStyle.Style"
-							value={formData.WritingStyle.Style}
+							name="writingStyle.Style"
+							value={formData.writingStyle.Style}
 							onChange={e => handleChange(e, "WritingStyle.Style")}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
@@ -520,7 +527,7 @@ const TestPromptForm = () => {
 					</div>
 
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="voice" className="block mb-1">
@@ -529,7 +536,7 @@ const TestPromptForm = () => {
 						<select
 							id="voice"
 							name="Voice"
-							value={formData.WritingStyle.Voice}
+							value={formData.writingStyle.Voice}
 							onChange={handleChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
@@ -540,7 +547,7 @@ const TestPromptForm = () => {
 					</div>
 
 					<div
-						className="text-2xl font-bold text-center mb-4"
+						className="text-lg font-bold text-center mb-4"
 						style={{ color: "white" }}
 					>
 						<label htmlFor="pacing" className="block mb-1">
@@ -549,7 +556,7 @@ const TestPromptForm = () => {
 						<select
 							id="pacing"
 							name="Pacing"
-							value={formData.WritingStyle.Pacing}
+							value={formData.writingStyle.Pacing}
 							onChange={handleChange}
 							className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 							required
@@ -565,99 +572,99 @@ const TestPromptForm = () => {
 					<SliderField
 						label="Optimistic"
 						id="optimistic"
-						name="Tone.Optimistic"
-						value={formData.Tone.Optimistic}
+						name="tone.Optimistic"
+						value={formData.tone.Optimistic}
 						onChange={newValue => handleSliderChange(newValue, "Optimistic")}
 					/>
 					<SliderField
 						label="Pessimistic"
 						id="pessimistic"
-						name="Tone.Pessimistic"
-						value={formData.Tone.Pessimistic}
+						name="tone.Pessimistic"
+						value={formData.tone.Pessimistic}
 						onChange={newValue => handleSliderChange(newValue, "Pessimistic")}
 					/>
 					<SliderField
 						label="Sarcastic"
 						id="sarcastic"
-						name="Tone.Sarcastic"
-						value={formData.Tone.Sarcastic}
+						name="tone.Sarcastic"
+						value={formData.tone.Sarcastic}
 						onChange={newValue => handleSliderChange(newValue, "Sarcastic")}
 					/>
 					<SliderField
 						label="Assertive"
 						id="assertive"
-						name="Tone.Assertive"
-						value={formData.Tone.Assertive}
+						name="tone.Assertive"
+						value={formData.tone.Assertive}
 						onChange={newValue => handleSliderChange(newValue, "Assertive")}
 					/>
 					<SliderField
 						label="Aggressive"
 						id="aggressive"
-						name="Tone.Aggressive"
-						value={formData.Tone.Aggressive}
+						name="tone.Aggressive"
+						value={formData.tone.Aggressive}
 						onChange={newValue => handleSliderChange(newValue, "Aggressive")}
 					/>
 					<SliderField
 						label="Passionate"
 						id="passionate"
-						name="Tone.Passionate"
-						value={formData.Tone.Passionate}
+						name="tone.Passionate"
+						value={formData.tone.Passionate}
 						onChange={newValue => handleSliderChange(newValue, "Passionate")}
 					/>
 					<SliderField
 						label="Entertaining"
 						id="entertaining"
-						name="Tone.Entertaining"
-						value={formData.Tone.Entertaining}
+						name="tone.Entertaining"
+						value={formData.tone.Entertaining}
 						onChange={newValue => handleSliderChange(newValue, "Entertaining")}
 					/>
 					<SliderField
 						label="Serious"
 						id="serious"
-						name="Tone.Serious"
-						value={formData.Tone.Serious}
+						name="tone.Serious"
+						value={formData.tone.Serious}
 						onChange={newValue => handleSliderChange(newValue, "Serious")}
 					/>
 					<SliderField
 						label="Educational"
 						id="educational"
-						name="Tone.Educational"
-						value={formData.Tone.Educational}
+						name="tone.Educational"
+						value={formData.tone.Educational}
 						onChange={newValue => handleSliderChange(newValue, "Educational")}
 					/>
 					<SliderField
 						label="Persuasive"
 						id="persuasive"
-						name="Tone.Persuasive"
-						value={formData.Tone.Persuasive}
+						name="tone.Persuasive"
+						value={formData.tone.Persuasive}
 						onChange={newValue => handleSliderChange(newValue, "Persuasive")}
 					/>
 					<SliderField
 						label="Motivating"
 						id="motivating"
-						name="Tone.Motivating"
-						value={formData.Tone.Motivating}
+						name="tone.Motivating"
+						value={formData.tone.Motivating}
 						onChange={newValue => handleSliderChange(newValue, "Motivating")}
 					/>
 					<SliderField
 						label="Curious"
 						id="curious"
-						name="Tone.Curious"
-						value={formData.Tone.Curious}
+						name="tone.Curious"
+						value={formData.tone.Curious}
 						onChange={newValue => handleSliderChange(newValue, "Curious")}
 					/>
 					<SliderField
 						label="Humoristic"
 						id="humoristic"
-						name="Tone.Humoristic"
-						value={formData.Tone.Humoristic}
+						name="tone.Humoristic"
+						value={formData.tone.Humoristic}
 						onChange={newValue => handleSliderChange(newValue, "Humoristic")}
 					/>
 					<SliderField
 						label="Surreal"
 						id="surreal"
-						name="Tone.Surreal"
-						value={formData.Tone.Surreal}
+						name="tone.Surreal"
+						value={formData.tone.Surreal}
 						onChange={newValue => handleSliderChange(newValue, "Surreal")}
 					/>
 				</Dropdown>
@@ -678,14 +685,11 @@ const TestPromptForm = () => {
 					)}
 				</div>
 			</div>
-			<div
-				className="w-full p-4 bg-black bg-opacity-50 rounded-md"
-				style={{ backdropFilter: "blur(10px)" }}
-			>
+			<div>
 				{isModalOpen && (
 					<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
 						<div className="bg-white p-8 rounded-lg shadow-md w-[50%]">
-							<h1 className="text-2xl font-bold mb-4 text-black">Prompt</h1>
+							<h1 className="text-lg font-bold mb-4 text-black">Prompt</h1>
 							<p className="text-black">
 								Review the prompt and make any changes
 							</p>
