@@ -10,6 +10,10 @@ interface MobileLayoutProps {
 	topics: Topic[];
 	categories: Category[];
 	editableRow: number | null;
+	promptText: { [key: number]: string };
+	setPromptText: React.Dispatch<
+		React.SetStateAction<{ [key: number]: string }>
+	>;
 	setEditableRow: React.Dispatch<React.SetStateAction<number | null>>;
 	handleSave: (id: number, category: string, prompt: string) => void;
 	handleCancel: () => void;
@@ -22,6 +26,8 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 	topics,
 	categories,
 	editableRow,
+	promptText,
+	setPromptText,
 	setEditableRow,
 	handleSave,
 	handleCancel,
@@ -71,9 +77,11 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 							{editableRow === prompt.id ? (
 								<textarea
 									ref={editRef}
-									value={prompt.prompt}
+									value={promptText[prompt.id] || prompt.prompt}
 									rows={4}
-									onChange={() => {}}
+									onChange={() =>
+										setPromptText({ ...promptText, [prompt.id]: prompt.prompt })
+									}
 									className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 								/>
 							) : (

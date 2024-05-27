@@ -28,6 +28,8 @@ export default function Page() {
 
 	const [editableRow, setEditableRow] = useState<number | null>(null); // Track the id of the currently editable row
 
+	const [promptText, setPromptText] = useState<{ [key: number]: string }>({}); // Track the prompt text for each row
+
 	const handleSave = async (id: number, category: string, prompt: string) => {
 		await updatePrompt({ id, category, prompt }, setEditableRow);
 	};
@@ -65,6 +67,8 @@ export default function Page() {
 					topics={topics_}
 					categories={categories}
 					editableRow={editableRow}
+					promptText={promptText}
+					setPromptText={setPromptText}
 					setEditableRow={setEditableRow}
 					handleSave={handleSave}
 					handleCancel={handleCancel}
@@ -76,6 +80,8 @@ export default function Page() {
 					topics={topics_}
 					categories={categories}
 					editableRow={editableRow}
+					promptText={promptText}
+					setPromptText={setPromptText}
 					setEditableRow={setEditableRow}
 					handleSave={handleSave}
 					handleCancel={handleCancel}

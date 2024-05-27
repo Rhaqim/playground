@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/navigation";
 
-import { routes } from "@/service/api/routes";
+// import { routes } from "@/service/api/routes";
 import Prompt, { Topic, Category } from "@/types/prompt.type";
 
 interface TableLayoutProps {
@@ -11,6 +11,10 @@ interface TableLayoutProps {
 	topics: Topic[];
 	categories: Category[];
 	editableRow: number | null;
+	promptText: { [key: number]: string };
+	setPromptText: React.Dispatch<
+		React.SetStateAction<{ [key: number]: string }>
+	>;
 	setEditableRow: React.Dispatch<React.SetStateAction<number | null>>;
 	handleSave: (id: number, category: string, prompt: string) => void;
 	handleCancel: () => void;
@@ -23,6 +27,8 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 	topics,
 	categories,
 	editableRow,
+	promptText,
+	setPromptText,
 	setEditableRow,
 	handleSave,
 	handleCancel,
@@ -31,8 +37,6 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 }) => {
 	const router = useRouter();
 	const editRef = useRef<HTMLTextAreaElement>(null);
-
-	const [editingPrompt, setEditingPrompt] = useState<string>("");
 
 	const handleEdit = (id: number) => {
 		setEditableRow(id); // Enable editing for the selected row
@@ -67,8 +71,6 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 						category => category.id === topic?.categoryId
 					);
 
-					setEditingPrompt(prompt.prompt);
-
 					return (
 						<tr className="border-t border-gray-300 text-white" key={prompt.id}>
 							<td
@@ -100,10 +102,13 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 								{editableRow === prompt.id ? ( // If editing is enabled for this row
 									<textarea
 										ref={editRef}
-										value={editingPrompt}
+										value={promptText[prompt.id] || prompt.prompt}
 										rows={10}
 										onChange={e => {
-											setEditingPrompt(e.target.value);
+											setPromptText({
+												...promptText,
+												[prompt.id]: e.target.value,
+											});
 										}}
 										className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 									/>
@@ -116,7 +121,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									<>
 										<button
 											onClick={() =>
-												handleSave(prompt.id, prompt.category, editingPrompt)
+												handleSave(prompt.id, prompt.category, prompt.prompt)
 											}
 											className="bg-green-500 text-white px-4 py-1 rounded-md"
 										>
