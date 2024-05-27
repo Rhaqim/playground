@@ -31,7 +31,7 @@ export default function Page() {
 
 	const [editableRow, setEditableRow] = useState<number | null>(null); // Track the id of the currently editable row
 
-	const [promptText, setPromptText] = useState<{ [key: number]: string }>({}); // Track the prompt text for each row
+	const [promptText, setPromptText] = useState<{ [key: number]: string }>({}); // Track the prompt text of the currently editable row
 
 	const handleSave = async (id: number, category: string, prompt: string) => {
 		await updatePrompt({ id, category, prompt }, setEditableRow);
@@ -72,7 +72,7 @@ export default function Page() {
 			<p className="text-center text-lg mt-4">
 				Explore and manage the writing prompts available in the system.
 			</p>
-			<div>
+			<div className="flex justify-center items-center m-2 border rounded-md">
 				<Search
 					placeholder="Search for a prompt"
 					data={prompts}

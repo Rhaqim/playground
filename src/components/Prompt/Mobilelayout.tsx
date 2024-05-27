@@ -78,10 +78,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 								<textarea
 									ref={editRef}
 									value={promptText[prompt.id] || prompt.prompt}
-									rows={4}
-									onChange={() =>
-										setPromptText({ ...promptText, [prompt.id]: prompt.prompt })
-									}
+									rows={8}
+									onChange={e => {
+										setPromptText({
+											...promptText,
+											[prompt.id]: e.target.value,
+										});
+									}}
 									className="w-full border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 								/>
 							) : (
