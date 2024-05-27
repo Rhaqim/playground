@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 
-import { routes } from "@/service/api/routes";
-import { usePrompt } from "@/context/prompt.context";
-import { Topic } from "@/types/prompt.type";
 import MobileLayout from "@/components/Prompt/Mobilelayout";
 import PromptsTable from "@/components/Prompt/TableLayout";
+import Search from "@/components/Search";
+import { usePrompt } from "@/context/prompt.context";
+import { routes } from "@/service/api/routes";
+import { Topic } from "@/types/prompt.type";
 
 export default function Page() {
 	const {
@@ -22,9 +23,11 @@ export default function Page() {
 
 	const [topics_, setTopics] = useState<Topic[]>(topics);
 
-	useEffect(() => {
-		setTopics(topics_);
-	}, [topics_]);
+	const [filteredPrompts, setFilteredPrompts] = useState(prompts);
+
+	const handleSearch = (data: any) => {
+		setFilteredPrompts(data);
+	};
 
 	const [editableRow, setEditableRow] = useState<number | null>(null); // Track the id of the currently editable row
 
@@ -53,6 +56,14 @@ export default function Page() {
 		setTopics(prev => prev.map(t => (t.id === data.topic.id ? data.topic : t)));
 	};
 
+	useEffect(() => {
+		setTopics(topics);
+	}, [topics]);
+
+	useEffect(() => {
+		setFilteredPrompts(prompts);
+	}, [prompts]);
+
 	return (
 		<div className="w-full mx-auto p-4 text-white">
 			<h1 className="text-4xl font-bold text-center">
@@ -61,9 +72,17 @@ export default function Page() {
 			<p className="text-center text-lg mt-4">
 				Explore and manage the writing prompts available in the system.
 			</p>
+			<div>
+				<Search
+					placeholder="Search for a prompt"
+					data={prompts}
+					searchFields={["prompt"]}
+					callBack={handleSearch}
+				/>
+			</div>
 			<div className="flex flex-col items-center mt-4 p-4 border rounded-md">
 				<PromptsTable
-					prompts={prompts}
+					prompts={filteredPrompts}
 					topics={topics_}
 					categories={categories}
 					editableRow={editableRow}
@@ -76,7 +95,7 @@ export default function Page() {
 					handleTopicCategoryChange={handleTopicCategoryChange}
 				/>
 				<MobileLayout
-					prompts={prompts}
+					prompts={filteredPrompts}
 					topics={topics_}
 					categories={categories}
 					editableRow={editableRow}
