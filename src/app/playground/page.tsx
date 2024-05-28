@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
@@ -15,6 +16,8 @@ import TestPromptRequest, {
 } from "@/types/craftPrompt.type";
 
 const TestPromptForm = () => {
+	const router = useRouter();
+
 	const { categories } = usePrompt();
 
 	const [error, setError] = useState<string>("");
@@ -219,6 +222,8 @@ const TestPromptForm = () => {
 				topic: topicName,
 				image_prompt: imagePrompt,
 			});
+
+			router.push("/prompts");
 		} catch (error: any) {
 			setError("An error occurred while saving the prompt");
 			console.error(error);
@@ -736,9 +741,14 @@ const TestPromptForm = () => {
 								<ul>
 									{imagePrompts.map((prompt, index) => (
 										<li key={index} className="flex items-center">
-											<p>{prompt}</p>
+											<p
+												className="text-black text-md w-full"
+												style={{ wordWrap: "break-word" }}
+											>
+												{prompt}
+											</p>
 											<button
-												className="text-black text-md bg-red-700 rounded-md p-1 m-2"
+												className="text-white text-md bg-red-700 rounded-md p-1 m-2"
 												onClick={() => handleRemoveImagePrompt(index)}
 											>
 												Remove

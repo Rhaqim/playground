@@ -19,7 +19,7 @@ export default function Page() {
 		setNewCategoryName,
 	} = usePrompt();
 
-	const { updatePrompt } = usePrompt();
+	const { updatePrompt, reloadAll } = usePrompt();
 
 	const [topics_, setTopics] = useState<Topic[]>(topics);
 
@@ -43,6 +43,7 @@ export default function Page() {
 
 	const handleDelete = async (id: number) => {
 		await routes.delPrompt(id.toString());
+		await reloadAll();
 	};
 
 	const handleTopicCategoryChange = async (
@@ -63,6 +64,10 @@ export default function Page() {
 	useEffect(() => {
 		setFilteredPrompts(prompts);
 	}, [prompts]);
+
+	useEffect(() => {
+		reloadAll();
+	}, []);
 
 	return (
 		<div className="w-full mx-auto p-4 text-white">

@@ -19,7 +19,8 @@ interface PromptContextProps {
 	categories: Category[];
 	newCategoryName: string;
 	handleCategoryCreation: () => void;
-	generatePrompt: () => Promise<void>;
+	reloadAll: () => Promise<void>;
+	fetchPrompts: () => Promise<void>;
 	setNewCategoryName: (name: string) => void;
 	updatePrompt: (
 		prompt: Prompt,
@@ -44,7 +45,7 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [newCategoryName, setNewCategoryName] = useState<string>("");
 
-	async function generatePrompt() {
+	async function fetchPrompts() {
 		try {
 			const { data } = await routes.getPrompt();
 			setPrompts(data.prompts);
@@ -118,10 +119,14 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
+	const reloadAll = async () => {
+		await fetchPrompts();
+		await fetchTopics();
+		await fetchCategories();
+	};
+
 	useEffect(() => {
-		generatePrompt();
-		fetchTopics();
-		fetchCategories();
+		reloadAll();
 	}, [environment]);
 
 	return (
@@ -131,9 +136,10 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 				topics,
 				categories,
 				newCategoryName,
+				reloadAll,
 				handleCategoryCreation,
 				setNewCategoryName,
-				generatePrompt,
+				fetchPrompts,
 				updatePrompt,
 				startStory,
 			}}
