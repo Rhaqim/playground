@@ -38,9 +38,10 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 					Confirm Deletion
 				</h2>
 				<div className="mt-2">
-					<p className="text-sm text-gray-500">
-						Are you sure you want to delete <strong>{itemName}</strong>? Please
-						type the name of the item to confirm.
+					<p className="text-sm text-center text-gray-500">
+						Are you sure you want to delete <strong>{itemName}</strong>? All
+						stories associated with this prompt will be deleted. Please type the
+						name of the item to confirm.
 					</p>
 					<input
 						type="text"
