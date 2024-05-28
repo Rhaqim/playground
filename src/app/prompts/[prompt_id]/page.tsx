@@ -21,6 +21,17 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 	const videoRef = useRef<HTMLVideoElement>(null);
 
+	const [prevImage, setPrevImage] = useState<string | null>(null);
+	const [showModal, setShowModal] = useState(false);
+
+	const handleOpenModal = () => {
+		setShowModal(true);
+	};
+
+	const handleCloseModal = () => {
+		setShowModal(false);
+	};
+
 	const promptResponse = async (choice: number, id: string) => {
 		const response = await routes.respond(choice, id);
 		setVideoBlob(null);
@@ -55,6 +66,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 					console.log("Image: ", data);
 					const img = `data:image/png;base64,${data.data}`;
 					setImage(img);
+					setPrevImage(img);
 				} catch (error) {
 					console.error(error);
 				} finally {
@@ -90,7 +102,56 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 			<div className="items-center text-white">
 				<h1 className="text-3xl text-center font-bold mb-4">Prompt Page</h1>
 				<div className="p-2 flex flex-col flex-1 space-y-2 w-full h-96">
-					{loadingImage && !image ? (
+					<div className="relative w-full h-full">
+						{loadingImage && !image ? (
+							<div className="w-full h-full flex justify-center items-center">
+								{prevImage && (
+									<img
+										src={prevImage}
+										alt="Previous Image"
+										className="w-full object-cover h-full rounded-lg absolute"
+									/>
+								)}
+								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12 z-10"></div>
+							</div>
+						) : (
+							!videoLoaded &&
+							image && (
+								<div className="relative w-full h-full">
+									<img
+										src={image}
+										alt="Generated Image"
+										className="w-full object-cover h-full rounded-lg"
+									/>
+									<button
+										onClick={handleOpenModal}
+										className="absolute bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+									>
+										View Fullscreen
+									</button>
+								</div>
+							)
+						)}
+
+						{showModal && (
+							<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+								<div className="relative w-full h-full max-w-4xl max-h-4xl">
+									<img
+										src={image}
+										alt="Fullscreen Image"
+										className="w-full h-full object-cover rounded-lg"
+									/>
+									<button
+										onClick={handleCloseModal}
+										className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md"
+									>
+										Close
+									</button>
+								</div>
+							</div>
+						)}
+					</div>
+					{/* {loadingImage && !image ? (
 						<div className="w-full h-full flex justify-center items-center bg-gray-500">
 							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
 						</div>
@@ -103,8 +164,8 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 								className="w-full object-cover h-full rounded-lg"
 							/>
 						)
-					)}
-					{loadingVideo && !videoLoaded ? (
+					)} */}
+					{/* {loadingVideo && !videoLoaded ? (
 						<div className="w-full h-full flex justify-center items-center bg-gray-500">
 							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
 						</div>
@@ -115,7 +176,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 								Your browser does not support the video tag.
 							</video>
 						)
-					)}
+					)} */}
 				</div>
 				<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg shadow-lg mt-2">
 					<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">
