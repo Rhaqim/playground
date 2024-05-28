@@ -738,7 +738,7 @@ const TestPromptForm = () => {
 										<li key={index} className="flex items-center">
 											<p>{prompt}</p>
 											<button
-												className="text-white text-md bg-red-700 rounded-md p-1 m-2"
+												className="text-black text-md bg-red-700 rounded-md p-1 m-2"
 												onClick={() => handleRemoveImagePrompt(index)}
 											>
 												Remove
