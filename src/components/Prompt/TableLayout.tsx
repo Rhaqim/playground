@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 // import { routes } from "@/service/api/routes";
 import Prompt, { Topic, Category } from "@/types/prompt.type";
+import DeleteConfirmationModal from "../Delete";
 
 interface TableLayoutProps {
 	prompts: Prompt[];
@@ -37,6 +38,22 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 }) => {
 	const router = useRouter();
 	const editRef = useRef<HTMLTextAreaElement>(null);
+
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+	const [selectedPrompt, setSelectedPrompt] = React.useState<{
+		id: number;
+		prompt: string | undefined;
+	} | null>(null);
+
+	const handleOpenDeleteModal = (id: number, prompt: string | undefined) => {
+		setSelectedPrompt({ id, prompt });
+		setIsDeleteModalOpen(true);
+	};
+
+	const handleCloseDeleteModal = () => {
+		setIsDeleteModalOpen(false);
+		setSelectedPrompt(null);
+	};
 
 	const handleEdit = (id: number) => {
 		setEditableRow(id); // Enable editing for the selected row
@@ -143,11 +160,22 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									</button>
 								)}
 								<button
-									onClick={() => handleDelete(prompt.id)}
+									// onClick={() => handleDelete(prompt.id)}
+									onClick={() => handleOpenDeleteModal(prompt.id, topic?.name)}
 									className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
 								>
 									Delete
 								</button>
+								<DeleteConfirmationModal
+									isOpen={isDeleteModalOpen}
+									onClose={handleCloseDeleteModal}
+									itemName={selectedPrompt?.prompt || ""}
+									onDelete={() => {
+										if (selectedPrompt) {
+											handleDelete(selectedPrompt.id);
+										}
+									}}
+								/>
 								<button
 									onClick={() =>
 										// routes.demoPrompt({ prompt_id: prompt.id.toString() })
