@@ -23,6 +23,8 @@ const TestPromptForm = () => {
 	const [response, setResponse] = useState<string>("");
 
 	const [topicName, setTopicName] = useState<string>("");
+	const [imagePrompts, setImagePrompts] = useState<string[]>([]);
+	const [newImagePrompt, setNewImagePrompt] = useState<string>("");
 	const [categoryId, setCategoryId] = useState<number>(1);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -143,6 +145,18 @@ const TestPromptForm = () => {
 		setSideCharacters(newSideCharacters);
 	};
 
+	const handleAddImagePrompt = () => {
+		if (newImagePrompt) {
+			setImagePrompts([...imagePrompts, newImagePrompt]);
+			setNewImagePrompt("");
+		}
+	};
+
+	const handleRemoveImagePrompt = (index: number) => {
+		const newImagePrompts = imagePrompts.filter((_, i) => i !== index);
+		setImagePrompts(newImagePrompts);
+	};
+
 	const handleChange = (
 		e: React.ChangeEvent<
 			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -195,11 +209,15 @@ const TestPromptForm = () => {
 	) => {
 		// e.preventDefault();
 
+		// join image prompts together separated by a comma
+		const imagePrompt = imagePrompts.join(",");
+
 		try {
 			await routes.createPrompt({
 				prompt: response,
 				category: categoryId,
 				topic: topicName,
+				image_prompt: imagePrompt,
 			});
 		} catch (error: any) {
 			setError("An error occurred while saving the prompt");
@@ -707,6 +725,41 @@ const TestPromptForm = () => {
 								className="w-full border-gray-300 text-white bg-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
 								required
 							/>
+							{/* Image prompts */}
+							<div className="flex flex-col space-y-2">
+								<label
+									htmlFor="imagePrompts"
+									className="block mb-1 text-black font-bold"
+								>
+									Image Prompts
+								</label>
+								<ul>
+									{imagePrompts.map((prompt, index) => (
+										<li key={index} className="flex items-center">
+											<p>{prompt}</p>
+											<button
+												className="text-white text-md bg-red-700 rounded-md p-1 m-2"
+												onClick={() => handleRemoveImagePrompt(index)}
+											>
+												Remove
+											</button>
+										</li>
+									))}
+								</ul>
+								<input
+									type="text"
+									value={newImagePrompt}
+									onChange={e => setNewImagePrompt(e.target.value)}
+									className="w-full border-gray-300 text-white bg-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
+									required
+								/>
+								<button
+									className="p-2 rounded-md bg-blue-600"
+									onClick={handleAddImagePrompt}
+								>
+									Add Image Prompt
+								</button>
+							</div>
 							<label
 								htmlFor="response"
 								className="block mb-1 text-black font-bold"
