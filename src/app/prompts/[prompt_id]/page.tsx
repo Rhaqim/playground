@@ -1,25 +1,24 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import { usePrompt } from "@/context/prompt.context";
 import { routes } from "@/service/api/routes";
 import StoryData from "@/types/story.type";
+import VideoComponent from "@/components/Video";
 
 export default function Page({ params }: { params: { prompt_id: string } }) {
 	const { startStory } = usePrompt();
 
+	const hasFetched = useRef(false);
+
 	const [story, setStory] = useState<StoryData | null>(null);
 
-	const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
-	const [loadingVideo, setLoadingVideo] = useState<boolean>(false);
-	const [videoLoaded, setVideoLoaded] = useState<boolean>(false);
+	const [videoData, setVideoData] = useState<string | null>(null);
 
 	const [image, setImage] = useState<string>("");
 	const [loadingImage, setLoading] = useState<boolean>(false);
-
-	const videoRef = useRef<HTMLVideoElement>(null);
 
 	const [prevImage, setPrevImage] = useState<string | null>(null);
 	const [showModal, setShowModal] = useState(false);
@@ -34,36 +33,29 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 
 	const promptResponse = async (choice: number, id: string) => {
 		const response = await routes.respond(choice, id);
-		setVideoBlob(null);
+		setVideoData(null);
 		setImage("");
 		setStory(response.data);
 	};
 
+	// Use useCallback to memoize the startStory function
+	const fetchStory = useCallback(() => {
+		if (!hasFetched.current) {
+			hasFetched.current = true;
+			startStory(parseInt(params.prompt_id), setStory);
+		}
+	}, [params.prompt_id, startStory]);
+
 	useEffect(() => {
-		startStory(parseInt(params.prompt_id), setStory);
-	}, [params.prompt_id]);
+		fetchStory();
+	}, [fetchStory]);
 
 	useEffect(() => {
 		if (story && story) {
-			const fetchVideo = async (id: string) => {
-				try {
-					setLoadingVideo(true);
-					const blob = await routes.video(id);
-					setVideoBlob(blob);
-				} catch (error) {
-					setVideoLoaded(false);
-					setVideoBlob(null);
-					console.error(error);
-				} finally {
-					setLoadingVideo(false);
-				}
-			};
-
 			const fetchImage = async (id: string) => {
 				try {
 					setLoading(true);
 					const data = await routes.image(id);
-					console.log("Image: ", data);
 					const img = `data:image/png;base64,${data.data}`;
 					setImage(img);
 					setPrevImage(img);
@@ -74,24 +66,9 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 				}
 			};
 
-			// fetchVideo(story.id);
 			fetchImage(story.id);
 		}
 	}, [story]);
-
-	useEffect(() => {
-		if (videoRef && videoRef.current) {
-			// Check if videoRef exists before manipulating it
-			const video = videoRef.current;
-
-			videoRef.current.onloadeddata = () => {
-				setVideoLoaded(true);
-				video.play().catch(error => console.error(error));
-				video.autoplay = true;
-				video.loop = true;
-			};
-		}
-	}, [videoRef]);
 
 	if (!story) {
 		return <div>Loading...</div>;
@@ -115,7 +92,6 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 								<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12 z-10"></div>
 							</div>
 						) : (
-							!videoLoaded &&
 							image && (
 								<div className="relative w-full h-full">
 									<img
@@ -132,7 +108,7 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 								</div>
 							)
 						)}
-
+						{/* Image modal */}
 						{showModal && (
 							<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
 								<div className="relative w-full h-full max-w-4xl max-h-4xl">
@@ -151,32 +127,15 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 							</div>
 						)}
 					</div>
-					{/* {loadingImage && !image ? (
-						<div className="w-full h-full flex justify-center items-center bg-gray-500">
-							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
-						</div>
-					) : (
-						!videoLoaded &&
-						image && (
-							<img
-								src={image}
-								alt="Generated Image"
-								className="w-full object-cover h-full rounded-lg"
-							/>
-						)
-					)} */}
-					{/* {loadingVideo && !videoLoaded ? (
-						<div className="w-full h-full flex justify-center items-center bg-gray-500">
-							<div className="ease-linear animate-ping rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
-						</div>
-					) : (
-						videoLoaded && (
-							<video ref={videoRef} className="w-full" controls autoPlay loop>
-								<source src={videoBlob ? URL.createObjectURL(videoBlob) : ""} />
-								Your browser does not support the video tag.
-							</video>
-						)
-					)} */}
+				</div>
+				<div>
+					{story.id && (
+						<VideoComponent
+							story_id={story.id}
+							videoData={videoData}
+							setVideoData={setVideoData}
+						/>
+					)}
 				</div>
 				<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg shadow-lg mt-2">
 					<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">

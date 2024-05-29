@@ -51,6 +51,6 @@ export const routes = {
 		post("/respond", { choice, story_id }),
 	// Media
 	image: async (story_id: string) => post("/image", { story_id }),
-	video: async (story_id: string) =>
-		requestBlob("post", "/video", { story_id }),
+	video: async (story_id: string) => post("/video", { story_id }),
+	videoStatus: async (job_id: string) => get(`/video-status/${job_id}`),
 };

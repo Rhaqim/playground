@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import MobileLayout from "@/components/Prompt/Mobilelayout";
 import PromptsTable from "@/components/Prompt/TableLayout";
@@ -18,6 +18,8 @@ export default function Page() {
 		handleCategoryCreation,
 		setNewCategoryName,
 	} = usePrompt();
+
+	const hasFetched = useRef(false);
 
 	const { updatePrompt, reloadAll } = usePrompt();
 
@@ -66,7 +68,10 @@ export default function Page() {
 	}, [prompts]);
 
 	useEffect(() => {
-		reloadAll();
+		if (!hasFetched.current) {
+			hasFetched.current = true;
+			reloadAll();
+		}
 	}, []);
 
 	return (

@@ -196,8 +196,6 @@ const TestPromptForm = () => {
 		formData.mainCharacter = mainCharacter;
 		formData.sideCharacters = sideCharacters;
 
-		console.log("Form Data: ", formData);
-
 		try {
 			const { data } = await routes.generatePrompt(formData);
 			setFullResponse(data.full);
@@ -213,7 +211,7 @@ const TestPromptForm = () => {
 		// e.preventDefault();
 
 		// join image prompts together separated by a comma
-		const imagePrompt = imagePrompts.join(",");
+		const imagePrompt = imagePrompts.join(", ");
 
 		try {
 			await routes.createPrompt({

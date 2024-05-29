@@ -58,7 +58,6 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	async function fetchTopics() {
 		try {
 			const { data } = await routes.getTopics();
-			console.log(data.topics);
 			setTopics(data.topics);
 		} catch (error) {
 			console.error(error);
@@ -120,6 +119,8 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
+	const hasFetched = React.useRef(false);
+
 	const reloadAll = async () => {
 		await fetchPrompts();
 		await fetchTopics();
@@ -127,7 +128,10 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	useEffect(() => {
-		reloadAll();
+		if (!hasFetched.current) {
+			hasFetched.current = true;
+			reloadAll();
+		}
 	}, [environment]);
 
 	return (
