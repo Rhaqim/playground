@@ -48,9 +48,12 @@ const ImagePlayground = () => {
 						onChange={handlePrompt}
 						className="text-black rounded-md p-2"
 					/>
-					<button 
+					<button
 						className="bg-blue-500 text-white p-2 rounded-md"
-					onClick={handleLoad}>Load Image</button>
+						onClick={handleLoad}
+					>
+						Load Image
+					</button>
 				</div>
 				<div className="flex flex-col justify-center items-center space-y-2">
 					{loading && (
