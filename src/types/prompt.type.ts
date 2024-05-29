@@ -6,8 +6,9 @@ declare interface Prompt {
 
 export interface Topic {
 	id: number;
-	categoryId: number;
+	category_id: number;
 	name: string;
+	image_prompt: string;
 }
 
 export interface Category {

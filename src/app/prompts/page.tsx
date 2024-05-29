@@ -70,7 +70,7 @@ export default function Page() {
 	}, []);
 
 	return (
-		<div className="w-full mx-auto p-4 text-white">
+		<div className="w-full mx-auto p-2 text-white">
 			<h1 className="text-4xl font-bold text-center">
 				Welcome to the Writing Prompt Explorer
 			</h1>
@@ -85,7 +85,7 @@ export default function Page() {
 					callBack={handleSearch}
 				/>
 			</div>
-			<div className="flex flex-col items-center mt-4 p-4 border rounded-md">
+			<div className="flex flex-col items-center mt-4 p-2 border rounded-md">
 				<PromptsTable
 					prompts={filteredPrompts}
 					topics={topics_}

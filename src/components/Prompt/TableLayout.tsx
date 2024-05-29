@@ -85,7 +85,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 					const topic = topics.find(topic => topic.id === topic_id);
 
 					const category = categories.find(
-						category => category.id === topic?.categoryId
+						category => category.id === topic?.category_id
 					);
 
 					return (

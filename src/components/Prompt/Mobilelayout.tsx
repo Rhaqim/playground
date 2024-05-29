@@ -65,7 +65,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 				const topicId = parseInt(prompt.category);
 				const topic = topics.find(topic => topic.id === topicId);
 				const category = categories.find(
-					category => category.id === topic?.categoryId
+					category => category.id === topic?.category_id
 				);
 
 				return (

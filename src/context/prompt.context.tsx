@@ -58,6 +58,7 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	async function fetchTopics() {
 		try {
 			const { data } = await routes.getTopics();
+			console.log(data.topics);
 			setTopics(data.topics);
 		} catch (error) {
 			console.error(error);
