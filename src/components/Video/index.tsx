@@ -2,15 +2,19 @@
 
 import { useState, useEffect, useRef } from "react";
 import { routes } from "@/service/api/routes";
+import StoryData from "@/types/story.type";
+import "./VideoLoading.css";
 
 const VideoComponent = ({
-	story_id,
+	story,
 	videoData,
 	setVideoData,
+	imageLoaded,
 }: {
-	story_id: string;
+	story: StoryData | null;
 	videoData: string | null;
 	setVideoData: (data: string | null) => void;
+	imageLoaded: boolean;
 }) => {
 	const [jobID, setJobID] = useState(null);
 	const [status, setStatus] = useState("idle");
@@ -25,6 +29,11 @@ const VideoComponent = ({
 
 		const interval = setInterval(async () => {
 			const { data } = await routes.videoStatus(jobID);
+			// Reset hasFetched after a delay
+			setTimeout(() => {
+				hasFetched.current = false;
+			}, 500); // Adjust the delay as needed
+
 			if (data.status === "error") {
 				setStatus("error");
 				setErrorMsg(data.error);
@@ -35,11 +44,6 @@ const VideoComponent = ({
 				setVideoData(data.video);
 				setStatus("ready");
 				clearInterval(interval);
-
-				// Reset hasFetched after a delay
-				setTimeout(() => {
-					hasFetched.current = false;
-				}, 500); // Adjust the delay as needed
 			}
 		}, 10000);
 
@@ -72,11 +76,11 @@ const VideoComponent = ({
 			}
 		};
 
-		if (story_id && !hasFetched.current) {
+		if (story && story.id && !hasFetched.current && imageLoaded) {
 			hasFetched.current = true;
-			startVideoGeneration(story_id);
+			startVideoGeneration(story.id);
 		}
-	}, [story_id]);
+	}, [story, imageLoaded]);
 
 	return (
 		<div
@@ -103,6 +107,9 @@ const EllipsisLoadingAnimation = ({ color = "blue" }: { color?: string }) => {
 		<div className="flex flex-col items-center justify-center text-center">
 			<div className="flex mb-4 items-end">
 				<div
+					className={`w-2 h-2 mx-1 bg-${color}-500 rounded-full animate-pulse`}
+				></div>
+				<div
 					className={`w-2 h-4 mx-1 bg-${color}-500 rounded-full animate-pulse`}
 				></div>
 				<div
@@ -110,9 +117,6 @@ const EllipsisLoadingAnimation = ({ color = "blue" }: { color?: string }) => {
 				></div>
 				<div
 					className={`w-2 h-8 mx-1 bg-${color}-500 rounded-full animate-pulse`}
-				></div>
-				<div
-					className={`w-2 h-10 mx-1 bg-${color}-500 rounded-full animate-pulse`}
 				></div>
 			</div>
 		</div>

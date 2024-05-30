@@ -129,13 +129,12 @@ export default function Page({ params }: { params: { prompt_id: string } }) {
 					</div>
 				</div>
 				<div>
-					{story.id && (
-						<VideoComponent
-							story_id={story.id}
-							videoData={videoData}
-							setVideoData={setVideoData}
-						/>
-					)}
+					<VideoComponent
+						story={story}
+						videoData={videoData}
+						setVideoData={setVideoData}
+						imageLoaded={!loadingImage}
+					/>
 				</div>
 				<div className="max-w-4xl mx-auto bg-cover bg-center rounded-lg shadow-lg mt-2">
 					<h2 className="text-xl text-white mb-4 border border-gray-400 rounded-md p-4">

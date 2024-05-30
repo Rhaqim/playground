@@ -8,8 +8,6 @@ export const setApiUrl = (url: string) => {
 	apiUrl = url;
 };
 
-console.log("API URL", apiUrl);
-
 const api: AxiosInstance = axios.create({
 	baseURL: apiUrl,
 });

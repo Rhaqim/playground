@@ -1,0 +1,89 @@
+/* VideoLoading.css */
+@keyframes bounce1 {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-50%);
+	}
+}
+
+@keyframes bounce2 {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-75%);
+	}
+}
+
+@keyframes bounce3 {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-100%);
+	}
+}
+
+@keyframes bounce4 {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-125%);
+	}
+}
+
+.animate-bounce1 {
+	animation: bounce1 1.5s infinite ease-in-out;
+}
+
+.animate-bounce2 {
+	animation: bounce2 1.5s infinite ease-in-out;
+}
+
+.animate-bounce3 {
+	animation: bounce3 1.5s infinite ease-in-out;
+}
+
+.animate-bounce4 {
+	animation: bounce4 1.5s infinite ease-in-out;
+}
+
+/* LoadingRectangle.css */
+@keyframes moveAlongBorder {
+	0% {
+		top: 0;
+		left: 0;
+	}
+	25% {
+		top: 0;
+		left: 100%;
+	}
+	50% {
+		top: 100%;
+		left: 100%;
+	}
+	75% {
+		top: 100%;
+		left: 0;
+	}
+	100% {
+		top: 0;
+		left: 0;
+	}
+}
+
+.ball {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-color: #3490dc; /* Tailwind blue color */
+	border-radius: 50%;
+	animation: moveAlongBorder 4s linear infinite;
+}
