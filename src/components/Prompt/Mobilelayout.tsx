@@ -113,7 +113,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 								<>
 									<button
 										onClick={() =>
-											handleSave(prompt.id, prompt.category, prompt.prompt)
+											handleSave(prompt.id, prompt.category, promptText[prompt.id] || prompt.prompt)
 										}
 										className="bg-green-500 text-white px-4 py-1 rounded-md"
 									>
