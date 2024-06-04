@@ -1,5 +1,6 @@
 "use client";
 
+import ShareButton from "@/components/Share";
 import VideoComponent from "@/components/Video";
 import Link from "next/link";
 
@@ -27,6 +28,7 @@ export default function Home() {
 						</p>
 					</Link>
 				</div>
+				<ShareButton />
 			</div>
 		</main>
 	);
