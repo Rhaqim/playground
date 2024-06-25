@@ -1,3 +1,4 @@
+import { SignUp, SignIn } from "@/types/auth.type";
 import TestPromptRequest from "@/types/craftPrompt.type";
 import { apiFunctions, requestBlob } from "./provider";
 
@@ -9,6 +10,10 @@ export const routes = {
 		post("/login", { wallet, signature }),
 	logout: async () => post("/logout", {}),
 	getNonce: async (wallet: string) => post("/nonce", { wallet }),
+	googleLogin: async () => get("/google/login"),
+	signup: async (userDetails: SignUp) => post("/signup", { ...userDetails }),
+	signin: async (signinDetails: SignIn) => post("/signin", { ...signinDetails }),
+	signout: async () => post("/signout", {}),
 	// Fetch
 	getPrompt: async () => get("/prompts"),
 	getTopics: async () => get("/topics"),
