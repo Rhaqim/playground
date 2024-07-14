@@ -1,11 +1,16 @@
 "use client";
 
 import React, { useState, useReducer } from "react";
+import { useRouter } from "next/navigation";
 
 import { SignUp, SignIn, Roles } from "@/types/auth.type";
 import { routes } from "@/service/api/routes";
+import { useAuth } from "@/context/auth.context";
 
 const AuthPage = () => {
+	
+	const router = useRouter();
+	
 	const [active, setActive] = useState("login");
 	return (
 		<div className="flex flex-col items-center justify-center h-screen bg-black">
@@ -41,6 +46,8 @@ const AuthPage = () => {
 export default AuthPage;
 
 const Login = () => {
+	const { signIn } = useAuth();
+
 	const initialLoginState: SignIn = {
 		email: "",
 		password: "",
@@ -55,11 +62,12 @@ const Login = () => {
 	);
 
 	const handleLogin = async () => {
-		try {
-			await routes.signin(loginState);
-		} catch (error) {
-			console.log(error);
-		}
+		await signIn(loginState);
+		// try {
+		// 	await routes.signin(loginState);
+		// } catch (error) {
+		// 	console.log(error);
+		// }
 	};
 
 	const handleGoogleLogin = async () => {
@@ -103,6 +111,7 @@ const Login = () => {
 };
 
 const Signup = () => {
+	const { signUp } = useAuth();
 	const initalSignupState: SignUp = {
 		first_name: "",
 		last_name: "",
@@ -120,11 +129,12 @@ const Signup = () => {
 	);
 
 	const handleSignup = async () => {
-		try {
-			await routes.signup(signupState);
-		} catch (error) {
-			console.log(error);
-		}
+		await signUp(signupState);
+		// try {
+		// 	await routes.signup(signupState);
+		// } catch (error) {
+		// 	console.log(error);
+		// }
 	};
 
 	return (

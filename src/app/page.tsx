@@ -28,7 +28,6 @@ export default function Home() {
 						</p>
 					</Link>
 				</div>
-				<ShareButton />
 			</div>
 		</main>
 	);

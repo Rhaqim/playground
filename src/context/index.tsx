@@ -1,8 +1,12 @@
+'use client';
+
 import React from "react";
 
 import { AuthProvider } from "@/context/auth.context";
 import { EnvironmentProvider } from "@/context/env.context";
 import { PromptProvider } from "@/context/prompt.context";
+import { ToastProvider } from "./toast.context";
+import Toast from "@/components/UI/Toast";
 
 export default function AppProviders({
 	children,
@@ -10,8 +14,15 @@ export default function AppProviders({
 	children: React.ReactNode;
 }): JSX.Element {
 	return (
-		<EnvironmentProvider>
-			<PromptProvider>{children}</PromptProvider>
-		</EnvironmentProvider>
+		<ToastProvider>
+			<EnvironmentProvider>
+				<AuthProvider>
+					<PromptProvider>
+						{children}
+						<Toast />
+					</PromptProvider>
+				</AuthProvider>
+			</EnvironmentProvider>
+		</ToastProvider>
 	);
 }

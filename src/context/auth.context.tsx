@@ -7,6 +7,10 @@ import { Web3Provider } from "@/lib/ether";
 import { routes } from "@/service/api/routes";
 import { SignIn, SignUp, User } from "@/types/auth.type";
 
+import { useEnvironment } from "./env.context";
+import { useToast } from "./toast.context";
+import { generateRandomID } from "@/lib/utils";
+
 interface AuthContextType {
 	user: User | null;
 	address: string | null;
@@ -40,6 +44,9 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const { setEnvironment } = useEnvironment();
+	const { addToast } = useToast();
+
 	const [user, setUser] = useState<User | null>(null);
 	const [address, setAddress] = useState<string | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -53,6 +60,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             ${nonce}`;
 
 	const getNonce = async () => {
+		setEnvironment("production");
+
 		const provider = await Web3Provider.init();
 
 		const address = await provider.userAddress();
@@ -63,6 +72,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	};
 
 	const signinWeb3 = async () => {
+		setEnvironment("production");
+
 		const provider = await Web3Provider.init();
 
 		const nonce = await getNonce();
@@ -77,18 +88,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	};
 
 	const signIn = async (data: SignIn) => {
-		const { data: user } = await routes.signin(data);
-		setUser(user);
-		localStorage.setItem("user", JSON.stringify(user));
+		setEnvironment("production");
+		try {
+			const { data: user } = await routes.signin(data);
+			setUser(user);
+			localStorage.setItem("user", JSON.stringify(user));
+		} catch (error: any) {
+			console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message: error.response.data.message,
+			});
+		}
 	};
 
 	const signUp = async (data: SignUp) => {
+		setEnvironment("production");
+
 		const { data: user } = await routes.signup(data);
 		setUser(user);
 		localStorage.setItem("user", JSON.stringify(user));
 	};
 
 	const signOut = async () => {
+		setEnvironment("production");
+
 		try {
 			await routes.logout();
 			setAddress(null);
