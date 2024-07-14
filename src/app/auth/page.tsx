@@ -2,7 +2,7 @@
 
 import React, { useState, useReducer } from "react";
 
-import { SignUp, SignIn } from "@/types/auth.type";
+import { SignUp, SignIn, Roles } from "@/types/auth.type";
 import { routes } from "@/service/api/routes";
 
 const AuthPage = () => {
@@ -104,10 +104,11 @@ const Login = () => {
 
 const Signup = () => {
 	const initalSignupState: SignUp = {
-		firstName: "",
-		lastName: "",
+		first_name: "",
+		last_name: "",
 		email: "",
 		password: "",
+		role: Roles.USER,
 	};
 
 	const [signupState, dispatch] = useReducer(
@@ -131,15 +132,15 @@ const Signup = () => {
 			<input
 				type="text"
 				placeholder="First Name"
-				value={signupState.firstName}
-				onChange={e => dispatch({ firstName: e.target.value })}
+				value={signupState.first_name}
+				onChange={e => dispatch({ first_name: e.target.value })}
 				className="w-full px-4 my-2 py-2 rounded bg-gray-700 text-white focus:outline-none"
 			/>
 			<input
 				type="text"
 				placeholder="Last Name"
-				value={signupState.lastName}
-				onChange={e => dispatch({ lastName: e.target.value })}
+				value={signupState.last_name}
+				onChange={e => dispatch({ last_name: e.target.value })}
 				className="w-full px-4 my-2 py-2 rounded bg-gray-700 text-white focus:outline-none"
 			/>
 			<input

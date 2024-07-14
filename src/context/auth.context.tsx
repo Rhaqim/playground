@@ -5,19 +5,26 @@ import { useRouter } from "next/navigation";
 
 import { Web3Provider } from "@/lib/ether";
 import { routes } from "@/service/api/routes";
+import { SignIn, SignUp, User } from "@/types/auth.type";
 
 interface AuthContextType {
+	user: User | null;
 	address: string | null;
 	isLoggedIn: boolean;
-	signIn: () => void;
-	signOut: () => void;
+	signIn: (data: SignIn) => Promise<void>;
+	signUp: (data: SignUp) => Promise<void>;
+	signinWeb3: () => Promise<void>;
+	signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
+	user: null,
 	address: null,
 	isLoggedIn: false,
-	signIn: () => {},
-	signOut: () => {},
+	signIn: async () => {},
+	signUp: async () => {},
+	signinWeb3: async () => {},
+	signOut: async () => {},
 });
 
 export function useAuth() {
@@ -33,6 +40,7 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const [user, setUser] = useState<User | null>(null);
 	const [address, setAddress] = useState<string | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -51,13 +59,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 		const { data } = await routes.getNonce(address);
 
-		return data
+		return data;
 	};
 
-	const signIn = async () => {
+	const signinWeb3 = async () => {
 		const provider = await Web3Provider.init();
 
-        const nonce = await getNonce();
+		const nonce = await getNonce();
 
 		const signature = await provider.sign(message(nonce));
 
@@ -66,6 +74,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		const { data } = await routes.login(address, signature);
 
 		console.log(data);
+	};
+
+	const signIn = async (data: SignIn) => {
+		const { data: user } = await routes.signin(data);
+		setUser(user);
+		localStorage.setItem("user", JSON.stringify(user));
+	};
+
+	const signUp = async (data: SignUp) => {
+		const { data: user } = await routes.signup(data);
+		setUser(user);
+		localStorage.setItem("user", JSON.stringify(user));
 	};
 
 	const signOut = async () => {
@@ -78,11 +98,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		}
 	};
 
-	return (
-		<AuthContext.Provider value={{ address, isLoggedIn, signIn, signOut }}>
-			{children}
-		</AuthContext.Provider>
-	);
+	const value: AuthContextType = {
+		user,
+		address,
+		isLoggedIn,
+		signIn,
+		signUp,
+		signinWeb3,
+		signOut,
+	};
+
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export function withAuth(Component: React.ComponentType) {
@@ -97,9 +123,11 @@ export function withAuth(Component: React.ComponentType) {
 		}
 
 		return <Component {...props} />;
-	};
+	}
 
-	AuthComponent.displayName = `withAuth(${Component.displayName || Component.name})`;
+	AuthComponent.displayName = `withAuth(${
+		Component.displayName || Component.name
+	})`;
 
 	return AuthComponent;
 }
