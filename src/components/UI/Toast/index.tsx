@@ -3,10 +3,9 @@ import React from "react";
 import { useToast } from "@/context/toast.context";
 
 const Toast = () => {
-	const { toasts } = useToast();
-    console.log(toasts);
+	const { toasts, removeToast } = useToast();
 	return (
-		<div className="absolute top-0 right-0 p-4">
+		<div className="absolute top-0 right-0 p-4 z-50 w-full">
 			{toasts.map(toast => (
 				<div
 					key={toast.id}
@@ -29,7 +28,7 @@ const Toast = () => {
 							</svg>
 							<p className="ml-3 font-semibold">{toast.type}</p>
 						</div>
-						<button className="text-black">
+						<button className="text-black" onClick={() => removeToast(toast.id)}>
 							<svg
 								className="h-4 w-4"
 								fill="none"

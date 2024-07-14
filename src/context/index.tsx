@@ -18,8 +18,8 @@ export default function AppProviders({
 			<EnvironmentProvider>
 				<AuthProvider>
 					<PromptProvider>
-						{children}
 						<Toast />
+						{children}
 					</PromptProvider>
 				</AuthProvider>
 			</EnvironmentProvider>

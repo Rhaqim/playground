@@ -15,9 +15,10 @@ interface AuthContextType {
 	user: User | null;
 	address: string | null;
 	isLoggedIn: boolean;
+	signinWeb3: () => Promise<void>;
+	signinGoogle: () => Promise<void>;
 	signIn: (data: SignIn) => Promise<void>;
 	signUp: (data: SignUp) => Promise<void>;
-	signinWeb3: () => Promise<void>;
 	signOut: () => Promise<void>;
 }
 
@@ -25,9 +26,10 @@ const AuthContext = createContext<AuthContextType>({
 	user: null,
 	address: null,
 	isLoggedIn: false,
+	signinWeb3: async () => {},
+	signinGoogle: async () => {},
 	signIn: async () => {},
 	signUp: async () => {},
-	signinWeb3: async () => {},
 	signOut: async () => {},
 });
 
@@ -87,6 +89,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		console.log(data);
 	};
 
+	const signinGoogle = async () => {
+		try {
+			await routes.googleLogin();
+		} catch (error: any) {
+			console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message:
+					error.response.data.error ?? error.response.data ?? error.message,
+			});
+		}
+	};
+
 	const signIn = async (data: SignIn) => {
 		setEnvironment("production");
 		try {
@@ -98,28 +114,43 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			addToast({
 				id: generateRandomID(),
 				type: "error",
-				message: error.response.data.message,
+				message:
+					error.response.data.error ?? error.response.data ?? error.message,
 			});
 		}
 	};
 
 	const signUp = async (data: SignUp) => {
 		setEnvironment("production");
-
-		const { data: user } = await routes.signup(data);
-		setUser(user);
-		localStorage.setItem("user", JSON.stringify(user));
+		try {
+			const { data: user } = await routes.signup(data);
+			setUser(user);
+			localStorage.setItem("user", JSON.stringify(user));
+		} catch (error: any) {
+			console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message:
+					error.response.data.error ?? error.response.data ?? error.message,
+			});
+		}
 	};
 
 	const signOut = async () => {
 		setEnvironment("production");
-
 		try {
 			await routes.logout();
 			setAddress(null);
 			setIsLoggedIn(false);
-		} catch (error) {
+		} catch (error: any) {
 			console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message:
+					error.response.data.error ?? error.response.data ?? error.message,
+			});
 		}
 	};
 
@@ -127,9 +158,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		user,
 		address,
 		isLoggedIn,
+		signinWeb3,
+		signinGoogle,
 		signIn,
 		signUp,
-		signinWeb3,
 		signOut,
 	};
 
