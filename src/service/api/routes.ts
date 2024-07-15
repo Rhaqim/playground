@@ -12,8 +12,12 @@ export const routes = {
 	getNonce: async (wallet: string) => post("/nonce", { wallet }),
 	googleLogin: async () => get("/google/login"),
 	signup: async (userDetails: SignUp) => post("/signup", { ...userDetails }),
-	signin: async (signinDetails: SignIn) => post("/signin", { ...signinDetails }),
+	signin: async (signinDetails: SignIn) =>
+		post("/signin", { ...signinDetails }),
 	signout: async () => post("/signout", {}),
+	me: async () => get("/me"),
+	confirmEmail: async (token: string, email: string) =>
+		get("/confirm-email?token=" + token + "&email=" + email),
 	// Fetch
 	getPrompt: async () => get("/prompts"),
 	getTopics: async () => get("/topics"),

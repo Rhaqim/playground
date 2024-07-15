@@ -61,10 +61,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	console.log("user", callbackURL);
 
 	useEffect(() => {
-		const user = localStorage.getItem("user");
-		if (user) {
-			setUser(JSON.parse(user));
-		}
+		const fetchUser = async () => {
+			setEnvironment("production");
+
+			try {
+				const { data } = await routes.me();
+				setUser(data.user);
+				setIsLoggedIn(true);
+			} catch (error: any) {
+				console.error(error);
+				setIsLoggedIn(false);
+			}
+		};
+
+		fetchUser();
 	}, []);
 
 	const message = (nonce: string) => `
@@ -219,14 +229,14 @@ export function withAuth(
 		if (!isLoggedIn) {
 			setCallbackURL(pathName);
 
-			router.push("/");
-			
+			router.push("/auth");
+
 			addToast({
 				id: generateRandomID(),
 				type: "error",
 				message: "You must be logged in to access this page.",
 			});
-			
+
 			return null;
 		}
 
