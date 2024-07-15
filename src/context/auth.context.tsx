@@ -58,14 +58,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 	const [callbackURL, setCallbackURL] = useState<string | null>(null);
 
-	console.log("user", callbackURL);
-
 	useEffect(() => {
 		const fetchUser = async () => {
-			setEnvironment("production");
-
 			try {
-				const { data } = await routes.me();
+				const response = await fetch("/api/prod/me");
+				const data = await response.json();
+
 				setUser(data.user);
 				setIsLoggedIn(true);
 			} catch (error: any) {
