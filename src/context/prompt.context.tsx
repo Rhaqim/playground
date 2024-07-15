@@ -12,6 +12,7 @@ import { useEnvironment } from "@/context/env.context";
 import { routes } from "@/service/api/routes";
 import Prompt, { Topic, Category } from "@/types/prompt.type";
 import StoryData from "@/types/story.type";
+import { useAuth } from "./auth.context";
 
 interface PromptContextProps {
 	prompts: Prompt[];
@@ -39,6 +40,7 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const { environment } = useEnvironment();
+	const { user } = useAuth();
 
 	const [prompts, setPrompts] = useState<Prompt[]>([]);
 	const [topics, setTopics] = useState<Topic[]>([]);
@@ -128,10 +130,11 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	useEffect(() => {
-		if (!hasFetched.current) {
-			hasFetched.current = true;
-			reloadAll();
-		}
+		if (user !== null)
+			if (!hasFetched.current) {
+				hasFetched.current = true;
+				reloadAll();
+			}
 	}, [environment]);
 
 	return (
