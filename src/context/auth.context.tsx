@@ -247,3 +247,30 @@ export function withAuth(
 
 	return AuthComponent;
 }
+
+export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+	const router = useRouter();
+	const pathName = usePathname();
+
+	const { isLoggedIn, setCallbackURL } = useAuth();
+
+	const { addToast } = useToast();
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			setCallbackURL(pathName);
+
+			router.push("/auth");
+
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message: "You must be logged in to access this page.",
+			});
+		}
+	}, [isLoggedIn, pathName, router, setCallbackURL]);
+
+	return isLoggedIn ? children : null;
+};
+
+export default ProtectedRoute;
