@@ -17,6 +17,25 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 	return (
 		<div className="min-h-screen bg-black">
 			<header className="bg-blue-500 text-white text-center p-4 flex justify-between">
+				<h1 className="text-2xl font-semibold">Story Prompts</h1>
+				<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
+					<button
+						onClick={toggleEnvironment}
+						className={`${
+							environment === "development" ? "bg-blue-500" : "bg-gray-300"
+						} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
+					>
+						Dev
+					</button>
+					<button
+						onClick={toggleEnvironment}
+						className={`${
+							environment === "production" ? "bg-green-500" : "bg-gray-300"
+						} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
+					>
+						Prod
+					</button>
+				</div>
 				<button
 					onClick={toggleLinks}
 					className="block md:hidden focus:outline-none z-20"
@@ -45,7 +64,6 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 						)}
 					</svg>
 				</button>
-				<h1 className="text-2xl font-semibold">Story Prompts</h1>
 				<nav
 					className={`${
 						showLinks ? "flex" : "hidden"
@@ -63,24 +81,6 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 					<Link href="/image">
 						<p className="text-white">Image</p>
 					</Link>
-					<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
-						<button
-							onClick={toggleEnvironment}
-							className={`${
-								environment === "development" ? "bg-blue-500" : "bg-gray-300"
-							} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
-						>
-							Dev
-						</button>
-						<button
-							onClick={toggleEnvironment}
-							className={`${
-								environment === "production" ? "bg-green-500" : "bg-gray-300"
-							} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
-						>
-							Prod
-						</button>
-					</div>
 				</nav>
 			</header>
 			<main className="container mx-auto p-4">{children}</main>

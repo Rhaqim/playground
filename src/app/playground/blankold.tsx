@@ -1,74 +1,40 @@
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { routes } from "@/service/api/routes";
-import { useToast } from "@/context/toast.context";
-import { generateRandomID } from "@/lib/utils";
+import React from "react";
 
 interface BlankProps {
+	topicName: string;
+	setTopicName: React.Dispatch<React.SetStateAction<string>>;
+	imagePrompts: string[];
+	newImagePrompt: string;
+	setNewImagePrompt: React.Dispatch<React.SetStateAction<string>>;
 	response: string;
 	setResponse: React.Dispatch<React.SetStateAction<string>>;
+	categoryId: number;
+	setCategoryId: React.Dispatch<React.SetStateAction<number>>;
 	categories: { id: number; name: string }[];
+	handleAddImagePrompt: () => void;
+	handleRemoveImagePrompt: (index: number) => void;
+	handleSavePrompt: () => void;
 	toggleModal: () => void;
 	hiddenCloseButton?: boolean;
-	setIsModalOpen: (value: boolean) => void;
 }
 
 const Blank: React.FC<BlankProps> = ({
+	topicName,
+	setTopicName,
+	imagePrompts,
+	newImagePrompt,
+	setNewImagePrompt,
 	response,
 	setResponse,
+	categoryId,
+	setCategoryId,
 	categories,
+	handleAddImagePrompt,
+	handleRemoveImagePrompt,
+	handleSavePrompt,
 	toggleModal,
 	hiddenCloseButton = false,
-	setIsModalOpen,
 }) => {
-	const router = useRouter();
-
-    const { addToast } = useToast();
-
-	const [topicName, setTopicName] = useState<string>("");
-	const [imagePrompts, setImagePrompts] = useState<string[]>([]);
-	const [newImagePrompt, setNewImagePrompt] = useState<string>("");
-	const [categoryId, setCategoryId] = useState<number>(1);
-	const [error, setError] = useState<string | null>(null);
-
-	const handleAddImagePrompt = () => {
-		if (newImagePrompt) {
-			setImagePrompts([...imagePrompts, newImagePrompt]);
-			setNewImagePrompt("");
-		}
-	};
-
-	const handleRemoveImagePrompt = (index: number) => {
-		const newImagePrompts = imagePrompts.filter((_, i) => i !== index);
-		setImagePrompts(newImagePrompts);
-	};
-
-	const handleSavePrompt = async () => {
-		// join image prompts together separated by a comma
-		const imagePrompt = imagePrompts.join(", ");
-
-		try {
-			await routes.createPrompt({
-				prompt: response,
-				category: categoryId,
-				topic: topicName,
-				image_prompt: imagePrompt,
-			});
-
-			router.push("/prompts");
-		} catch (error: any) {
-			// setError("An error occurred while saving the prompt");
-            addToast({
-                id: generateRandomID(),
-                type: "error",
-                message: "An error occurred while saving the prompt"
-            })
-            console.error(error);
-		} finally {
-			setIsModalOpen(false);
-		}
-	};
 	return (
 		<div className="bg-white p-8 rounded-lg shadow-md w-[50%]">
 			<h1 className="text-lg font-bold mb-4 text-black">Prompt</h1>

@@ -20,6 +20,7 @@ interface TableLayoutProps {
 	handleSave: (id: number, category: string, prompt: string) => void;
 	handleCancel: () => void;
 	handleDelete: (id: number) => void;
+	handleMigrate: (prompt: Prompt) => void;
 	handleTopicCategoryChange: (topicId: string, categoryId: string) => void;
 }
 
@@ -34,6 +35,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 	handleSave,
 	handleCancel,
 	handleDelete,
+	handleMigrate,
 	handleTopicCategoryChange,
 }) => {
 	const router = useRouter();
@@ -133,7 +135,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									prompt.prompt
 								)}
 							</td>
-							<td className="flex flex-col md:flex-row">
+							<td className="flex flex-col space-y-4 my-4 ml-4">
 								{editableRow === prompt.id ? ( // If editing is enabled for this row
 									<>
 										<button
@@ -146,7 +148,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 										</button>
 										<button
 											onClick={handleCancel}
-											className="bg-gray-500 text-white px-4 py-1 rounded-md ml-2"
+											className="bg-gray-500 text-white px-4 py-1 rounded-md"
 										>
 											Cancel
 										</button>
@@ -162,7 +164,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 								<button
 									// onClick={() => handleDelete(prompt.id)}
 									onClick={() => handleOpenDeleteModal(prompt.id, topic?.name)}
-									className="bg-red-500 text-white px-4 py-1 rounded-md ml-2"
+									className="bg-red-500 text-white px-4 py-1 rounded-md"
 								>
 									Delete
 								</button>
@@ -181,9 +183,15 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 										// routes.demoPrompt({ prompt_id: prompt.id.toString() })
 										router.push(`/prompts/${prompt.id}`)
 									}
-									className="bg-green-500 text-white px-4 py-1 rounded-md ml-2"
+									className="bg-green-500 text-white px-4 py-1 rounded-md"
 								>
 									Demo
+								</button>
+								<button
+									onClick={() => handleMigrate(prompt)}
+									className="bg-purple-500 text-white px-4 py-1 rounded-md"
+								>
+									Migrate
 								</button>
 							</td>
 						</tr>

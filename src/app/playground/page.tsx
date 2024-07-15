@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, SetStateAction } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 import { routes } from "@/service/api/routes";
 import Dropdown from "@/components/Dropdown";
@@ -14,26 +13,19 @@ import TestPromptRequest, {
 	VoiceStyle,
 	Character,
 } from "@/types/craftPrompt.type";
+
 import Blank from "./blank";
 
 const TestPromptForm = () => {
-	const router = useRouter();
-
 	const { categories } = usePrompt();
 
 	type Sections = "Parameters" | "Blank";
 
 	const [section, setSection] = useState<Sections>("Parameters");
 
-	const [error, setError] = useState<string>("");
-
 	const [fullResponse, setFullResponse] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
 
-	const [topicName, setTopicName] = useState<string>("");
-	const [imagePrompts, setImagePrompts] = useState<string[]>([]);
-	const [newImagePrompt, setNewImagePrompt] = useState<string>("");
-	const [categoryId, setCategoryId] = useState<number>(1);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const [losingScenarios, setLosingScenarios] = useState<string[]>([]);
@@ -153,18 +145,6 @@ const TestPromptForm = () => {
 		setSideCharacters(newSideCharacters);
 	};
 
-	const handleAddImagePrompt = () => {
-		if (newImagePrompt) {
-			setImagePrompts([...imagePrompts, newImagePrompt]);
-			setNewImagePrompt("");
-		}
-	};
-
-	const handleRemoveImagePrompt = (index: number) => {
-		const newImagePrompts = imagePrompts.filter((_, i) => i !== index);
-		setImagePrompts(newImagePrompts);
-	};
-
 	const handleChange = (
 		e: React.ChangeEvent<
 			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -210,27 +190,6 @@ const TestPromptForm = () => {
 		}
 	};
 
-	const handleSavePrompt = async () => {
-		// join image prompts together separated by a comma
-		const imagePrompt = imagePrompts.join(", ");
-
-		try {
-			await routes.createPrompt({
-				prompt: response,
-				category: categoryId,
-				topic: topicName,
-				image_prompt: imagePrompt,
-			});
-
-			router.push("/prompts");
-		} catch (error: any) {
-			setError("An error occurred while saving the prompt");
-			console.error(error);
-		} finally {
-			setIsModalOpen(false);
-		}
-	};
-
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
@@ -242,14 +201,6 @@ const TestPromptForm = () => {
 
 	return (
 		<div className="mx-auto text-white w-full">
-			{/* Error */}
-			{error && (
-				<div className="relative w-full h-96 bg-opacity-50 flex justify-center items-center rounded-md mb-4">
-					<div className="absolute top-0 left-0 right-0 bg-red-500 text-white p-2 rounded-t-md">
-						{error}
-					</div>
-				</div>
-			)}
 			{/* Section button */}
 			<div className="flex justify-center space-x-4">
 				<button
@@ -757,17 +708,8 @@ const TestPromptForm = () => {
 									response={response}
 									setResponse={setResponse}
 									categories={categories}
-									categoryId={categoryId}
-									topicName={topicName}
-									setTopicName={setTopicName}
-									imagePrompts={imagePrompts}
-									newImagePrompt={newImagePrompt}
-									setNewImagePrompt={setNewImagePrompt}
-									setCategoryId={setCategoryId}
-									handleAddImagePrompt={handleAddImagePrompt}
-									handleRemoveImagePrompt={handleRemoveImagePrompt}
-									handleSavePrompt={handleSavePrompt}
 									toggleModal={toggleModal}
+									setIsModalOpen={setIsModalOpen}
 								/>
 							</div>
 						)}
@@ -783,18 +725,9 @@ const TestPromptForm = () => {
 						response={response}
 						setResponse={setResponse}
 						categories={categories}
-						categoryId={categoryId}
-						topicName={topicName}
-						setTopicName={setTopicName}
-						imagePrompts={imagePrompts}
-						newImagePrompt={newImagePrompt}
-						setNewImagePrompt={setNewImagePrompt}
-						setCategoryId={setCategoryId}
-						handleAddImagePrompt={handleAddImagePrompt}
-						handleRemoveImagePrompt={handleRemoveImagePrompt}
-						handleSavePrompt={handleSavePrompt}
 						toggleModal={toggleModal}
 						hiddenCloseButton
+						setIsModalOpen={setIsModalOpen}
 					/>
 				</div>
 			)}

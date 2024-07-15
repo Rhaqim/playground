@@ -19,6 +19,7 @@ interface MobileLayoutProps {
 	handleSave: (id: number, category: string, prompt: string) => void;
 	handleCancel: () => void;
 	handleDelete: (id: number) => void;
+	handleMigrate: (prompt: Prompt) => void;
 	handleTopicCategoryChange: (topicId: string, categoryId: string) => void;
 }
 
@@ -33,6 +34,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 	handleSave,
 	handleCancel,
 	handleDelete,
+	handleMigrate,
 	handleTopicCategoryChange,
 }) => {
 	const router = useRouter();
@@ -70,10 +72,10 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 
 				return (
 					<div key={prompt.id} className="p-2 mb-2 rounded">
-						<div className="mb-2">
-							<strong>Topic:</strong> {topic?.name}
+						<div className="mb-2 flex space-x-2">
+							<strong>Topic:</strong> <span className="font-bold">{topic?.name}</span>
 						</div>
-						<div className="mb-2">
+						<div className="mb-2 flex space-x-2 items-center">
 							<strong>Category:</strong>
 							<select
 								className="border-gray-300 text-black p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -155,6 +157,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 								className="bg-green-500 text-white px-4 py-1 rounded-md"
 							>
 								Demo
+							</button>
+							<button
+									onClick={() => handleMigrate(prompt)}
+									className="bg-purple-500 text-white px-4 py-1 rounded-md"
+								>
+									Migrate
 							</button>
 						</div>
 					</div>

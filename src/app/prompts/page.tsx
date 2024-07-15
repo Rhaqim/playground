@@ -7,7 +7,8 @@ import PromptsTable from "@/components/Prompt/TableLayout";
 import Search from "@/components/Search";
 import { usePrompt } from "@/context/prompt.context";
 import { routes } from "@/service/api/routes";
-import { Topic } from "@/types/prompt.type";
+import Prompt, { Topic } from "@/types/prompt.type";
+import Blank from "../playground/blank";
 
 export default function Page() {
 	const {
@@ -26,6 +27,13 @@ export default function Page() {
 	const [topics_, setTopics] = useState<Topic[]>(topics);
 
 	const [filteredPrompts, setFilteredPrompts] = useState(prompts);
+
+	const [response, setResponse] = useState<string>("");
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
 
 	const handleSearch = (data: any) => {
 		setFilteredPrompts(data);
@@ -46,6 +54,11 @@ export default function Page() {
 	const handleDelete = async (id: number) => {
 		await routes.delPrompt(id.toString());
 		await reloadAll();
+	};
+
+	const handleMigrate = async (prompt: Prompt) => {
+		setResponse(prompt.prompt);
+		toggleModal();
 	};
 
 	const handleTopicCategoryChange = async (
@@ -102,6 +115,7 @@ export default function Page() {
 					handleSave={handleSave}
 					handleCancel={handleCancel}
 					handleDelete={handleDelete}
+					handleMigrate={handleMigrate}
 					handleTopicCategoryChange={handleTopicCategoryChange}
 				/>
 				<MobileLayout
@@ -115,6 +129,7 @@ export default function Page() {
 					handleSave={handleSave}
 					handleCancel={handleCancel}
 					handleDelete={handleDelete}
+					handleMigrate={handleMigrate}
 					handleTopicCategoryChange={handleTopicCategoryChange}
 				/>
 			</div>
@@ -140,6 +155,19 @@ export default function Page() {
 				>
 					Create
 				</button>
+			</div>
+			<div>
+				{isModalOpen && (
+					<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
+						<Blank
+							response={response}
+							setResponse={setResponse}
+							categories={categories}
+							toggleModal={toggleModal}
+							setIsModalOpen={setIsModalOpen}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	);
