@@ -213,7 +213,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export function withAuth(
+function withAuth(
 	Component: React.ComponentType<Readonly<{ children: React.ReactNode }>>
 ) {
 	function AuthComponent(props: any) {
