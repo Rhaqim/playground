@@ -32,8 +32,6 @@ export const EnvironmentProvider: React.FC<{ children: ReactNode }> = ({
 
 	const [environment, setEnvironment] = useState<Environment>("development");
 
-	console.log("config", environment);
-
 	const toggleEnvironment = () => {
 		localStorage.setItem(
 			"environment",

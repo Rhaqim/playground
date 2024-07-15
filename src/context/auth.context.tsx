@@ -1,20 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 import { Web3Provider } from "@/lib/ether";
+import { generateRandomID } from "@/lib/utils";
 import { routes } from "@/service/api/routes";
 import { SignIn, SignUp, User } from "@/types/auth.type";
 
 import { useEnvironment } from "./env.context";
 import { useToast } from "./toast.context";
-import { generateRandomID } from "@/lib/utils";
 
 interface AuthContextType {
 	user: User | null;
 	address: string | null;
 	isLoggedIn: boolean;
+	setCallbackURL: React.Dispatch<React.SetStateAction<string | null>>;
 	signinWeb3: () => Promise<void>;
 	signinGoogle: () => Promise<void>;
 	signIn: (data: SignIn) => Promise<void>;
@@ -26,6 +27,7 @@ const AuthContext = createContext<AuthContextType>({
 	user: null,
 	address: null,
 	isLoggedIn: false,
+	setCallbackURL: () => {},
 	signinWeb3: async () => {},
 	signinGoogle: async () => {},
 	signIn: async () => {},
@@ -46,12 +48,24 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const router = useRouter();
+
 	const { setEnvironment } = useEnvironment();
 	const { addToast } = useToast();
 
 	const [user, setUser] = useState<User | null>(null);
 	const [address, setAddress] = useState<string | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+	const [callbackURL, setCallbackURL] = useState<string | null>(null);
+
+	console.log("user", callbackURL);
+
+	useEffect(() => {
+		const user = localStorage.getItem("user");
+		if (user) {
+			setUser(JSON.parse(user));
+		}
+	}, []);
 
 	const message = (nonce: string) => `
             Sign this message to prove you're an Inception Ark NFT holder.
@@ -107,8 +121,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		setEnvironment("production");
 		try {
 			const { data: user } = await routes.signin(data);
+			setIsLoggedIn(true);
 			setUser(user);
+
 			localStorage.setItem("user", JSON.stringify(user));
+
+			if (callbackURL) {
+				router.push(callbackURL);
+				setCallbackURL(null); // Reset callback URL after redirection
+			} else {
+				router.push("/"); // Default to home page or any other default page
+			}
 		} catch (error: any) {
 			console.error(error);
 			addToast({
@@ -124,8 +147,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		setEnvironment("production");
 		try {
 			const { data: user } = await routes.signup(data);
+			setIsLoggedIn(true);
 			setUser(user);
+
 			localStorage.setItem("user", JSON.stringify(user));
+
+			if (callbackURL) {
+				router.push(callbackURL);
+				setCallbackURL(null); // Reset callback URL after redirection
+			} else {
+				router.push("/"); // Default to home page or any other default page
+			}
 		} catch (error: any) {
 			console.error(error);
 			addToast({
@@ -143,6 +175,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			await routes.logout();
 			setAddress(null);
 			setIsLoggedIn(false);
+
+			localStorage.removeItem("user");
+
+			router.push("/");
 		} catch (error: any) {
 			console.error(error);
 			addToast({
@@ -158,6 +194,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		user,
 		address,
 		isLoggedIn,
+		setCallbackURL,
 		signinWeb3,
 		signinGoogle,
 		signIn,
@@ -168,14 +205,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export function withAuth(Component: React.ComponentType) {
+export function withAuth(
+	Component: React.ComponentType<Readonly<{ children: React.ReactNode }>>
+) {
 	function AuthComponent(props: any) {
-		const { isLoggedIn } = useAuth();
-
 		const router = useRouter();
+		const pathName = usePathname();
+
+		const { isLoggedIn, setCallbackURL } = useAuth();
+
+		const { addToast } = useToast();
 
 		if (!isLoggedIn) {
+			setCallbackURL(pathName);
+
 			router.push("/");
+
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message: "You must be logged in to access this page.",
+			});
+
 			return null;
 		}
 
