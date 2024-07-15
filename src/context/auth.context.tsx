@@ -220,13 +220,13 @@ export function withAuth(
 			setCallbackURL(pathName);
 
 			router.push("/");
-
+			
 			addToast({
 				id: generateRandomID(),
 				type: "error",
 				message: "You must be logged in to access this page.",
 			});
-
+			
 			return null;
 		}
 
