@@ -11,6 +11,8 @@ import React, {
 import config from "@/config";
 import { setApiUrl } from "@/service/api/provider";
 
+import { useToast } from "./toast.context";
+
 type Environment = "development" | "production";
 
 interface EnvironmentContextProps {
@@ -26,6 +28,8 @@ const EnvironmentContext = createContext<EnvironmentContextProps | undefined>(
 export const EnvironmentProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
+	const { addToast } = useToast();
+
 	const [environment, setEnvironment] = useState<Environment>("development");
 
 	console.log("config", environment);
@@ -43,6 +47,11 @@ export const EnvironmentProvider: React.FC<{ children: ReactNode }> = ({
 
 	useEffect(() => {
 		setApiUrl(config[environment]);
+		addToast({
+			id: "environment",
+			type: "success",
+			message: `Environment set to ${environment}`,
+		});
 	}, [environment]);
 
 	useEffect(() => {

@@ -6,6 +6,7 @@ import { useToast } from "@/context/toast.context";
 import { generateRandomID } from "@/lib/utils";
 
 interface BlankProps {
+	buttonText?: string;
 	response: string;
 	setResponse: React.Dispatch<React.SetStateAction<string>>;
 	categories: { id: number; name: string }[];
@@ -15,6 +16,7 @@ interface BlankProps {
 }
 
 const Blank: React.FC<BlankProps> = ({
+	buttonText = "Save Prompt",
 	response,
 	setResponse,
 	categories,
@@ -24,13 +26,12 @@ const Blank: React.FC<BlankProps> = ({
 }) => {
 	const router = useRouter();
 
-    const { addToast } = useToast();
+	const { addToast } = useToast();
 
 	const [topicName, setTopicName] = useState<string>("");
 	const [imagePrompts, setImagePrompts] = useState<string[]>([]);
 	const [newImagePrompt, setNewImagePrompt] = useState<string>("");
 	const [categoryId, setCategoryId] = useState<number>(1);
-	const [error, setError] = useState<string | null>(null);
 
 	const handleAddImagePrompt = () => {
 		if (newImagePrompt) {
@@ -59,18 +60,18 @@ const Blank: React.FC<BlankProps> = ({
 			router.push("/prompts");
 		} catch (error: any) {
 			// setError("An error occurred while saving the prompt");
-            addToast({
-                id: generateRandomID(),
-                type: "error",
-                message: "An error occurred while saving the prompt"
-            })
-            console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message: "An error occurred while saving the prompt",
+			});
+			console.error(error);
 		} finally {
 			setIsModalOpen(false);
 		}
 	};
 	return (
-		<div className="bg-white p-8 rounded-lg shadow-md w-[50%]">
+		<div className="bg-white p-8 rounded-lg shadow-md md:w-[50%] overflow-auto">
 			<h1 className="text-lg font-bold mb-4 text-black">Prompt</h1>
 			<p className="text-black">Review the prompt and make any changes</p>
 			{/* Topic title input */}
@@ -151,14 +152,13 @@ const Blank: React.FC<BlankProps> = ({
 							{cat.name}
 						</option>
 					))}
-					{/* <option value="1">Escape</option> */}
 				</select>
 			</div>
 			<button
 				className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
 				onClick={handleSavePrompt}
 			>
-				Save Prompt
+				{buttonText}
 			</button>
 			<button
 				className={`mt-4 bg-gray-300 text-gray-800 px-4 py-2 rounded-md ml-2 hover:bg-gray-400

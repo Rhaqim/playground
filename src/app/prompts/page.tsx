@@ -6,8 +6,10 @@ import MobileLayout from "@/components/Prompt/Mobilelayout";
 import PromptsTable from "@/components/Prompt/TableLayout";
 import Search from "@/components/Search";
 import { usePrompt } from "@/context/prompt.context";
+import { useEnvironment } from "@/context/env.context";
 import { routes } from "@/service/api/routes";
 import Prompt, { Topic } from "@/types/prompt.type";
+
 import Blank from "../playground/blank";
 
 export default function Page() {
@@ -19,6 +21,7 @@ export default function Page() {
 		handleCategoryCreation,
 		setNewCategoryName,
 	} = usePrompt();
+	const { setEnvironment, environment } = useEnvironment();
 
 	const hasFetched = useRef(false);
 
@@ -57,6 +60,7 @@ export default function Page() {
 	};
 
 	const handleMigrate = async (prompt: Prompt) => {
+		setEnvironment(environment === "development" ? "production" : "development");
 		setResponse(prompt.prompt);
 		toggleModal();
 	};
@@ -156,19 +160,18 @@ export default function Page() {
 					Create
 				</button>
 			</div>
-			<div>
-				{isModalOpen && (
-					<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
-						<Blank
-							response={response}
-							setResponse={setResponse}
-							categories={categories}
-							toggleModal={toggleModal}
-							setIsModalOpen={setIsModalOpen}
-						/>
-					</div>
-				)}
-			</div>
+			{isModalOpen && (
+				<div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75 z-45">
+					<Blank
+						buttonText={`Migrate to ${environment}`}
+						response={response}
+						setResponse={setResponse}
+						categories={categories}
+						toggleModal={toggleModal}
+						setIsModalOpen={setIsModalOpen}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
