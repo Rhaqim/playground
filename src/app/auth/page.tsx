@@ -82,12 +82,12 @@ const Login = () => {
 			>
 				Login
 			</button>
-			<button
+			{/* <button
 				onClick={signinGoogle}
 				className="w-full px-4 py-2 bg-red-500 rounded text-white transition duration-300 ease-in-out transform hover:scale-105"
 			>
 				Login with Google
-			</button>
+			</button> */}
 		</div>
 	);
 };
@@ -150,9 +150,9 @@ const Signup = () => {
 			>
 				Signup
 			</button>
-			<button className="w-full px-4 my-2 py-2 bg-red-500 rounded text-white transition duration-300 ease-in-out transform hover:scale-105">
+			{/* <button className="w-full px-4 my-2 py-2 bg-red-500 rounded text-white transition duration-300 ease-in-out transform hover:scale-105">
 				Signup with Google
-			</button>
+			</button> */}
 		</div>
 	);
 };
