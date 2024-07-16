@@ -71,7 +71,7 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 						showLinks ? "flex" : "hidden"
 					} fixed inset-0 z-10 bg-gray-900 bg-opacity-90 flex-col justify-around items-center md:flex md:relative md:bg-transparent md:bg-opacity-100 md:flex-row md:space-x-2`}
 				>
-					{isLoggedIn ? (
+					{isLoggedIn && user ? (
 						<>
 							<Link href="/">
 								<p className="text-white">Home</p>
