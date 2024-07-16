@@ -67,6 +67,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				const response = await fetch("/api/prod/me");
 				const data = await response.json();
 
+				localStorage.setItem("user", JSON.stringify(data.user));
+
 				setUser(data.user);
 				setIsLoggedIn(true);
 			} catch (error: any) {
@@ -259,19 +261,19 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 	const { addToast } = useToast();
 
-	useEffect(() => {
-		if (!isLoggedIn || user === null) {
-			setCallbackURL(pathName);
+	// useEffect(() => {
+	if (!isLoggedIn || user === null) {
+		setCallbackURL(pathName);
 
-			router.push("/auth");
+		router.push("/auth");
 
-			addToast({
-				id: generateRandomID(),
-				type: "error",
-				message: "You must be logged in to access this page.",
-			});
-		}
-	}, [isLoggedIn, pathName, router, setCallbackURL, user]);
+		addToast({
+			id: generateRandomID(),
+			type: "error",
+			message: "You must be logged in to access this page.",
+		});
+	}
+	// }, [isLoggedIn, pathName, router, setCallbackURL, user]);
 
 	return isLoggedIn || user ? children : null;
 };
