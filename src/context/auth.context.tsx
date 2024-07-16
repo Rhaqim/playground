@@ -257,23 +257,27 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	const router = useRouter();
 	const pathName = usePathname();
 
-	const { user, isLoggedIn, setCallbackURL } = useAuth();
+	const { isLoggedIn, setCallbackURL } = useAuth();
 
 	const { addToast } = useToast();
 
-	// useEffect(() => {
-	if (!isLoggedIn || user === null) {
-		setCallbackURL(pathName);
+	const storedUser = localStorage.getItem("user");
 
-		router.push("/auth");
+	const user = storedUser ? (JSON.parse(storedUser) as User) : null;
 
-		addToast({
-			id: generateRandomID(),
-			type: "error",
-			message: "You must be logged in to access this page.",
-		});
-	}
-	// }, [isLoggedIn, pathName, router, setCallbackURL, user]);
+	useEffect(() => {
+		if (!isLoggedIn || !user) {
+			setCallbackURL(pathName);
+
+			router.push("/auth");
+
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message: "You must be logged in to access this page.",
+			});
+		}
+	}, [isLoggedIn, pathName, router, setCallbackURL, user]);
 
 	return isLoggedIn || user ? children : null;
 };
