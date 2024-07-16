@@ -252,12 +252,12 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	const router = useRouter();
 	const pathName = usePathname();
 
-	const { isLoggedIn, setCallbackURL } = useAuth();
+	const { user, isLoggedIn, setCallbackURL } = useAuth();
 
 	const { addToast } = useToast();
 
 	useEffect(() => {
-		if (!isLoggedIn) {
+		if (!isLoggedIn || user === null) {
 			setCallbackURL(pathName);
 
 			router.push("/auth");
@@ -268,7 +268,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 				message: "You must be logged in to access this page.",
 			});
 		}
-	}, [isLoggedIn, pathName, router, setCallbackURL]);
+	}, [isLoggedIn, pathName, router, setCallbackURL, user]);
 
 	return isLoggedIn ? children : null;
 };
