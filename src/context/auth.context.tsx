@@ -58,6 +58,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 	const [callbackURL, setCallbackURL] = useState<string | null>(null);
 
+	console.log("User", user);
+	console.log("LoggedIn", isLoggedIn);
+
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
@@ -270,7 +273,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [isLoggedIn, pathName, router, setCallbackURL, user]);
 
-	return isLoggedIn ? children : null;
+	return isLoggedIn || user ? children : null;
 };
 
 export default ProtectedRoute;
