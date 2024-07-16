@@ -58,9 +58,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 	const [callbackURL, setCallbackURL] = useState<string | null>(null);
 
-	console.log("User", user);
-	console.log("LoggedIn", isLoggedIn);
-
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
@@ -261,12 +258,13 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 	const { addToast } = useToast();
 
-	const storedUser = localStorage.getItem("user");
-
-	const user = storedUser ? (JSON.parse(storedUser) as User) : null;
-
 	useEffect(() => {
-		if (!isLoggedIn || !user) {
+		const storedUser = localStorage.getItem("user");
+
+		const user = storedUser ? (JSON.parse(storedUser) as User) : null;
+
+		if (!isLoggedIn || user === null) {
+
 			setCallbackURL(pathName);
 
 			router.push("/auth");
@@ -277,9 +275,9 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 				message: "You must be logged in to access this page.",
 			});
 		}
-	}, [isLoggedIn, pathName, router, setCallbackURL, user]);
+	}, [isLoggedIn, pathName, router, setCallbackURL]);
 
-	return isLoggedIn || user ? children : null;
+	return isLoggedIn ? children : null;
 };
 
 export default ProtectedRoute;
