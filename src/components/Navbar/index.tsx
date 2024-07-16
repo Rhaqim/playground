@@ -19,7 +19,9 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 	return (
 		<div className="min-h-screen bg-black">
 			<header className="bg-blue-500 text-white text-center p-4 flex justify-between">
-				<h1 className="text-2xl font-semibold">Story Prompts</h1>
+				<Link href="/">
+					<h1 className="text-2xl font-semibold">Story Prompts</h1>
+				</Link>
 				<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
 					<button
 						onClick={toggleEnvironment}
@@ -73,9 +75,6 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 				>
 					{isLoggedIn && user ? (
 						<>
-							<Link href="/">
-								<p className="text-white">Home</p>
-							</Link>
 							<Link href="/playground">
 								<p className="text-white">Playground</p>
 							</Link>

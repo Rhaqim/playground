@@ -8,6 +8,7 @@ import { EnvironmentProvider } from "@/context/env.context";
 import { PromptProvider } from "@/context/prompt.context";
 
 import { ToastProvider } from "./toast.context";
+import EnvironmentContainer from "@/components/UI/Environment";
 
 export default function AppProviders({
 	children,
@@ -17,6 +18,7 @@ export default function AppProviders({
 	return (
 		<ToastProvider>
 			<EnvironmentProvider>
+				<EnvironmentContainer />
 				<AuthProvider>
 					<PromptProvider>
 						<Toast />
