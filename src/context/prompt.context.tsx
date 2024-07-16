@@ -121,21 +121,32 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	}
 
-	const hasFetched = React.useRef(false);
-
 	const reloadAll = async () => {
 		await fetchPrompts();
 		await fetchTopics();
 		await fetchCategories();
 	};
 
+	const [hasFetched, setHasFetched] = useState({
+		development: false,
+		production: false,
+	});
+
+	const handleReloadAll = React.useCallback(async () => {
+		if (hasFetched[environment]) return;
+		await reloadAll();
+		setHasFetched(prev => ({
+			...prev,
+			[environment]: true,
+			[environment === "development" ? "production" : "development"]: false,
+		}));
+	}, [environment, hasFetched]);
+
 	useEffect(() => {
-		if (user !== null)
-			if (!hasFetched.current) {
-				hasFetched.current = true;
-				reloadAll();
-			}
-	}, [environment]);
+		if (user && !hasFetched[environment]) {
+			handleReloadAll();
+		}
+	}, [user, environment, hasFetched, handleReloadAll]);
 
 	return (
 		<PromptContext.Provider
