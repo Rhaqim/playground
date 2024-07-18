@@ -93,7 +93,10 @@ const Login = () => {
 };
 
 const Signup = () => {
-	const { signUp } = useAuth();
+	const { signUp, signupReferral } = useAuth();
+
+	const [referralCode, setReferralCode] = useState("");
+
 	const initalSignupState: SignUp = {
 		first_name: "",
 		last_name: "",
@@ -112,6 +115,10 @@ const Signup = () => {
 
 	const handleSignup = async () => {
 		await signUp(signupState);
+	};
+
+	const handleSignupReferral = async () => {
+		await signupReferral({ user: signupState, referral_code: referralCode });
 	};
 
 	return (
@@ -144,8 +151,16 @@ const Signup = () => {
 				onChange={e => dispatch({ password: e.target.value })}
 				className="w-full px-4 my-2 py-2 rounded bg-gray-700 text-white focus:outline-none"
 			/>
+			<input
+				type="text"
+				placeholder="Referral Code"
+				value={referralCode}
+				onChange={e => setReferralCode(e.target.value)}
+				className="w-full px-4 my-2 py-2 rounded bg-gray-700 text-white focus:outline-none"
+				required
+			/>
 			<button
-				onClick={handleSignup}
+				onClick={handleSignupReferral}
 				className="w-full px-4 my-2 py-2 bg-blue-500 rounded text-white transition duration-300 ease-in-out transform hover:scale-105"
 			>
 				Signup

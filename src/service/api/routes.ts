@@ -1,6 +1,7 @@
 import { SignUp, SignIn } from "@/types/auth.type";
 import TestPromptRequest from "@/types/craftPrompt.type";
 import { apiFunctions, requestBlob } from "./provider";
+import { ReferralSignUp } from "@/types/referral.type";
 
 const { get, post, patch, del } = apiFunctions;
 
@@ -12,12 +13,18 @@ export const routes = {
 	getNonce: async (wallet: string) => post("/nonce", { wallet }),
 	googleLogin: async () => get("/google/login"),
 	signup: async (userDetails: SignUp) => post("/signup", { ...userDetails }),
-	signin: async (signinDetails: SignIn) =>
-		post("/signin", { ...signinDetails }),
-	signout: async () => post("/signout", {}),
-	me: async () => get("/me"),
 	confirmEmail: async (token: string, email: string) =>
 		get("/confirm-email?token=" + token + "&email=" + email),
+	signin: async (signinDetails: SignIn) =>
+		post("/signin", { ...signinDetails }),
+	// Authenticated
+	signout: async () => post("/signout", {}),
+	me: async () => get("/me"),
+	// Referral
+	generateReferralCode: async () => get("/referral/generate"),
+	getReferralCode: async () => get("/referral/get"),
+	signupReferral: async (signup: ReferralSignUp) =>
+		post("/referral/signup", signup),
 	// Fetch
 	getPrompt: async () => get("/prompts"),
 	getTopics: async () => get("/topics"),

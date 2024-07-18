@@ -7,6 +7,7 @@ import { Web3Provider } from "@/lib/ether";
 import { generateRandomID } from "@/lib/utils";
 import { routes } from "@/service/api/routes";
 import { SignIn, SignUp, User } from "@/types/auth.type";
+import { ReferralSignUp } from "@/types/referral.type";
 
 import { useEnvironment } from "./env.context";
 import { useToast } from "./toast.context";
@@ -20,6 +21,7 @@ interface AuthContextType {
 	signinGoogle: () => Promise<void>;
 	signIn: (data: SignIn) => Promise<void>;
 	signUp: (data: SignUp) => Promise<void>;
+	signupReferral: (data: ReferralSignUp) => Promise<void>;
 	signOut: () => Promise<void>;
 }
 
@@ -32,6 +34,7 @@ const AuthContext = createContext<AuthContextType>({
 	signinGoogle: async () => {},
 	signIn: async () => {},
 	signUp: async () => {},
+	signupReferral: async () => {},
 	signOut: async () => {},
 });
 
@@ -132,7 +135,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		try {
 			const { data: user } = await routes.signin(data);
 			setIsLoggedIn(true);
-			setUser(user);
+			setUser(user.user);
 
 			localStorage.setItem("user", JSON.stringify(user));
 
@@ -158,7 +161,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		try {
 			const { data: user } = await routes.signup(data);
 			setIsLoggedIn(true);
-			setUser(user);
+			setUser(user.user);
+
+			localStorage.setItem("user", JSON.stringify(user));
+
+			if (callbackURL) {
+				router.push(callbackURL);
+				setCallbackURL(null); // Reset callback URL after redirection
+			} else {
+				router.push("/"); // Default to home page or any other default page
+			}
+		} catch (error: any) {
+			console.error(error);
+			addToast({
+				id: generateRandomID(),
+				type: "error",
+				message:
+					error.response.data.error ?? error.response.data ?? error.message,
+			});
+		}
+	};
+
+	const signupReferral = async (data: ReferralSignUp) => {
+		setEnvironment("production");
+		try {
+			const { data: user } = await routes.signupReferral(data);
+			setIsLoggedIn(true);
+			setUser(user.user);
 
 			localStorage.setItem("user", JSON.stringify(user));
 
@@ -209,6 +238,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		signinGoogle,
 		signIn,
 		signUp,
+		signupReferral,
 		signOut,
 	};
 
@@ -264,7 +294,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 		const user = storedUser ? (JSON.parse(storedUser) as User) : null;
 
 		if (!isLoggedIn || user === null) {
-
 			setCallbackURL(pathName);
 
 			router.push("/auth");
