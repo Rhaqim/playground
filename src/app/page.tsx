@@ -28,8 +28,6 @@ export default function Home() {
 						</p>
 					</Link>
 				</div>
-				<FileUploadComponent fileType="image" acceptedFileType=".avif" />
-				<FileUploadComponent fileType="music" acceptedFileType=".mp3" />
 			</div>
 		</main>
 	);
