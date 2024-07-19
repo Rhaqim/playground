@@ -5,6 +5,8 @@ FROM node:18 AS builder
 ENV NEXT_PUBLIC_BACKEND_DEV=api/dev
 ENV NEXT_PUBLIC_BACKEND_PROD=api/prod
 
+ENV NEXT_UPLOAD_DIR=public
+
 # Set the working directory inside the container
 WORKDIR /app
 
