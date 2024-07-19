@@ -28,6 +28,9 @@ FROM node:18-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+# list directories
+RUN ls -la
+
 # Copy only the necessary files from the builder stage
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
