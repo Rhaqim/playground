@@ -20,4 +20,8 @@ export const GET = async (req: Request) => {
 			status: 500,
 		});
 	}
+
+	return new Response("An error occurred while fetching the file list", {
+		status: 500,
+	});
 };
