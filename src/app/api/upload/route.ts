@@ -33,7 +33,12 @@ const handleFileUpload = async (
 			fs.mkdirSync(uploadDir);
 		}
 
-		fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
+		try {
+			fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
+			console.log("writing file to disk", uploadDir, fileName);
+		} catch (error) {
+			return new Response("Error uploading file", { status: 500 });
+		}
 
 		return new Response(`File uploaded successfully: ${fileName}`, {
 			status: 200,
