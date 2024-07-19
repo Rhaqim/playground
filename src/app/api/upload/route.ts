@@ -1,0 +1,90 @@
+import path from "path";
+import fs from "fs";
+
+import { UPLOAD_DIR } from "@/config";
+
+const IMAGE_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "images");
+const MUSIC_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "music");
+
+const allowedExtentions = {
+	music: ".mp3",
+	image: "avif",
+};
+
+const handleFileUpload = async (
+	req: Request,
+	uploadDir: string,
+	allowedExt: string
+) => {
+	const formData = await req.formData();
+	const body = Object.fromEntries(formData);
+	const file = (body.file as Blob) || null;
+
+	if (file) {
+		const fileName = (body.file as File).name;
+		const fileExtention = path.extname(fileName.toLowerCase());
+
+		if (fileExtention !== allowedExt) {
+			return new Response(
+				`Invalid file type. Only ${allowedExt} files are allowed.`,
+				{ status: 400 }
+			);
+		}
+
+		const buffer = Buffer.from(await file.arrayBuffer());
+		if (!fs.existsSync(uploadDir)) {
+			fs.mkdirSync(uploadDir);
+		}
+
+		fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
+
+		return new Response(`File uploaded successfully: ${fileName}`, {
+			status: 200,
+		});
+	}
+
+	return new Response("File not found", { status: 400 });
+};
+
+export const POST = async (req: Request) => {
+	// get the query for the type of file to upload either image or music
+	const searchParams = new URL(req.url).searchParams;
+	const type = searchParams.get("type");
+
+	if (!type) {
+		return new Response("File type not specified", { status: 400 });
+	}
+
+	if (type === "image") {
+		return handleFileUpload(req, IMAGE_UPLOAD_DIR, allowedExtentions.image);
+	} else if (type === "music") {
+		return handleFileUpload(req, MUSIC_UPLOAD_DIR, allowedExtentions.music);
+	} else {
+		return new Response("Invalid file type", { status: 400 });
+	}
+};
+
+// export const POST = async (req: Request) => {
+// 	const formData = await req.formData();
+// 	const body = Object.fromEntries(formData);
+// 	const file = (body.file as Blob) || null;
+
+// 	if (file) {
+// 		const buffer = Buffer.from(await file.arrayBuffer());
+// 		if (!fs.existsSync(UPLOAD_DIR)) {
+// 			fs.mkdirSync(UPLOAD_DIR);
+// 		}
+
+// 		fs.writeFileSync(
+// 			path.resolve(UPLOAD_DIR, (body.file as File).name),
+// 			buffer
+// 		);
+// 	} else {
+// 		return new Response("File not found", { status: 400 });
+// 	}
+
+// 	return new Response(
+// 		`File uploaded successfully: ${(body.file as File).name}`,
+// 		{ status: 200 }
+// 	);
+// };

@@ -2,70 +2,72 @@
 
 import React, { useState } from "react";
 
-// export const FileUploadComponent = () => {
-// 	return (
-// 		<input
-// 			type="file"
-// 			name="file"
-// 			onChange={async e => {
-// 				if (e.target.files) {
-// 					const formData = new FormData();
-// 					Object.values(e.target.files).forEach(file => {
-// 						formData.append("file", file);
-// 					});
+import { useToast } from "@/context/toast.context";
 
-// 					const response = await fetch("/api/upload", {
-// 						method: "POST",
-// 						body: formData,
-// 					});
+interface FileUploadComponentProps {
+	fileType: "image" | "music";
+	acceptedFileType: string;
+}
 
-// 					const result = await response.json();
-// 					if (result.success) {
-// 						alert("Upload ok : " + result.name);
-// 					} else {
-// 						alert("Upload failed");
-// 					}
-// 				}
-// 			}}
-// 		/>
-// 	);
-// };
+const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
+	fileType,
+	acceptedFileType,
+}) => {
+	const { addToast } = useToast();
 
-const FileUploadComponent: React.FC = () => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedFile(event.target.files[0]);
-        }
-    };
+	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files && event.target.files.length > 0) {
+			setSelectedFile(event.target.files[0]);
+		}
+	};
 
-    const handleUpload = async () => {
-        if (!selectedFile) {
-            return;
-        }
+	const handleUpload = async () => {
+		if (!selectedFile) {
+			return;
+		}
 
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+		const formData = new FormData();
+		formData.append("file", selectedFile);
 
-        try {
-            await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            alert('File uploaded successfully');
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while uploading the file');
-        }
-    }
+		try {
+			const response = await fetch(`/api/upload?type=${fileType}`, {
+				method: "POST",
+				body: formData,
+			});
 
-    return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
-        </div>
-    );
+			if (response.ok) {
+				addToast({
+					type: "success",
+					message: "File uploaded successfully",
+					id: "",
+				});
+			} else {
+				addToast({
+					type: "error",
+					message: "An error occurred while uploading the file",
+					id: "",
+				});
+			}
+		} catch (error) {
+			console.error("Error:", error);
+			alert("An error occurred while uploading the file");
+		}
+	};
+
+	return (
+		<div>
+			<input
+				type="file"
+				onChange={handleFileChange}
+				accept={acceptedFileType}
+			/>
+			<button onClick={handleUpload}>
+				Upload {fileType.charAt(0).toUpperCase() + fileType.slice(1)}
+			</button>
+		</div>
+	);
 };
 
 export default FileUploadComponent;

@@ -5,7 +5,7 @@ export const BASE_URL_DEV =
 export const BASE_URL_PROD =
 	process.env.NEXT_PUBLIC_BACKEND_PROD || `http://localhost:8080`;
 
-export const UPLOAD_DIR = process.env.NEXT_UPLOAD_DIR || path.resolve(process.cwd(), "public/uploads");
+export const UPLOAD_DIR = process.env.NEXT_UPLOAD_DIR || path.resolve(process.cwd());
 
 const config = {
 	development: BASE_URL_DEV,
