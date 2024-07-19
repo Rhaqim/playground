@@ -1,8 +1,8 @@
 "use client";
 
-import ShareButton from "@/components/Share";
-import VideoComponent from "@/components/Video";
 import Link from "next/link";
+
+import FileUploadComponent from "@/components/File";
 
 export default function Home() {
 	return (
@@ -28,6 +28,7 @@ export default function Home() {
 						</p>
 					</Link>
 				</div>
+				<FileUploadComponent />
 			</div>
 		</main>
 	);
