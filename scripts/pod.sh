@@ -4,8 +4,8 @@
 APP_NAME=playground
 CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
-HOST_VOLUME_PATH=/www/conexus-categories
-CONTAINER_VOLUME_PATH=/app/public
+HOST_VOLUME_PATH=/www/conexus-categories/images
+CONTAINER_VOLUME_PATH=images
 # CONTAINER_VOLUME_PATH=/usr/src/app/public/collections
 
 # Ensure the scripts directory is the working directory

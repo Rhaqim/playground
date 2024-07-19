@@ -28,14 +28,14 @@ FROM node:18-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# list directories
-RUN ls -la
-
 # Copy only the necessary files from the builder stage
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
+
+# list directories
+RUN ls -la
 
 # Expose the port that the Next.js application will run on
 EXPOSE 3000
