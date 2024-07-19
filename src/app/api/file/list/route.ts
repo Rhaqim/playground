@@ -1,8 +1,6 @@
-import path from "path";
 import fs from "fs";
 
-const IMAGE_UPLOAD_DIR =
-	process.env.IMAGE_UPLOAD_DIR || "/www/conexus-categories/images";
+import { IMAGE_UPLOAD_DIR, MUSIC_UPLOAD_DIR } from "@/config";
 
 const getFileList = (directory: string) => {
 	return fs.readdirSync(directory).filter(file => {
@@ -11,17 +9,27 @@ const getFileList = (directory: string) => {
 };
 
 export const GET = async (req: Request) => {
-	try {
-		const files = getFileList(IMAGE_UPLOAD_DIR);
-		const fileUrls = files.map(file => `/conexus-categories/images/${file}`);
-		new Response(JSON.stringify(fileUrls), { status: 200 });
-	} catch (error) {
-		new Response("An error occurred while fetching the file list", {
-			status: 500,
-		});
+	const searchParams = new URL(req.url).searchParams;
+	const type = searchParams.get("type");
+
+	let Urls: string[] = [];
+
+	if (!type) {
+		return new Response("File type not specified", { status: 400 });
 	}
 
-	return new Response("An error occurred while fetching the file list", {
-		status: 500,
-	});
+	if (type === "image") {
+		const files = getFileList(IMAGE_UPLOAD_DIR);
+		const fileUrls = files.map(file => `/images/${file}`);
+
+		Urls = fileUrls;
+	} else if (type === "music") {
+		const files = getFileList(MUSIC_UPLOAD_DIR);
+		console.log(files);
+		const fileUrls = files.map(file => `/music/${file}`);
+
+		Urls = fileUrls;
+	}
+
+	return new Response(JSON.stringify(Urls), { status: 200 });
 };

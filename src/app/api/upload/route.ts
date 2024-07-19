@@ -1,10 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-import { UPLOAD_DIR } from "@/config";
-
-const IMAGE_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "images");
-const MUSIC_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "music");
+import { IMAGE_UPLOAD_DIR, MUSIC_UPLOAD_DIR } from "@/config";
 
 const allowedExtentions = {
 	music: ".mp3",

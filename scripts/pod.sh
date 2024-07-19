@@ -4,6 +4,9 @@
 APP_NAME=playground
 CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
+HOST_VOLUME_PATH=/www/conexus-categories
+# CONTAINER_VOLUME_PATH=/usr/src/app/public/collections
+CONTAINER_VOLUME_PATH=/app/public
 
 # Ensure the scripts directory is the working directory
 cd "$(dirname "$0")"
@@ -32,4 +35,9 @@ podman pod rm -f $POD_NAME
 podman pod create --name $POD_NAME -p 3031:3000
 
 # Run the container in the pod
-podman run -d --name $CONTAINER_NAME --pod $POD_NAME $APP_NAME
+# podman run -d --name $CONTAINER_NAME --pod $POD_NAME $APP_NAME
+podman run -d \
+  --name $CONTAINER_NAME \
+  --pod $POD_NAME \
+  --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH \
+  $APP_NAME
