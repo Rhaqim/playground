@@ -3,7 +3,7 @@ import fs from "fs";
 import { promisify } from "util";
 
 const IMAGE_UPLOAD_DIR =
-	process.env.IMAGE_UPLOAD_DIR || "/www/collections/images";
+	process.env.IMAGE_UPLOAD_DIR || "/www/conexus-categories/images";
 
 const readFile = promisify(fs.readFile);
 
@@ -26,12 +26,7 @@ export const GET = async (req: Request, params: { slug: string }) => {
 			},
 			status: 200,
 		});
-
-		// res.setHeader('Content-Type', mimeType);
-		// res.status(200).send(file);
 	} catch (error) {
 		return new Response("File not found", { status: 404 });
-		// console.error('Error reading file:', error);
-		// res.status(404).json({ error: 'File not found' });
 	}
 };
