@@ -33,8 +33,6 @@ const Dashboard: React.FC = () => {
 		fetchCodes();
 	}, []);
 
-	console.log(user?.referral_count);
-
 	return (
 		<div className="container mx-auto justify-center items-center flex flex-col p-4">
 			<h1 className="text-2xl font-bold mb-4">Dashboard</h1>

@@ -25,7 +25,7 @@ export const GET = async (req: Request) => {
 		Urls = fileUrls;
 	} else if (type === "music") {
 		const files = getFileList(MUSIC_UPLOAD_DIR);
-		console.log(files);
+		
 		const fileUrls = files.map(file => `/music/${file}`);
 
 		Urls = fileUrls;

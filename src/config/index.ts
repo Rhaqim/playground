@@ -7,10 +7,6 @@ export const BASE_URL_PROD =
 
 export const UPLOAD_DIR = process.env.NEXT_UPLOAD_DIR || path.resolve(process.cwd(), "public");
 
-console.log("UPLOAD_DIR", UPLOAD_DIR);
-// print the current directory
-console.log("Current directory: ", process.cwd());
-
 export const IMAGE_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "images");
 export const MUSIC_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "music");
 
