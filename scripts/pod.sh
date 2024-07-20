@@ -6,8 +6,10 @@ CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
 HOST_VOLUME_PATH=/www/conexus-categories/images
 CONTAINER_VOLUME_PATH=/app/public
-USER_ID=$(id -u)
-GROUP_ID=$(id -g)
+USER_ID=1000
+GROUP_ID=1000
+# USER_ID=$(id -u)
+# GROUP_ID=$(id -g)
 
 # Ensure the scripts directory is the working directory
 cd "$(dirname "$0")"
