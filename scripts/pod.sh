@@ -4,7 +4,7 @@
 APP_NAME=playground
 CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
-HOST_VOLUME_PATH=/www/conexus-categories/images
+HOST_VOLUME_PATH=/www/conexus-categories
 CONTAINER_VOLUME_PATH=/app/public
 USER_ID=1000
 GROUP_ID=1000
