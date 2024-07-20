@@ -35,8 +35,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
 # ensure correct permissions for public folder
-# RUN mkdir -p /app/public/images && mkdir -p /app/public/music && chown -R 1000:1000 /app/public
-RUN chown -R 1000:1000 /app/public && chmod -R 777 /app/public
+RUN mkdir -p /app/public/images && mkdir -p /app/public/music && chown -R 1000:1000 /app/public/images && chown -R 1000:1000 /app/public/music
 
 # Expose the port that the Next.js application will run on
 EXPOSE 3000

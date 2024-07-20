@@ -11,6 +11,9 @@ CONTAINER_VOLUME_PATH=/app/public
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
+echo "USER_ID: $USER_ID"
+echo "GROUP_ID: $GROUP_ID"
+
 # Ensure the scripts directory is the working directory
 cd "$(dirname "$0")"
 
