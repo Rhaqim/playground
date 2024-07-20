@@ -33,9 +33,12 @@ const handleFileUpload = async (
 			fs.mkdirSync(uploadDir);
 		}
 
+		// list the files and directories inside the directory
+		console.log("Files and directories inside the directory:", fs.readdirSync(IMAGE_UPLOAD_DIR));
+
 		try {
-			fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
 			console.log("writing file to disk", uploadDir, fileName);
+			fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
 		} catch (error) {
 			return new Response("Error uploading file", { status: 500 });
 		}
