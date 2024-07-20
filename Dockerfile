@@ -35,8 +35,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
 # ensure correct permissions for public folder
-RUN mkdir -p /app/public/images && mkdir -p /app/public/music
-
 RUN chown -R 1000:1000 /app/public
 
 USER 1000
