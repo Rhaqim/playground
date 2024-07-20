@@ -36,7 +36,7 @@ const handleFileUpload = async (
 		try {
 			fs.writeFileSync(path.resolve(uploadDir, fileName), buffer);
 		} catch (error) {
-			return new Response("Error uploading file", { status: 500 });
+			return new Response(`Error uploading file: ${error}`, { status: 500 });
 		}
 
 		return new Response(`File uploaded successfully: ${fileName}`, {

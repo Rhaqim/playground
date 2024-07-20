@@ -40,7 +40,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
 		formData.append("file", selectedFile);
 
 		try {
-			const response = await fetch(`/api/upload?type=${fileType}`, {
+			const response = await fetch(`/api/file/upload?type=${fileType}`, {
 				method: "POST",
 				body: formData,
 			});
