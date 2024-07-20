@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 
 export const BASE_URL_DEV =
@@ -8,6 +9,13 @@ export const BASE_URL_PROD =
 export const UPLOAD_DIR = process.env.NEXT_UPLOAD_DIR || path.resolve(process.cwd(), "public");
 
 console.log("UPLOAD_DIR", UPLOAD_DIR);
+// print the current directory
+console.log("Current directory: ", process.cwd());
+// list files and folders in the current directory
+console.log("Files and folders in the current directory: ");
+fs.readdirSync(process.cwd()).forEach((file: any) => {
+	console.log(file);
+});
 export const IMAGE_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "images");
 export const MUSIC_UPLOAD_DIR = path.resolve(UPLOAD_DIR, "music");
 
