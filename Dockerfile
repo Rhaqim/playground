@@ -36,10 +36,10 @@ COPY --from=builder /app/node_modules ./node_modules
 
 USER 1000
 
-RUN mkdir -p /app/public/categories
-
 # ensure correct permissions for public folder
-RUN chown -R 1000:1000 /app/public/categories
+RUN chown -R 1000:1000 /app/public
+
+RUN mkdir -p /app/public/categories
 
 # Expose the port that the Next.js application will run on
 EXPOSE 3000
