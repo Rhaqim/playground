@@ -36,6 +36,8 @@ COPY --from=builder /app/node_modules ./node_modules
 
 USER 1000
 
+RUN mkdir -p /app/assets
+
 # ensure correct permissions for public folder
 RUN chown -R 1000:1000 /app/assets
 
