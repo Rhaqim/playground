@@ -5,7 +5,7 @@ APP_NAME=playground
 CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
 HOST_VOLUME_PATH=/www/conexus-categories
-CONTAINER_VOLUME_PATH=/app/public
+CONTAINER_VOLUME_PATH=/app/assets
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
@@ -21,7 +21,7 @@ if [ ! -f ../.env ]; then
 NEXT_PUBLIC_BACKEND_DEV=api/dev
 NEXT_PUBLIC_BACKEND_PROD=api/prod
 
-NEXT_UPLOAD_DIR=public
+NEXT_UPLOAD_DIR=assets
 EOF
 fi
 
