@@ -34,10 +34,10 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
-RUN mkdir -p /app/public/uploads/images /app/public/uploads/music
+RUN mkdir -p /app/public/uploads/images && mkdir -p /app/public/uploads/music
 
 # ensure correct permissions for public folder
-RUN chown -R 1000:1000 /app/public/uploads/images /app/public/uploads/music
+RUN chown -R 1000:1000 /app/public/uploads
 
 RUN chmod -R 775 /app/public
 

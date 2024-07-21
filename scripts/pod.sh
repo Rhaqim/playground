@@ -46,8 +46,7 @@ podman run -d \
   --name $CONTAINER_NAME \
   --pod $POD_NAME \
   --user $USER_ID:$GROUP_ID \
-  --volume $HOST_VOLUME_PATH/images:$CONTAINER_VOLUME_PATH/images:Z \
-  --volume $HOST_VOLUME_PATH/music:$CONTAINER_VOLUME_PATH/music:Z \
+  --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH:Z \
   $APP_NAME
 
   # --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH:Z \
