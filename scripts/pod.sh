@@ -5,7 +5,7 @@ APP_NAME=playground
 CONTAINER_NAME=playground-container
 POD_NAME=playground-pod
 HOST_VOLUME_PATH=/www/conexus-categories
-CONTAINER_VOLUME_PATH=/app/assets
+CONTAINER_VOLUME_PATH=/app/public/uploads
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
@@ -21,7 +21,7 @@ if [ ! -f ../.env ]; then
 NEXT_PUBLIC_BACKEND_DEV=api/dev
 NEXT_PUBLIC_BACKEND_PROD=api/prod
 
-NEXT_UPLOAD_DIR=assets
+NEXT_UPLOAD_DIR=public/uploads
 EOF
 fi
 
@@ -46,6 +46,8 @@ podman run -d \
   --name $CONTAINER_NAME \
   --pod $POD_NAME \
   --user $USER_ID:$GROUP_ID \
+  --volume $HOST_VOLUME_PATH/images:$CONTAINER_VOLUME_PATH/images:Z \
+  --volume $HOST_VOLUME_PATH/music:$CONTAINER_VOLUME_PATH/music:Z \
   $APP_NAME
 
   # --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH:Z \
