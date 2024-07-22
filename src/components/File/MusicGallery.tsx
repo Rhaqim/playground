@@ -75,7 +75,7 @@ const MusicGallery = () => {
 		<div className="flex flex-col items-center space-y-2 w-full">
 			<h1>Music Gallery</h1>
 			<div
-				className="flex flex-row items-center space-x-2"
+				className="flex flex-col items-center space-x-2"
 				style={{ width: "100%" }}
 			>
 				{musicFiles.map(file => (
