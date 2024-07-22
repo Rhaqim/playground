@@ -27,13 +27,13 @@ export const GET = async (req: Request) => {
 
 	if (type === "image") {
 		const files = getFileList(IMAGE_UPLOAD_DIR);
-		const fileUrls = files.map(file => `/uploads/images/${file}`);
+		const fileUrls = files.map(file => `public/uploads/images/${file}`);
 
 		Urls = fileUrls;
 	} else if (type === "music") {
 		const files = getFileList(MUSIC_UPLOAD_DIR);
 
-		const fileUrls = files.map(file => `/uploads/music/${file}`);
+		const fileUrls = files.map(file => `public/uploads/music/${file}`);
 
 		Urls = fileUrls;
 	}
