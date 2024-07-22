@@ -6,7 +6,7 @@ import MusicGallery from "@/components/File/MusicGallery";
 
 const Uploads = () => {
 	return (
-		<div className="flex flex-row justify-between items-center w-full h-full">
+		<div className="flex flex-row justify-between items-start w-full h-full">
 			<div className="flex flex-col items-center space-y-2 w-full">
 				<FileUploadComponent fileType="image" acceptedFileType=".avif" />
 				<div
