@@ -87,7 +87,7 @@ const MusicGallery = () => {
 							<source src={file} type="audio/mp3" />
 							Your browser does not support the audio element.
 						</audio>
-						<div className="flex flex-col items-center space-y-2 w-full">
+						{/* <div className="flex flex-col items-center space-y-2 w-full">
 							<p>{musicName(file)}</p>
 							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
@@ -95,7 +95,7 @@ const MusicGallery = () => {
 							>
 								Delete
 							</button>
-						</div>
+						</div> */}
 					</div>
 				))}
 			</div>

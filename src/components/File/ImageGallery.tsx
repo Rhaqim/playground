@@ -93,7 +93,7 @@ const ImageGallery = () => {
 							className="p-2 border-2 border-gray-500 w-full"
 							priority
 						/>
-						<div className="flex flex-col items-center space-y-2 w-full">
+						{/* <div className="flex flex-col items-center space-y-2 w-full">
 							<p>{imageName(image)}</p>
 							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
@@ -101,7 +101,7 @@ const ImageGallery = () => {
 							>
 								Delete
 							</button>
-						</div>
+						</div> */}
 					</div>
 				))}
 			</div>

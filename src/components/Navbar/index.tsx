@@ -6,6 +6,26 @@ import Link from "next/link";
 import { useEnvironment } from "@/context/env.context";
 import { useAuth } from "@/context/auth.context";
 
+const Links: { href: string; title: string }[] = [
+	{ href: "/playground", title: "Playground" },
+	{ href: "/prompts", title: "Prompts" },
+	{ href: "/media", title: "Media" },
+	{ href: "/account", title: "Account" },
+];
+
+const NavLink = ({
+	href,
+	title,
+}: Readonly<{ href: string; title: string }>) => {
+	return (
+		<Link href={href}>
+			<p className="text-white border border-gray-400 rounded-md hover:bg-gray-200 hover:text-black p-2">
+				{title}
+			</p>
+		</Link>
+	);
+};
+
 const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 	const { toggleEnvironment, environment } = useEnvironment();
 	const { isLoggedIn, user } = useAuth();
@@ -75,18 +95,9 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 				>
 					{isLoggedIn && user ? (
 						<>
-							<Link href="/playground">
-								<p className="text-white">Playground</p>
-							</Link>
-							<Link href="/prompts">
-								<p className="text-white">Prompts</p>
-							</Link>
-							<Link href="/media">
-								<p className="text-white">Media</p>
-							</Link>
-							<Link href="/account">
-								<p className="text-white">Account</p>
-							</Link>
+							{Links.map((link, index) => (
+								<NavLink key={index} href={link.href} title={link.title} />
+							))}
 							<p className="text-white">{user?.first_name}</p>
 						</>
 					) : (
