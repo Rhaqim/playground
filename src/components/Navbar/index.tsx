@@ -81,12 +81,13 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 							<Link href="/prompts">
 								<p className="text-white">Prompts</p>
 							</Link>
-							<Link href="/image">
-								<p className="text-white">Image</p>
+							<Link href="/media">
+								<p className="text-white">Media</p>
 							</Link>
 							<Link href="/account">
 								<p className="text-white">Account</p>
 							</Link>
+							<p className="text-white">{user?.first_name}</p>
 						</>
 					) : (
 						<Link href="/auth">

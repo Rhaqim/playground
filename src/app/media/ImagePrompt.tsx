@@ -4,7 +4,7 @@ import React from "react";
 import ImageBase64 from "@/components/Image";
 import { routes } from "@/service/api/routes";
 
-const ImagePlayground = () => {
+const ImagePromptGenerator = () => {
 	// get base64 from user input
 	const [prompt, setPrompt] = React.useState<string>("");
 	const [base64, setBase64] = React.useState<string>("");
@@ -73,4 +73,4 @@ const ImagePlayground = () => {
 	);
 };
 
-export default ImagePlayground;
+export default ImagePromptGenerator;
