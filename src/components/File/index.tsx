@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 import { useToast } from "@/context/toast.context";
+import { generateRandomID } from "@/lib/utils";
 
 interface FileUploadComponentProps {
 	fileType: "image" | "music";
@@ -49,13 +50,18 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
 				addToast({
 					type: "success",
 					message: "File uploaded successfully",
-					id: "",
+					id: generateRandomID(),
 				});
+
+				// refresh the gallery
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
 			} else {
 				addToast({
 					type: "error",
 					message: "An error occurred while uploading the file",
-					id: "",
+					id: generateRandomID(),
 				});
 			}
 		} catch (error) {

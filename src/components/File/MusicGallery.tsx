@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { useToast } from "@/context/toast.context";
+import { generateRandomID } from "@/lib/utils";
 
 const MusicGallery = () => {
 	const { addToast } = useToast();
@@ -20,20 +21,20 @@ const MusicGallery = () => {
 				addToast({
 					type: "success",
 					message: "Music file deleted successfully",
-					id: "",
+					id: generateRandomID(),
 				});
 			} else {
 				addToast({
 					type: "error",
 					message: "Error deleting music file",
-					id: "",
+					id: generateRandomID(),
 				});
 			}
 		} catch (error) {
 			addToast({
 				type: "error",
 				message: `Error deleting music file: ${error}`,
-				id: "",
+				id: generateRandomID(),
 			});
 		}
 	};
@@ -49,20 +50,20 @@ const MusicGallery = () => {
 					addToast({
 						type: "success",
 						message: "Music files fetched successfully",
-						id: "",
+						id: generateRandomID(),
 					});
 				} else {
 					addToast({
 						type: "error",
 						message: "Error fetching music files",
-						id: "",
+						id: generateRandomID(),
 					});
 				}
 			} catch (error) {
 				addToast({
 					type: "error",
 					message: `Error fetching music files: ${error}`,
-					id: "",
+					id: generateRandomID(),
 				});
 			}
 		};

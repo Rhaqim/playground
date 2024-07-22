@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { useToast } from "@/context/toast.context";
+import { generateRandomID } from "@/lib/utils";
 
 const ImageGallery = () => {
 	const { addToast } = useToast();
@@ -21,20 +22,20 @@ const ImageGallery = () => {
 				addToast({
 					type: "success",
 					message: "Image deleted successfully",
-					id: "",
+					id: generateRandomID(),
 				});
 			} else {
 				addToast({
 					type: "error",
 					message: "Error deleting image",
-					id: "",
+					id: generateRandomID(),
 				});
 			}
 		} catch (error) {
 			addToast({
 				type: "error",
 				message: `Error deleting image: ${error}`,
-				id: "",
+				id: generateRandomID(),
 			});
 		}
 	};
@@ -50,20 +51,20 @@ const ImageGallery = () => {
 					addToast({
 						type: "success",
 						message: "Images fetched successfully",
-						id: "",
+						id: generateRandomID(),
 					});
 				} else {
 					addToast({
 						type: "error",
 						message: "Error fetching images",
-						id: "",
+						id: generateRandomID(),
 					});
 				}
 			} catch (error) {
 				addToast({
 					type: "error",
 					message: `Error fetching images: ${error}`,
-					id: "",
+					id: generateRandomID(),
 				});
 			}
 		};

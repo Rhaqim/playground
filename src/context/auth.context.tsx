@@ -293,7 +293,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 		const user = storedUser ? (JSON.parse(storedUser) as User) : null;
 
-		if (!isLoggedIn || user === null) {
+		if (user === null) {
 			setCallbackURL(pathName);
 
 			router.push("/auth");

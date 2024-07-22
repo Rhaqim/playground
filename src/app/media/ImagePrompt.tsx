@@ -1,14 +1,19 @@
 "use client";
 
 import React from "react";
+
 import ImageBase64 from "@/components/Image";
+import { useToast } from "@/context/toast.context";
 import { routes } from "@/service/api/routes";
+import { generateRandomID } from "@/lib/utils";
 
 const ImagePromptGenerator = () => {
+	const { addToast } = useToast();
+
 	// get base64 from user input
 	const [prompt, setPrompt] = React.useState<string>("");
 	const [base64, setBase64] = React.useState<string>("");
-	const [error, setError] = React.useState<string>("");
+	
 	const [loading, setLoading] = React.useState<boolean>(false);
 
 	const handlePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +22,11 @@ const ImagePromptGenerator = () => {
 
 	const handleLoad = async () => {
 		if (!prompt) {
-			setError("Please enter a prompt string");
+			addToast({
+				type: "error",
+				message: "Please enter a prompt string",
+				id: generateRandomID(),
+			});
 			return;
 		}
 
@@ -27,7 +36,11 @@ const ImagePromptGenerator = () => {
 			const { data } = await routes.image(prompt);
 			setBase64(data.image);
 		} catch (error: any) {
-			setError(error.message);
+			addToast({
+				type: "error",
+				message: error.message,
+				id: generateRandomID(),
+			});
 		} finally {
 			setLoading(false);
 		}
@@ -61,7 +74,6 @@ const ImagePromptGenerator = () => {
 							<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white"></div>
 						</div>
 					)}
-					{error && <p style={{ color: "red" }}>{error}</p>}
 					{base64 && (
 						<div className="flex justify-center items-center rounded-md">
 							<ImageBase64 image={base64} />
