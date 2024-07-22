@@ -47,24 +47,15 @@ const ImageGallery = () => {
 			<h1>Image Gallery</h1>
 			<div>
 				{images.map(image => (
-					<>
-						<Image
-							key={image}
-							src={image}
-							alt={image}
-							width={200}
-							height={200}
-							style={{ width: "100px", height: "100px", margin: "10px" }}
-							priority
-						/>
-						<img
-							src={image}
-							alt={image}
-							width={200}
-							height={200}
-							style={{ width: "100px", height: "100px", margin: "10px" }}
-						/>
-					</>
+					<Image
+						key={image}
+						src={image}
+						alt={image}
+						width={400}
+						height={200}
+						style={{ width: "100px", height: "100px", margin: "10px" }}
+						priority
+					/>
 				))}
 			</div>
 		</div>
