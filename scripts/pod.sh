@@ -22,6 +22,7 @@ NEXT_PUBLIC_BACKEND_DEV=api/dev
 NEXT_PUBLIC_BACKEND_PROD=api/prod
 
 NEXT_UPLOAD_DIR=public/uploads
+NODE_ENV=production
 EOF
 fi
 

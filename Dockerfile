@@ -58,6 +58,14 @@ FROM docker.io/oven/bun:latest
 
 ENV PUBLIC_BACKEND=/api
 
+# Environment variable to set the API URL
+ENV NEXT_PUBLIC_BACKEND_DEV=api/dev
+ENV NEXT_PUBLIC_BACKEND_PROD=api/prod
+
+ENV NEXT_UPLOAD_DIR=/app/public
+
+ENV NODE_ENV=production
+
 WORKDIR /app
 COPY package.json .
 COPY bun.lockb .
