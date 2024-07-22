@@ -92,11 +92,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
 # Create directories and set permissions
-RUN mkdir -p /app/public/uploads/images && mkdir -p /app/public/uploads/music
-RUN chown -R 1000:1000 /app/public/uploads
+# RUN mkdir -p /app/public/uploads/images && mkdir -p /app/public/uploads/music
+# RUN chown -R 1000:1000 /app/public/uploads
 RUN chmod -R 775 /app/public
 
-USER 1000
+# USER 1000
 
 # Expose the port that the Next.js application will run on
 EXPOSE 3000

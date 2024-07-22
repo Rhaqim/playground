@@ -9,9 +9,6 @@ CONTAINER_VOLUME_PATH=/app/public/uploads
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
-echo "USER_ID: $USER_ID"
-echo "GROUP_ID: $GROUP_ID"
-
 # Ensure the scripts directory is the working directory
 cd "$(dirname "$0")"
 
@@ -46,6 +43,7 @@ podman pod create --name $POD_NAME -p 3031:3000
 podman run -d \
   --name $CONTAINER_NAME \
   --pod $POD_NAME \
-  --user $USER_ID:$GROUP_ID \
   --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH:Z \
   $APP_NAME
+
+  # --user $USER_ID:$GROUP_ID \
