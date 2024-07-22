@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	// reactStrictMode: true,
+	images: {
+		domains: ["playground.degenerousdao.com"],
+	},
 	// proxy config
 	async rewrites() {
 		return [
