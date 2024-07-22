@@ -54,28 +54,33 @@
 # # Start the Next.js application
 # CMD ["npm", "start"]
 
+# Use the latest Bun image
 FROM docker.io/oven/bun:latest
 
+# Set environment variables
 ENV PUBLIC_BACKEND=/api
-
-# Environment variable to set the API URL
 ENV NEXT_PUBLIC_BACKEND_DEV=api/dev
 ENV NEXT_PUBLIC_BACKEND_PROD=api/prod
-
 ENV NEXT_UPLOAD_DIR=/app/public
-
 ENV NODE_ENV=production
 
+# Set the working directory
 WORKDIR /app
-COPY package.json .
-COPY bun.lockb .
 
+# Copy package.json and bun.lockb before installing dependencies
+COPY package.json bun.lockb ./
+
+# Install dependencies
 RUN bun install
 
-COPY . /app
+# Copy the rest of the application code
+COPY . .
 
+# Build the application
 RUN bun run build
 
+# Expose the application port
 EXPOSE 3000
 
+# Start the application
 CMD ["bun", "run", "start"]
