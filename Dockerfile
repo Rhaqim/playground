@@ -41,7 +41,7 @@ RUN chown -R 1000:1000 /app/public/uploads
 
 RUN chmod -R 775 /app/public
 
-USER 1000
+USER 1000:1000
 
 # Expose the port that the Next.js application will run on
 EXPOSE 3000
