@@ -75,7 +75,7 @@ const MusicGallery = () => {
 		<div className="flex flex-col items-center space-y-2 w-full">
 			<h1>Music Gallery</h1>
 			<div
-				className="flex flex-col items-center space-x-2"
+				className="flex flex-col items-center space-y-2"
 				style={{ width: "100%" }}
 			>
 				{musicFiles.map(file => (
@@ -87,15 +87,15 @@ const MusicGallery = () => {
 							<source src={file} type="audio/mp3" />
 							Your browser does not support the audio element.
 						</audio>
-						{/* <div className="flex flex-col items-center space-y-2 w-full">
-							<p>{musicName(file)}</p>
-							<button
+						<div className="flex flex-col items-center space-y-2 w-full">
+							<p className="font-bold">{musicName(file)}</p>
+							{/* <button
 								className="bg-blue-500 text-white p-2 rounded-md"
 								onClick={() => deleteMusic(file)}
 							>
 								Delete
-							</button>
-						</div> */}
+							</button> */}
+						</div>
 					</div>
 				))}
 			</div>

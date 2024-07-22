@@ -76,7 +76,7 @@ const ImageGallery = () => {
 		<div className="flex flex-col items-center space-y-2 w-full">
 			<h1>Image Gallery</h1>
 			<div
-				className="flex flex-col items-center space-x-2"
+				className="flex flex-col items-center space-y-2"
 				style={{ width: "100%" }}
 			>
 				{images.map(image => (
@@ -93,15 +93,15 @@ const ImageGallery = () => {
 							className="p-2 border-2 border-gray-500 w-full"
 							priority
 						/>
-						{/* <div className="flex flex-col items-center space-y-2 w-full">
-							<p>{imageName(image)}</p>
-							<button
+						<div className="flex flex-col items-center space-y-2 w-full">
+							<p className="font-bold">{imageName(image)}</p>
+							{/* <button
 								className="bg-blue-500 text-white p-2 rounded-md"
 								onClick={() => deleteImage(image)}
 							>
 								Delete
-							</button>
-						</div> */}
+							</button> */}
+						</div>
 					</div>
 				))}
 			</div>
