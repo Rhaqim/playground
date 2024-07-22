@@ -54,6 +54,7 @@ const ImageGallery = () => {
             width={200}
             height={200}
             style={{ width: '100px', height: '100px', margin: '10px' }}
+            priority
           />
         ))}
       </div>
