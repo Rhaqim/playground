@@ -37,9 +37,9 @@ COPY --from=builder /app/node_modules ./node_modules
 RUN mkdir -p /app/public/uploads/images && mkdir -p /app/public/uploads/music
 
 # ensure correct permissions for public folder
-RUN chown -R 1000:1000 /app/public/uploads
+RUN chown -R 1000:1000 /app/public/uploads && chown -R 1000:1000 /app/public/uploads/images && chown -R 1000:1000 /app/public/uploads/music
 
-RUN chmod -R 775 /app/public
+RUN chmod -R 775 /app/public && chmod -R 775 /app/public/uploads && chmod -R 775 /app/public/uploads/images && chmod -R 775 /app/public/uploads/music
 
 USER 1000:1000
 
