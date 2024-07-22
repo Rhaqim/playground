@@ -45,5 +45,3 @@ podman run -d \
   --pod $POD_NAME \
   --volume $HOST_VOLUME_PATH:$CONTAINER_VOLUME_PATH:Z \
   $APP_NAME
-
-  # --user $USER_ID:$GROUP_ID \
