@@ -25,6 +25,11 @@ RUN npm run build
 # Runtime Stage
 FROM node:18-slim
 
+# install necessary tools for managing permissions
+RUN apt-get update && apt-get install -y sudo  \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set the working directory inside the container
 WORKDIR /app
 
