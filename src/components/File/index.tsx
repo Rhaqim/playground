@@ -74,8 +74,10 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
 		<div>
 			<div></div>
 			<div>
-				<label className={`block text-sm font-medium capitalize`}>
-					{fileType} Upload
+				<label className={`block text-sm font-medium`}>
+					{fileType === "image"
+						? "Please provide a .avif file"
+						: "Please provide a .mp3 file"}
 				</label>
 				<label className="rounded-md flex justify-center items-center h-[175px] border-2 border-[#443E4F] cursor-pointer p-2">
 					<input

@@ -40,7 +40,7 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 		<div className="min-h-screen bg-black">
 			<header className="bg-blue-500 text-white text-center p-4 flex justify-between">
 				<Link href="/">
-					<h1 className="text-2xl font-semibold">Story Prompts</h1>
+					<h1 className="text-2xl font-semibold">Degenerous</h1>
 				</Link>
 				<div className="relative inline-flex items-center bg-gray-300 rounded-full p-1">
 					<button

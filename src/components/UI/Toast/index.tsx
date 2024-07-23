@@ -5,7 +5,7 @@ import { useToast } from "@/context/toast.context";
 const Toast = () => {
 	const { toasts, removeToast } = useToast();
 	return (
-		<div className="absolute top-0 right-0 p-4 z-50 w-full">
+		<div className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 z-50 w-full max-w-md">
 			{toasts.map(toast => (
 				<div
 					key={toast.id}

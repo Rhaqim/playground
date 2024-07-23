@@ -33,8 +33,6 @@ export const GET = async (req: Request) => {
 	} else if (type === "music") {
 		const files = getFileList(MUSIC_UPLOAD_DIR, '.mp3');
 
-		console.log('files', files);
-
 		const fileUrls = files.map(file => `/uploads/music/${file}`);
 
 		Urls = fileUrls;
