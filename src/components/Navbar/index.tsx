@@ -46,7 +46,9 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 					<button
 						onClick={toggleEnvironment}
 						className={`${
-							environment === "development" ? "bg-blue-500" : "bg-gray-300"
+							environment === "development"
+								? "bg-blue-500"
+								: "bg-gray-300 hover:scale-105 hover:bg-gray-200 hover:text-black"
 						} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
 					>
 						Dev
@@ -54,7 +56,9 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 					<button
 						onClick={toggleEnvironment}
 						className={`${
-							environment === "production" ? "bg-green-500" : "bg-gray-300"
+							environment === "production"
+								? "bg-green-500"
+								: "bg-gray-300 hover:scale-105 hover:bg-gray-200 hover:text-black"
 						} text-white rounded-full px-4 py-1 focus:outline-none transition-colors duration-300`}
 					>
 						Prod
@@ -101,8 +105,11 @@ const Navbar = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 							<p className="text-white">{user?.first_name}</p>
 						</>
 					) : (
-						<Link href="/auth">
-							<p className="text-white">Login</p>
+						<Link
+							href="/auth"
+							className="p-2 border border-gray-400 rounded-md hover:bg-gray-200 hover:text-black"
+						>
+							<p>Login</p>
 						</Link>
 					)}
 				</nav>
