@@ -17,21 +17,32 @@ api.interceptors.request.use(config => {
 	return config;
 });
 
-// api.interceptors.response.use(
-// 	(response) => {
-// 		return response.data;
-// 	},
-// 	(error: AxiosError) => {
-// 		const { response } = error;
+api.interceptors.response.use(
+	response => {
+		console.log("response", response);
+		return response;
+	},
+	(error: AxiosError) => {
+		const { response, request } = error || {};
 
-// 		if (response && response?.status >= 400) {
-// 			console.error("Error Response", response);
-// 		}
+		if (!response && !request) {
+			console.log(error.message);
+		}
 
-// 		return Promise.reject(error);
+		const { data, status } = response || {};
 
-// 	}
-// );
+		// auth me handling
+		const url = request.responseURL.split("/");
+
+		if (
+			(status === 401 && url[url.length - 1] === "me") ||
+			error.message === "Network Error"
+		) {
+			// Unauthorized
+			return null;
+		}
+	}
+);
 
 // Define the Data type
 type Data = Record<string, any>;
@@ -54,7 +65,7 @@ export const requestBlob = async (
 		responseType: "blob",
 	});
 	return response.data;
-}
+};
 
 export const apiFunctions = {
 	get: (url: string) => request("get", url),

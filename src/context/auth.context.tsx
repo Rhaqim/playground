@@ -291,7 +291,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		const storedUser = localStorage.getItem("user");
 
-		const user = storedUser ? (JSON.parse(storedUser) as User) : null;
+		const user = storedUser ? (storedUser !== "undefined" ? JSON.parse(storedUser) : null) : null;
 
 		if (user === null) {
 			setCallbackURL(pathName);
