@@ -1,7 +1,8 @@
 declare interface Prompt {
+	id: number;
 	category: string;
 	prompt: string;
-	id: number;
+	available: string;
 }
 
 export interface Topic {

@@ -16,10 +16,16 @@ interface MobileLayoutProps {
 		React.SetStateAction<{ [key: number]: string }>
 	>;
 	setEditableRow: React.Dispatch<React.SetStateAction<number | null>>;
-	handleSave: (id: number, category: string, prompt: string) => void;
+	handleSave: (
+		id: number,
+		category: string,
+		prompt: string,
+		available: string
+	) => void;
 	handleCancel: () => void;
 	handleDelete: (id: number) => void;
 	handleMigrate: (prompt: Prompt) => void;
+	makeAvailable: (id: number, available: string) => void;
 	handleTopicCategoryChange: (topicId: string, categoryId: string) => void;
 }
 
@@ -35,6 +41,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 	handleCancel,
 	handleDelete,
 	handleMigrate,
+	makeAvailable,
 	handleTopicCategoryChange,
 }) => {
 	const router = useRouter();
@@ -73,7 +80,8 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 				return (
 					<div key={prompt.id} className="p-2 mb-2 rounded">
 						<div className="mb-2 flex space-x-2">
-							<strong>Topic:</strong> <span className="font-bold">{topic?.name}</span>
+							<strong>Topic:</strong>{" "}
+							<span className="font-bold">{topic?.name}</span>
 						</div>
 						<div className="mb-2 flex space-x-2 items-center">
 							<strong>Category:</strong>
@@ -115,7 +123,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 								<>
 									<button
 										onClick={() =>
-											handleSave(prompt.id, prompt.category, promptText[prompt.id] || prompt.prompt)
+											handleSave(
+												prompt.id,
+												prompt.category,
+												promptText[prompt.id] || prompt.prompt,
+												prompt.available
+											)
 										}
 										className="bg-green-500 text-white px-4 py-1 rounded-md"
 									>
@@ -159,10 +172,30 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 								Demo
 							</button>
 							<button
-									onClick={() => handleMigrate(prompt)}
-									className="bg-purple-500 text-white px-4 py-1 rounded-md"
-								>
-									Migrate
+								onClick={() => handleMigrate(prompt)}
+								className="bg-purple-500 text-white px-4 py-1 rounded-md"
+							>
+								Migrate
+							</button>
+							˝
+							<button
+								onClick={() =>
+									makeAvailable(
+										prompt.id,
+										prompt.available === "available"
+											? "unavailable"
+											: "available"
+									)
+								}
+								className={`
+									${
+										prompt.available === "available"
+											? "bg-rose-500"
+											: "bg-cyan-500"
+									} text-white px-4 py-1 rounded-md
+									`}
+							>
+								{prompt.available === "available" ? "Unavailable" : "Available"}
 							</button>
 						</div>
 					</div>

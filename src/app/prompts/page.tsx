@@ -46,8 +46,13 @@ export default function Page() {
 
 	const [promptText, setPromptText] = useState<{ [key: number]: string }>({}); // Track the prompt text of the currently editable row
 
-	const handleSave = async (id: number, category: string, prompt: string) => {
-		await updatePrompt({ id, category, prompt }, setEditableRow);
+	const handleSave = async (
+		id: number,
+		category: string,
+		prompt: string,
+		available: string
+	) => {
+		await updatePrompt({ id, category, prompt, available }, setEditableRow);
 	};
 
 	const handleCancel = () => {
@@ -60,7 +65,9 @@ export default function Page() {
 	};
 
 	const handleMigrate = async (prompt: Prompt) => {
-		setEnvironment(environment === "development" ? "production" : "development");
+		setEnvironment(
+			environment === "development" ? "production" : "development"
+		);
 		setResponse(prompt.prompt);
 		toggleModal();
 	};
@@ -74,6 +81,10 @@ export default function Page() {
 
 		const { data } = await routes.updateTopicCategory(id, catId);
 		setTopics(prev => prev.map(t => (t.id === data.topic.id ? data.topic : t)));
+	};
+
+	const makeAvailable = async (id: number, available: string = "available") => {
+		await routes.changePromptAvailability(id, available);
 	};
 
 	useEffect(() => {
@@ -120,6 +131,7 @@ export default function Page() {
 					handleCancel={handleCancel}
 					handleDelete={handleDelete}
 					handleMigrate={handleMigrate}
+					makeAvailable={makeAvailable}
 					handleTopicCategoryChange={handleTopicCategoryChange}
 				/>
 				<MobileLayout
@@ -134,6 +146,7 @@ export default function Page() {
 					handleCancel={handleCancel}
 					handleDelete={handleDelete}
 					handleMigrate={handleMigrate}
+					makeAvailable={makeAvailable}
 					handleTopicCategoryChange={handleTopicCategoryChange}
 				/>
 			</div>

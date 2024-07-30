@@ -17,10 +17,16 @@ interface TableLayoutProps {
 		React.SetStateAction<{ [key: number]: string }>
 	>;
 	setEditableRow: React.Dispatch<React.SetStateAction<number | null>>;
-	handleSave: (id: number, category: string, prompt: string) => void;
+	handleSave: (
+		id: number,
+		category: string,
+		prompt: string,
+		available: string
+	) => void;
 	handleCancel: () => void;
 	handleDelete: (id: number) => void;
 	handleMigrate: (prompt: Prompt) => void;
+	makeAvailable: (id: number, available: string) => void;
 	handleTopicCategoryChange: (topicId: string, categoryId: string) => void;
 }
 
@@ -36,6 +42,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 	handleCancel,
 	handleDelete,
 	handleMigrate,
+	makeAvailable,
 	handleTopicCategoryChange,
 }) => {
 	const router = useRouter();
@@ -139,14 +146,21 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 								{editableRow === prompt.id ? ( // If editing is enabled for this row
 									<>
 										<button
+											title="Save changes"
 											onClick={() =>
-												handleSave(prompt.id, prompt.category, promptText[prompt.id] || prompt.prompt)
+												handleSave(
+													prompt.id,
+													prompt.category,
+													promptText[prompt.id] || prompt.prompt,
+													prompt.available
+												)
 											}
 											className="bg-green-500 text-white px-4 py-1 rounded-md"
 										>
 											Save
 										</button>
 										<button
+											title="Cancel changes"
 											onClick={handleCancel}
 											className="bg-gray-500 text-white px-4 py-1 rounded-md"
 										>
@@ -155,6 +169,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									</>
 								) : (
 									<button
+										title="Edit story"
 										onClick={() => handleEdit(prompt.id)}
 										className="bg-blue-500 text-white px-4 py-1 rounded-md"
 									>
@@ -162,6 +177,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									</button>
 								)}
 								<button
+									title="Delete story"
 									// onClick={() => handleDelete(prompt.id)}
 									onClick={() => handleOpenDeleteModal(prompt.id, topic?.name)}
 									className="bg-red-500 text-white px-4 py-1 rounded-md"
@@ -179,6 +195,7 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									}}
 								/>
 								<button
+									title="Demo story"
 									onClick={() =>
 										// routes.demoPrompt({ prompt_id: prompt.id.toString() })
 										router.push(`/prompts/${prompt.id}`)
@@ -188,10 +205,37 @@ const PromptsTable: React.FC<TableLayoutProps> = ({
 									Demo
 								</button>
 								<button
+									title="Migrate story to production"
 									onClick={() => handleMigrate(prompt)}
 									className="bg-purple-500 text-white px-4 py-1 rounded-md"
 								>
 									Migrate
+								</button>
+								<button
+									title={`Make story ${
+										prompt.available === "available"
+											? "unavailable"
+											: "available"
+									}`}
+									onClick={() =>
+										makeAvailable(
+											prompt.id,
+											prompt.available === "available"
+												? "unavailable"
+												: "available"
+										)
+									}
+									className={`
+										${
+											prompt.available === "available"
+												? "bg-rose-500"
+												: "bg-cyan-500"
+										} text-white px-4 py-1 rounded-md
+										`}
+								>
+									{prompt.available === "available"
+										? "Unavailable"
+										: "Available"}
 								</button>
 							</td>
 						</tr>

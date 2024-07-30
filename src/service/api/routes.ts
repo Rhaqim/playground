@@ -33,6 +33,8 @@ export const routes = {
 		patch(`/topic/${topic_id}`, { category_id }),
 	createCategory: async (name: string) => post("/category", { name }),
 	// Prompts
+	changePromptAvailability: async (prompt_id: number, available: string) =>
+		patch("/prompt/availability", { prompt_id, available }),
 	generatePrompt: async (data: TestPromptRequest) => post("/gen-prompt", data),
 	createPrompt: ({
 		prompt,
