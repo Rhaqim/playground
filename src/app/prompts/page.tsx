@@ -85,6 +85,7 @@ export default function Page() {
 
 	const makeAvailable = async (id: number, available: string = "available") => {
 		await routes.changePromptAvailability(id, available);
+		await reloadAll();
 	};
 
 	useEffect(() => {
