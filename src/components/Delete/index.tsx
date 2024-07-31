@@ -5,6 +5,7 @@ interface DeleteConfirmationModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	itemName: string;
+	helpText?: string;
 	onDelete: () => void;
 }
 
@@ -12,6 +13,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 	isOpen,
 	onClose,
 	itemName,
+	helpText = "All stories associated with this prompt will be deleted.",
 	onDelete,
 }) => {
 	const [inputValue, setInputValue] = useState("");
@@ -39,9 +41,8 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 				</h2>
 				<div className="mt-2">
 					<p className="text-sm text-center text-gray-500">
-						Are you sure you want to delete <strong>{itemName}</strong>? All
-						stories associated with this prompt will be deleted. Please type the
-						name of the item to confirm.
+						Are you sure you want to delete <strong>{itemName}</strong>?{" "}
+						{helpText} Please type the name of the item to confirm.
 					</p>
 					<input
 						type="text"

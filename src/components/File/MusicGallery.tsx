@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import DeleteConfirmationModal from "@/components/Delete";
 import { useToast } from "@/context/toast.context";
 import { generateRandomID } from "@/lib/utils";
 
@@ -9,6 +10,9 @@ const MusicGallery = () => {
 	const { addToast } = useToast();
 
 	const [musicFiles, setMusicFiles] = useState<string[]>([]);
+
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [selectedMusic, setSelectedMusic] = useState<string | null>(null);
 
 	const musicName = (music: string) => music.split("/").pop();
 
@@ -97,7 +101,10 @@ const MusicGallery = () => {
 							<p className="font-bold">{musicName(file)}</p>
 							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
-								onClick={() => deleteMusic(file)}
+								onClick={() => {
+									setSelectedMusic(file);
+									setIsDeleteModalOpen(true);
+								}}
 							>
 								Delete
 							</button>
@@ -105,6 +112,19 @@ const MusicGallery = () => {
 					</div>
 				))}
 			</div>
+			{selectedMusic && (
+				<DeleteConfirmationModal
+					isOpen={isDeleteModalOpen}
+					onClose={() => setIsDeleteModalOpen(false)}
+					itemName={musicName(selectedMusic) || ""}
+					helpText="This music file will be deleted from the gallery."
+					onDelete={() => {
+						if (selectedMusic) {
+							deleteMusic(selectedMusic);
+						}
+					}}
+				/>
+			)}
 		</div>
 	);
 };

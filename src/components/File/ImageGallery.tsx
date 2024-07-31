@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+import DeleteConfirmationModal from "@/components/Delete";
 import { useToast } from "@/context/toast.context";
 import { generateRandomID } from "@/lib/utils";
 
@@ -10,6 +11,9 @@ const ImageGallery = () => {
 	const { addToast } = useToast();
 
 	const [images, setImages] = useState<string[]>([]);
+
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
 	const imageName = (image: string) => image.split("/").pop();
 
@@ -103,7 +107,10 @@ const ImageGallery = () => {
 							<p className="font-bold">{imageName(image)}</p>
 							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
-								onClick={() => deleteImage(image)}
+								onClick={() => {
+									setSelectedImage(image);
+									setIsDeleteModalOpen(true);
+								}}
 							>
 								Delete
 							</button>
@@ -111,6 +118,19 @@ const ImageGallery = () => {
 					</div>
 				))}
 			</div>
+			{selectedImage && (
+				<DeleteConfirmationModal
+					isOpen={isDeleteModalOpen}
+					onClose={() => setIsDeleteModalOpen(false)}
+					itemName={imageName(selectedImage) || ""}
+					helpText="This image will be deleted from the gallery."
+					onDelete={() => {
+						if (selectedImage) {
+							deleteImage(selectedImage);
+						}
+					}}
+				/>
+			)}
 		</div>
 	);
 };
