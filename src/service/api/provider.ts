@@ -19,7 +19,6 @@ api.interceptors.request.use(config => {
 
 api.interceptors.response.use(
 	response => {
-		console.log("response", response);
 		return response;
 	},
 	(error: AxiosError) => {

@@ -15,7 +15,6 @@ const MusicGallery = () => {
 	const deleteMusic = async (music: string) => {
 		try {
 			const musicName = music.split("/").pop();
-			console.log("Deleeteing music file", musicName);
 			const response = await fetch(
 				`/api/file/upload?type=music&file=${musicName}`,
 				{

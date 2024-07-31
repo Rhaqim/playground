@@ -16,7 +16,6 @@ const ImageGallery = () => {
 	const deleteImage = async (image: string) => {
 		try {
 			const imageName = image.split("/").pop();
-			console.log("Deleeteing image", imageName);
 			const response = await fetch(
 				`/api/file/upload?type=image&file=${imageName}`,
 				{
