@@ -14,7 +14,14 @@ const MusicGallery = () => {
 
 	const deleteMusic = async (music: string) => {
 		try {
-			const response = await fetch(`/api/file/delete?path=${music}`);
+			const musicName = music.split("/").pop();
+			console.log("Deleeteing music file", musicName);
+			const response = await fetch(
+				`/api/file/upload?type=music&file=${musicName}`,
+				{
+					method: "DELETE",
+				}
+			);
 			if (response.ok) {
 				setMusicFiles(musicFiles.filter(m => m !== music));
 
@@ -89,12 +96,12 @@ const MusicGallery = () => {
 						</audio>
 						<div className="flex flex-col items-center space-y-2 w-full">
 							<p className="font-bold">{musicName(file)}</p>
-							{/* <button
+							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
 								onClick={() => deleteMusic(file)}
 							>
 								Delete
-							</button> */}
+							</button>
 						</div>
 					</div>
 				))}

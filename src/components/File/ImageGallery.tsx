@@ -15,7 +15,14 @@ const ImageGallery = () => {
 
 	const deleteImage = async (image: string) => {
 		try {
-			const response = await fetch(`/api/file/delete?path=${image}`);
+			const imageName = image.split("/").pop();
+			console.log("Deleeteing image", imageName);
+			const response = await fetch(
+				`/api/file/upload?type=image&file=${imageName}`,
+				{
+					method: "DELETE",
+				}
+			);
 			if (response.ok) {
 				setImages(images.filter(i => i !== image));
 
@@ -95,12 +102,12 @@ const ImageGallery = () => {
 						/>
 						<div className="flex flex-col items-center space-y-2 w-full">
 							<p className="font-bold">{imageName(image)}</p>
-							{/* <button
+							<button
 								className="bg-blue-500 text-white p-2 rounded-md"
 								onClick={() => deleteImage(image)}
 							>
 								Delete
-							</button> */}
+							</button>
 						</div>
 					</div>
 				))}

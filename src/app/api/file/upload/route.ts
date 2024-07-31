@@ -64,3 +64,31 @@ export const POST = async (req: Request) => {
 		return new Response("Invalid file type", { status: 400 });
 	}
 };
+
+export const DELETE = async (req: Request) => {
+	// get the query for the type of file to upload either image or music
+	const searchParams = new URL(req.url).searchParams;
+	const type = searchParams.get("type");
+
+	if (!type) {
+		return new Response("File type not specified", { status: 400 });
+	}
+
+	const fileName = searchParams.get("file");
+
+	if (!fileName) {
+		return new Response("File name not specified", { status: 400 });
+	}
+
+	const uploadDir = type === "image" ? IMAGE_UPLOAD_DIR : MUSIC_UPLOAD_DIR;
+
+	try {
+		fs.unlinkSync(path.resolve(uploadDir, fileName));
+	} catch (error) {
+		return new Response(`Error deleting file: ${error}`, { status: 500 });
+	}
+
+	return new Response(`File deleted successfully: ${fileName}`, {
+		status: 200,
+	});
+};
