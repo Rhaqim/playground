@@ -71,4 +71,6 @@ export const routes = {
 	image: async (story_id: string) => post("/image", { story_id }),
 	video: async (story_id: string) => post("/video", { story_id }),
 	videoStatus: async (job_id: string) => get(`/video-status/${job_id}`),
+
+	metrics: async (year: number, month: number) => get(`/metrics?year=${year}&month=${month}`),
 };

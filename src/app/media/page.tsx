@@ -1,18 +1,42 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+
+import { useAuth } from "@/context/auth.context";
+import { Roles } from "@/types/auth.type";
 
 import ImagePromptGenerator from "./ImagePrompt";
 import Uploads from "./Uploads";
 
 const Media = () => {
+	const { user } = useAuth();
 	const [section, setSection] = useState<"generator" | "uploads">("uploads");
+
+	if (!user || user.role !== Roles.ADMIN) {
+		return (
+			<div className="flex flex-col items-center h-screen bg-black text-white w-full">
+				<div className="text-center p-4">
+					<h1 className="text-2xl font-semibold">Media</h1>
+					<p className="text-sm">You are not authorized to access this page</p>
+				</div>
+				<Link href="/">
+					<button className="bg-blue-500 text-white p-2 rounded-md">
+						Go Home
+					</button>
+				</Link>
+			</div>
+		);
+	}
+
 	return (
 		<div className="flex flex-col items-center h-screen bg-black text-white w-full">
 			<div className="text-center p-4">
 				<h1 className="text-2xl font-semibold">Media</h1>
 				{section === "uploads" && (
-					<p className="text-sm">Upload and view images and music, for the story prompts</p>
+					<p className="text-sm">
+						Upload and view images and music, for the story prompts
+					</p>
 				)}
 				{section === "generator" && (
 					<p className="text-sm">Generate images, for the story prompts</p>

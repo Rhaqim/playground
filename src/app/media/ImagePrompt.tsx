@@ -13,7 +13,7 @@ const ImagePromptGenerator = () => {
 	// get base64 from user input
 	const [prompt, setPrompt] = React.useState<string>("");
 	const [base64, setBase64] = React.useState<string>("");
-	
+
 	const [loading, setLoading] = React.useState<boolean>(false);
 
 	const handlePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {

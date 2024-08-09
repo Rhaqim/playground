@@ -10,6 +10,7 @@ const Links: { href: string; title: string }[] = [
 	{ href: "/playground", title: "Playground" },
 	{ href: "/prompts", title: "Prompts" },
 	{ href: "/media", title: "Media" },
+	{ href: "/metrics", title: "Metrics" },
 	{ href: "/account", title: "Account" },
 ];
 
